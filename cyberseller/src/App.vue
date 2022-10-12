@@ -1,6 +1,8 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <br><br><br><br>
+  <img alt="CyberSeller logo" src="./assets/logo.png">
+  <HelloWorld msg="Welcome to CyberMarkets"/>
+  <br><br><br><br>
 </template>
 
 <script>
