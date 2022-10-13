@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    <br><br><br><br>
+    <img alt="CyberSeller logo" src="../assets/logo.png">
     <p>
       Your CyberSellers are coming soon!,<br>
       Check the project in detail:
