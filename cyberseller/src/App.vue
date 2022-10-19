@@ -1,15 +1,28 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <!-- <RouterLink to="/helloworld"></RouterLink>
+    <RouterLink to="/mylayout"></RouterLink> -->
+    <button @click="linkToMyLayout">Category</button>
+    <button @click="linkToHelloWorld">Welcome</button>
+    <RouterView></RouterView>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+//import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  // components: {
+  //   HelloWorld
+  // }
+  methods: {
+    linkToMyLayout() {
+      this.$router.push('/mylayout')
+    },
+    linkToHelloWorld() {
+      this.$router.push('./helloworld')
+    }
   }
 }
 </script>
@@ -22,5 +35,12 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+;
+
+button {
+  color: aqua;
+  vertical-align: bottom;
 }
 </style>
