@@ -1,46 +1,61 @@
 <template>
     <div>
-        <div class="header">Title</div>
-        <div class="navbar">Category</div>
-        <div class="main">Page</div>
+        <LayoutHeader></LayoutHeader>
+        <LayoutNavbar></LayoutNavbar>
+        <LayoutMain></LayoutMain>
     </div>
 </template>
 
-<style scoped>
-/* 头部样式 */
-.header {
+<script>
+import LayoutMain from './LayoutComponents/LayoutMain';
+import LayoutHeader from './LayoutComponents/LayoutHeader';
+import LayoutNavbar from './LayoutComponents/LayoutNavbar';
+export default {
+    name:"myLayout",
+    data() {
+        return {};
+    },
+
+    components: {
+    LayoutHeader,
+    LayoutMain,
+    LayoutNavbar
+},
+
+    methods: {}
+};
+</script>
+
+<style >
+.LayoutHeader {
     position: absolute;
     line-height: 50px;
+    background-color: #2d333b;
     top: 0px;
     left: 0px;
     right: 0px;
-    background-color: rgb(225, 225, 225);
 }
 
-/* 左侧样式 */
-.navbar {
-    position: absolute;
-    width: 230px;
+.LayoutNavbar {
+    /* position: absolute; 
+     background-color: #adbac7; 
     top: 50px;
-    /* 距离上面50像素 */
     left: 0px;
-    bottom: 0px;
+    bottom: 0px;*/
+    width: 180px;  
+    height:100%;
     overflow-y: auto;
-    /* 当内容过多时y轴出现滚动条 */
-    background-color: rgb(225, 225, 225);
-}
+} 
 
-/* 主区域 */
-.main {
-    position: center;
+.LayoutMain {
+    position: absolute;
+    left: 200px;
+    /* 内部框框距离 */
     top: 50px;
-    left: 230px;
-    bottom: 0px;
-    right: 0px;
-    /* 距离右边0像素 */
     padding: 10px;
+    right: 0px;
     overflow-y: auto;
-    /* 当内容过多时y轴出现滚动条 */
-    /* background-color: red; */
+    bottom: 0px;
+    /* background-color: rebeccapurple; */
 }
 </style>

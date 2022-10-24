@@ -5,8 +5,8 @@ const myLayout = () => import("../components/myLayout")
 
 const routes = [
     { path: '/', redirect: '/home' },
-    { path: '/helloworld', name: 'helloworld', component: HelloWorld },
-    { path: '/mylayout', name: 'layout', component: myLayout }
+    { path: '/home', name: 'layout', component: myLayout },
+    { path: '/helloworld', name: 'helloworld', component: HelloWorld }
 ]
 const router = createRouter({
     history: createWebHistory(),

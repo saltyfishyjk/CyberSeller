@@ -2,8 +2,6 @@
   <div id="app">
     <!-- <RouterLink to="/helloworld"></RouterLink>
     <RouterLink to="/mylayout"></RouterLink> -->
-    <button @click="linkToMyLayout">Category</button>
-    <button @click="linkToHelloWorld">Welcome</button>
     <RouterView></RouterView>
   </div>
 </template>
@@ -18,10 +16,10 @@ export default {
   // }
   methods: {
     linkToMyLayout() {
-      this.$router.push('/mylayout')
+      this.$router.push('/home')
     },
     linkToHelloWorld() {
-      this.$router.push('./helloworld')
+      this.$router.push('/helloworld')
     }
   }
 }
