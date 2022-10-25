@@ -27,6 +27,8 @@ def signup(request):
 			ret_identity = receive_data['identity']
 			return HttpResponse("name : " + ret_name + "\npassword:" + ret_password + "\nidentity:" + ret_identity)
 		receive_data = json.loads(request.body)  # 解析传入的HttpRequest对象
+		if test_json:
+			print("ARRIVE HERE")
 		name = receive_data['name']  # 注册用户名
 		password = receive_data['password']  # 注册密码
 		identity = receive_data['identity']  # 注册身份
