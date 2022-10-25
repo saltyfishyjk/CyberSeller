@@ -58,6 +58,8 @@ def signup(request):
 				response['message'] = "ERROR! Illegal identity, make sure identity is admin, customer or seller"
 				response['id'] = -1
 			else:
+				if test_json:
+					print("ARRIVE HERE 2 ")
 				accounts = Account.objects.all()  # Account对象列表，每一个元素是一个Account对象
 				flag = True  # 标记用户名是否合法（不重名）
 				for account in accounts:
