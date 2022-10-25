@@ -12,10 +12,14 @@ legal_identity = ["admin", "customer", "seller"]
 def index(request):
 	return HttpResponse("Hello!<br/>Welcome to CyberSeller!\n")
 
+test_signup = True
+
 @csrf_exempt
 def signup(request):
 	response = HttpResponse()  # 返回HttpResponse对象
 	if (request.method == 'POST'):
+		if test_signup:
+			return HttpResponse(request.body)
 		receive_data = json.loads(request.body)  # 解析传入的HttpRequest对象
 		name = receive_data['name']  # 注册用户名
 		password = receive_data['password']  # 注册密码
@@ -61,6 +65,7 @@ def signup(request):
 					response['code'] = "010101"  # 注册成功
 					response['message'] = "SUCCESS! Sign up successfully"
 					response['id'] = account_id
+
 
 	else:
 		response['succeed'] = False  # 表明请求失败
