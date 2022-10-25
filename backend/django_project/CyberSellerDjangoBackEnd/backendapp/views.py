@@ -13,6 +13,7 @@ def index(request):
 	return HttpResponse("Hello!<br/>Welcome to CyberSeller!\n")
 
 test_signup = False
+test_json = True
 
 @csrf_exempt
 def signup(request):
@@ -29,6 +30,10 @@ def signup(request):
 		name = receive_data['name']  # 注册用户名
 		password = receive_data['password']  # 注册密码
 		identity = receive_data['identity']  # 注册身份
+		if test_json:
+			print("name : " + name)
+			print("password : " + password)
+			print("identity : " + identity)
 		if name is None or password is None or identity is None or len(name) == 0 or len(password) == 0:
 			response['succeed'] = False
 			response['code'] = "010000"  # 空用户名/密码/身份
