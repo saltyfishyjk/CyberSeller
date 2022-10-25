@@ -13,7 +13,7 @@ def index(request):
 	return HttpResponse("Hello!<br/>Welcome to CyberSeller!\n")
 
 test_signup = False
-test_json = True
+test_json = False
 
 @csrf_exempt
 def signup(request):
@@ -89,4 +89,54 @@ def signup(request):
 		response['message'] = "ERROR! This URL accepts POST ONLY!"  # 错误提示信息
 		response['id'] = -1  # 用非法id -1 表征当前为错误情况
 		# return HttpResponse("ERROR! This URL accepts POST ONLY!")
+	return response
+
+@csrf_exempt
+def login(request):
+	response = HttpResponse()
+	if request.method == "POST":
+		receive_data = json.loads(request.body)  # 解析传入的HttpRequest对象
+		name = receive_data['name']
+		password = receive_data['password']
+		if name is None or password is None or len(name) == 0 or len(password) == 0:
+			response['succeed'] = False
+			response['code'] = "020001"
+			response['message'] = "ERROR! Empty name or password, make sure they are legal"
+			response['id'] = -1
+			response['balance'] = -1
+			response['identity'] = "FAIL"
+		else:
+			account = Account.objects.get(name=name)
+			if account is None:
+				response['succeed'] = False
+				response['code'] = "020002"
+				response['message'] = "ERROR! Non-exist name, make sure the name is correct"
+				response['id'] = -1
+				response['balance'] = -1
+				response['identity'] = "FAIL"
+			else:
+				account_id = account.id
+				account_identity = account.identity
+				if password != account.password:
+					response['succeed'] = False
+					response['code'] = "020003"
+					response['message'] = "ERROR! Wrong password, make sure the password is correct"
+					response['id'] = account_id
+					response['balance'] = -1
+					response['identity'] = account_identity
+				else:
+					account_balance = account.balance
+					response['succeed'] = True
+					response['code'] = "020101"
+					response['message'] = "SUCCESS! Log in successfully"
+					response['id'] = account_id
+					response['balance'] = account_balance
+					response['identity'] = account_identity
+	else:
+		response['succeed'] = False
+		response['code'] = "020000"
+		response['message'] = "ERROR! This URL accepts POST ONLY!"
+		response['id'] = -1
+		response['balance'] = -1
+		response['identity'] = "FAIL"
 	return response
