@@ -2,7 +2,7 @@
 
 > 绝大多数时候，前端开发人员**不需要**查阅本文件，通过URL API接口文档应当获得足够前端需要的信息；本文件更多是为后端开发者服务
 
-## 数据库基本信息
+## Part 1 数据库基本信息
 
 | 属性     | 值               |
 | -------- | ---------------- |
@@ -27,7 +27,7 @@ mysql -uroot -p
 `enter password`
 ```
 
-## 表
+## Part 2 表
 
 ### Account账户表
 
@@ -50,3 +50,10 @@ class Account(models.Model):
 
 TODO : 应当设计**检查**，用于排查非法的identity插入
 
+## Part 3 选择合适的数据类型
+
+### DecimalField
+
+固定精度的十进制数，不像Float等有浮点误差。对于账户余额等对精度有要求的小数存储和操作时，应当使用这种类型。
+
+> 参考：[Django Doc - DecimalField](https://docs.djangoproject.com/zh-hans/3.2/ref/models/fields/#decimalfield)
