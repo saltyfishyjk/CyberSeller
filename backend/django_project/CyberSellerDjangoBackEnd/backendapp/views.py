@@ -72,6 +72,8 @@ def signup(request):
 					response['message'] = "ERROR! This name has been signed up, please choose another name"
 					response['id'] = -1
 				else:
+					if test_json:
+						print("ARRIVE HERE 3 ")
 					account_new = Account(name=name, password=password, identity=identity)  # 生成新的用户行
 					account_new.save()  # 保存到数据库
 					account_id = Account.objects.get(name=name).id
@@ -79,8 +81,6 @@ def signup(request):
 					response['code'] = "010101"  # 注册成功
 					response['message'] = "SUCCESS! Sign up successfully"
 					response['id'] = account_id
-
-
 	else:
 		response['succeed'] = False  # 表明请求失败
 		response['code'] = "010001"  # 01代表signup方法，00代表错误，01代表错误类型
