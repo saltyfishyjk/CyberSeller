@@ -3,6 +3,7 @@ import json
 from django.shortcuts import render
 from django.http import HttpResponse
 from backendapp.models import Account
+from django.views.decorators.csrf import csrf_exempt  # 用于忽略scrf攻击
 
 # 合法身份identity列表
 legal_identity = ["admin", "customer", "seller"]
@@ -11,6 +12,7 @@ legal_identity = ["admin", "customer", "seller"]
 def index(request):
 	return HttpResponse("Hello!<br/>Welcome to CyberSeller!\n")
 
+@csrf_exempt
 def signup(request):
 	response = HttpResponse()  # 返回HttpResponse对象
 	if (request.method == 'POST'):
