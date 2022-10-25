@@ -10,8 +10,7 @@
             </span>
             <template #dropdown>
                 <el-dropdown-menu>
-                    <el-dropdown-item>Login</el-dropdown-item>
-                    <el-dropdown-item>Sign Up</el-dropdown-item>
+                    <el-dropdown-item @click="LoginIn">Login</el-dropdown-item>
                     <!-- <el-dropdown-item disabled>tag1</el-dropdown-item>
                     <el-dropdown-item divided>tag2</el-dropdown-item> -->
                 </el-dropdown-menu>
@@ -30,6 +29,9 @@ export default {
     methods: {
         handleCommand(command) {
             alert(command)
+        },
+        LoginIn() {
+            this.$router.push("/login")
         }
     }
 };

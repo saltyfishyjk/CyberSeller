@@ -15,12 +15,6 @@ export default {
   //   HelloWorld
   // }
   methods: {
-    linkToMyLayout() {
-      this.$router.push('/home')
-    },
-    linkToHelloWorld() {
-      this.$router.push('/helloworld')
-    }
   }
 }
 </script>

@@ -1,8 +1,9 @@
 <template>
-    <div>
+    <div class="myLayout">
         <LayoutHeader></LayoutHeader>
         <LayoutNavbar></LayoutNavbar>
         <LayoutMain></LayoutMain>
+        <RouterView></RouterView>
     </div>
 </template>
 

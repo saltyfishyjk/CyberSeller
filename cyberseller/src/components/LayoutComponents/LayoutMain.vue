@@ -1,6 +1,5 @@
 <template>
     <div class="LayoutMain">
-        <RouterView></RouterView>
     </div>
 </template>
 

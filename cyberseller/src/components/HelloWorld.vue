@@ -1,21 +1,28 @@
 <template>
-  <div class="hello">
-    <br><br><br><br>
-    <img alt="CyberSeller logo" src="../assets/logo.png">
-    <p>
-      Your CyberSellers are coming soon!,<br>
-      Check the project in detail:
-      <a href="https://github.com/saltyfishyjk/CyberSeller" target="_blank" rel="noopener">CyberSeller</a>.
-    </p>
-  </div>
+  <LayoutHeader></LayoutHeader>
+  <LayoutNavbar></LayoutNavbar>
+    <div class="hello">
+      <img alt="CyberSeller logo" src="../assets/logo.png">
+      <p>
+        Your CyberSellers are coming soon!,<br>
+        Check the project in detail:
+        <a href="https://github.com/saltyfishyjk/CyberSeller" target="_blank" rel="noopener">CyberSeller</a>.
+      </p>
+    </div>
+
 </template>
 
 <script>
+import LayoutHeader from './LayoutComponents/LayoutHeader.vue';
+import LayoutNavbar from './LayoutComponents/LayoutNavbar.vue';
+
+
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
+    name: "HelloWorld",
+    props: {
+        msg: String
+    },
+    components: { LayoutHeader, LayoutNavbar }
 }
 </script>
 

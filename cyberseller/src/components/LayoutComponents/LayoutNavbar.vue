@@ -1,15 +1,15 @@
 <template #title>
     <div class="LayoutNavbar">
-        <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @mouseover="mouseOver" @mouseleave="mouseLeave" 
-            :collapse="isCollapse">
-            <el-menu-item index="1">
+        <el-menu default-active="this.$router.path" router class="el-menu-vertical-demo" @mouseover="mouseOver" @mouseleave="mouseLeave" 
+            :collapse="isCollapse" :class="{ 'myMenu': isActive }">
+            <el-menu-item index="/market">
                 <i class="el-icon-menu"></i>
                 <img class="icon_format" src="../../assets/market.png">
                 <template #title>
                     Market
                 </template>
             </el-menu-item>
-            <el-menu-item index="2">
+            <el-menu-item index="/shopCart">
                 <i class="el-icon-menu"></i>
                 <img class="icon_format" src="../../assets/shopCart.png">
                 <template #title>
