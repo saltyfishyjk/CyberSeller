@@ -12,7 +12,7 @@ legal_identity = ["admin", "customer", "seller"]
 def index(request):
 	return HttpResponse("Hello!<br/>Welcome to CyberSeller!\n")
 
-test_signup = True
+test_signup = False
 
 @csrf_exempt
 def signup(request):
