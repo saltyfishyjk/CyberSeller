@@ -76,6 +76,8 @@ def signup(request):
 						print("ARRIVE HERE 3 ")
 					account_new = Account(name=name, password=password, identity=identity)  # 生成新的用户行
 					account_new.save()  # 保存到数据库
+					if test_json:
+						print("ARRIVE HERE 4 ")
 					account_id = Account.objects.get(name=name).id
 					response['succeed'] = True
 					response['code'] = "010101"  # 注册成功
