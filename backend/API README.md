@@ -8,7 +8,9 @@
 
 #### 发送
 
-- 使用`POST`方法向服务器提供注册数据申请
+- 使用`POST`方法向服务器提供注册数据申请，数据格式为`raw`+`json`
+
+- URL:`http://43.143.179.158:8080/signup`
 
 - 具体属性如下：
 
@@ -50,7 +52,8 @@
 
 #### 发送
 
-- 使用`POST`方法向服务器提供注册数据申请
+- 使用`POST`方法向服务器提供登录申请，数据格式为`raw`+`json`
+- URL:`http://43.143.179.158:8080/login`
 - 具体属性如下：
 
 | 属性     | 说明   | 类型                       |
@@ -79,10 +82,10 @@
 
 - 错误情况
 
-| succeed | code     | message                                                    | id   | balance | identity     | 说明                              |
-| ------- | -------- | ---------------------------------------------------------- | ---- | ------- | ------------ | --------------------------------- |
-| `False` | `020000` | `ERROR! This URL accepts POST ONLY! `                      | -1   | -1      | `FAIL`       | 使用非POST方法发送请求            |
-| `False` | `020001` | `ERROR! Empty name or password, make sure they are legal`  | -1   | -1      | `FAIL`       | `name,password`中有空值或空字符串 |
-| `False` | `020002` | `ERROR! Non-exist name, make sure the name is correct`     | -1   | -1      | `FAIL`       | 用户名错误                        |
-| `False` | `020003` | `ERROR! Wrong password, make sure the password is correct` | -1   | -1      | <该用户身份> | 密码错误                          |
+| succeed | code     | message                                                    | id                   | balance | identity     | 说明                              |
+| ------- | -------- | ---------------------------------------------------------- | -------------------- | ------- | ------------ | --------------------------------- |
+| `False` | `020000` | `ERROR! This URL accepts POST ONLY! `                      | -1                   | -1      | `FAIL`       | 使用非POST方法发送请求            |
+| `False` | `020001` | `ERROR! Empty name or password, make sure they are legal`  | -1                   | -1      | `FAIL`       | `name,password`中有空值或空字符串 |
+| `False` | `020002` | `ERROR! Non-exist name, make sure the name is correct`     | -1                   | -1      | `FAIL`       | 用户名错误                        |
+| `False` | `020003` | `ERROR! Wrong password, make sure the password is correct` | <数据库自动赋予的id> | -1      | <该用户身份> | 密码错误                          |
 
