@@ -2,7 +2,7 @@
     <div class="LayoutHeader">
         <a href>
             <img class="logo" src="../../assets/logo.png" alt width="30px" />
-            <span class="company">CyberSeller</span>
+            <span class="company" v-on:click="returnMarket">CyberSeller</span>
         </a>
         <el-dropdown class="el-dropdown">
             <span class="el-dropdown-link">
@@ -27,11 +27,11 @@ export default {
     components: {},
 
     methods: {
-        handleCommand(command) {
-            alert(command)
-        },
         LoginIn() {
             this.$router.push("/login")
+        },
+        returnMarket() {
+            this.$router.push("/market")
         }
     }
 };
