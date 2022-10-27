@@ -130,6 +130,14 @@ pip install pymysql
 
 没什么坑，参考[这篇文章](https://blog.csdn.net/beishanyingluo/article/details/107451921)
 
+### 开启防火墙特定端口
+
+主要参考[这篇文章](https://blog.csdn.net/qq_36938617/article/details/95234909)，简要步骤如下：
+
+- `sudo ufw status`：查看防火墙状态
+- `sudo ufw enable`：开启防火墙
+- `sudo ufw allow 8080`：开放8080端口
+
 ## Part 2 使用服务器
 
 在**Part 1**中，主要介绍了目前已经安装和运行的环境以及如何从零部署他们的办法，以下介绍对于其他开发人员，如何在CyberSeller服务器上快速进入开发环境
