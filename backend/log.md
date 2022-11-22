@@ -24,5 +24,11 @@
 
 **具体参数和过程可以参考本目录下的README.md**
 
+### 2022/11/22
 
+#### 允许跨域访问以支持前端测试
+
+*author:YJK*
+
+主要参考了这篇文章：[Django解决跨域请求的问题](https://cloud.tencent.com/developer/article/1578462)
 
