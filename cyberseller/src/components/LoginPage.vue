@@ -32,14 +32,14 @@
                     <el-form-item label="确认密码：">
                         <el-input type="password" v-model="LoginInfo.tryRegisterForm.tryRegisterConfirmedPassword" @blur="confirmFunc" />
                     </el-form-item>
-                    <el-form-item label="验证码：">
+                    <!-- <el-form-item label="验证码：">
                         <el-row>
                             <el-input type="password" v-model="LoginInfo.tryRegisterForm.tryRegisterIdentifyCode" class="inpWidth" />
                             <el-button type="primary" @click="getIdentifyCode" plain>
                                 获取验证码
                             </el-button>
                         </el-row>
-                    </el-form-item>
+                    </el-form-item> -->
 
                     <el-row>
                         <el-checkbox class="checkBox" v-model="LoginInfo.tryRegisterForm.tryRegisterIsAgree" label="同意用户使用准则" name="type" />
@@ -57,6 +57,7 @@ import { ElMessage } from "element-plus";
 import { LoginInfo } from "@/utils/LoginInfo";
 import LayoutHeader from './LayoutComponents/LayoutHeader.vue';
 import LayoutNavbar from './LayoutComponents/LayoutNavbar.vue';
+import { userLogin,userSignUp } from "@/api";
 export default {
     data() {
         return {
@@ -65,10 +66,14 @@ export default {
     },
     methods: {
         login() {
-            console.log(LoginInfo.tryLoginForm);
+            try { userLogin(LoginInfo) }
+            catch (error){
+                console.log(error);
+            }
         },
         register() {
             console.log("注册", LoginInfo.tryRegisterForm);
+            userSignUp(LoginInfo)
         },
         getIdentifyCode() {
             console.log("获取验证码");
