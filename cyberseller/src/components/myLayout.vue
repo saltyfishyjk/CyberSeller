@@ -3,6 +3,7 @@
         <LayoutHeader></LayoutHeader>
         <LayoutNavbar></LayoutNavbar>
         <LayoutMain></LayoutMain>
+        <CartList></CartList>
         <RouterView></RouterView>
     </div>
 </template>
@@ -20,7 +21,8 @@ export default {
     components: {
     LayoutHeader,
     LayoutMain,
-    LayoutNavbar
+    LayoutNavbar,
+    CartList
 },
 
     methods: {}

@@ -1,26 +1,93 @@
 import { createRouter, createWebHistory } from "vue-router"
 
-const HelloWorld = () => import("../components/HelloWorld")
-const myLayout = () => import("../components/myLayout")
-const LoginPage = () => import("../components/LoginPage")
 
-const routes = [
-    { path: '/', redirect: '/market' },
+const routes =[
     {
-        path: '/market',
-        name: 'layout',
-        component: myLayout,
+        path: '/',
+        redirect: '/helloHome'
     },
     {
-        path: '/shopCart',
-        name: 'shopCart',
-        component: HelloWorld
+        path: '/',
+        component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
+            meta: { title: 'helloFront' },
+children: [
+    {
+        path: '/helloHome',
+        component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/index.vue'),
+        meta: { title: '首页' }
     },
     {
-        path: '/login',
-        name: 'login',
-        component: LoginPage
+        path: '/goodsDesc',
+        component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/goodsDesc.vue'),
+        meta: { title: '商品详情' }
+    },
+    {
+        path: '/carts',
+        component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/carts.vue'),
+        meta: { title: '购物车' }
+    },
+    {
+        path: '/collection',
+        component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/collection.vue'),
+        meta: { title: '我的收藏' }
+    },
+    {
+        path: '/myOrders',
+        component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/myOrders.vue'),
+        meta: { title: '我的订单' }
+    },
+    {
+        path: '/makeSureOrder',
+        component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/makeSureOrder.vue'),
+        meta: { title: '确认订单' }
+    },
+    {
+        path: '/submitOrder',
+        component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/submitOrder.vue'),
+        meta: { title: '提交订单' }
+    },
+    {
+        path: '/userInfo',
+        component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/userInfo.vue'),
+        meta: { title: '个人信息' }
+    },
+    {
+        path: '/addressMag',
+        component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/addressMag.vue'),
+        meta: { title: '地址管理' }
+    },
+    {
+        path: '/404',
+        component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
+        meta: { title: '404' }
+    },
+    {
+        path: '/403',
+        component: () => import(/* webpackChunkName: "403" */ '../components/page/403.vue'),
+        meta: { title: '403' }
     }
+
+]
+    },
+{
+    path: '/login',
+        component: () => import(/* webpackChunkName: "login" */ '../components/page/login.vue'),
+            meta: { title: '登录' }
+},
+{
+    path: '/register',
+        component: () => import(/* webpackChunkName: "login" */ '../components/page/register.vue'),
+            meta: { title: '注册' }
+},
+// {
+//   path: '/register',
+//   component: () => import(/* webpackChunkName: "login" */ '../components/page/Register.vue'),
+//   meta: { title: '注册' }
+// },
+{
+    path: "/:catchAll(.*)", // 不识别的path自动匹配404
+    redirect: '/404',
+}
 ]
 const router = createRouter({
     history: createWebHistory(),

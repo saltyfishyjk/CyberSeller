@@ -1,38 +1,19 @@
 <template>
-  <div id="app">
-    <!-- <RouterLink to="/helloworld"></RouterLink>
-    <RouterLink to="/mylayout"></RouterLink> -->
-    <RouterView></RouterView>
+  <div id="app" style="background: #DCDFE6">
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-//import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  // components: {
-  //   HelloWorld
-  // }
-  methods: {
-  }
+  name: 'App'
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-;
-
-button {
-  color: aqua;
-  vertical-align: bottom;
-}
+@import "./assets/css/main.css";
+/*@import "./assets/css/color-dark.css";     !*深色主题*!*/
+@import "./assets/css/theme-green/color-green.css";
+/*浅绿色主题*/
 </style>
+
