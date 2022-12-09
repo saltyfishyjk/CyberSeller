@@ -37,7 +37,8 @@ export function post(url, params = {}, json = false) {
         axios
             .post(url, json ? JSON.stringify(params) : qs.stringify(params), {
                 headers: json ? headerJSON : headerFormData,
-            responseType:"json"})
+                responseType: "json"
+            })
             .then(res => {
                 console.log(res['message']);
                 resolve(res.data);
@@ -53,13 +54,14 @@ export const userLogin = async () => {
         "name": "123@qq.com",
         "password": "123"
     }, true).then(res => {
-        
+
         console.log(res['message']);
         console.log(res.message);
     })
         .catch(function (error) {
             console.log(error);
-        }); }
+        });
+}
 
 export const userSignUp = async () => {
     let result = await post(`http://43.143.179.158:8080/signup`, {
@@ -67,6 +69,6 @@ export const userSignUp = async () => {
         "password": "123",
         "identity": "customer"
     }, true)
-    console.log("result->"+result)
+    console.log("result->" + result)
 }
 

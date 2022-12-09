@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { userLogin, userSignUp } from "@/api";
 export default {
     data: function() {
         return {
@@ -44,6 +45,7 @@ export default {
     },
     methods: {
         submitForm() {
+            userLogin(this.param);
             this.$refs.login.validate(valid => {
                 if (valid) {
                     this.$message.success('登录成功');
