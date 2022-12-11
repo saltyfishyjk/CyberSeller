@@ -112,6 +112,16 @@ CORS_ORIGIN_ALLOW_ALL = True
 #允许所有的请求头
 CORS_ALLOW_HEADERS = default_headers + ('*')
 
+# 配置允许的请求方式
+CORS_ALLOW_METHODS = [
+    '*', # * 表示允许全部请求头
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS'
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
