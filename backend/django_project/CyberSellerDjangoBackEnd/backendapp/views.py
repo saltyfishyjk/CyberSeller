@@ -1,7 +1,7 @@
 import json
 
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from backendapp.models import Account
 from django.views.decorators.csrf import csrf_exempt  # 用于忽略scrf攻击
 
@@ -91,10 +91,13 @@ def signup(request):
 		# return HttpResponse("ERROR! This URL accepts POST ONLY!")
 	return response
 
+try_cross = True
 @csrf_exempt
 def login(request):
 	response = HttpResponse()
 	if request.method == "POST":
+		if (try_cross) :
+			return JsonResponse({'errno': 0, 'msg': "试验成功!"})
 		receive_data = json.loads(request.body)  # 解析传入的HttpRequest对象
 		name = receive_data['name']
 		password = receive_data['password']
