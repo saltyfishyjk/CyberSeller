@@ -98,7 +98,7 @@ def signup(request):
 		'id': response['id']
 	})
 
-try_cross = True
+try_cross = False
 @csrf_exempt
 def login(request):
 	# response = HttpResponse()
