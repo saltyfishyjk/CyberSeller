@@ -17,7 +17,8 @@ test_json = False
 
 @csrf_exempt
 def signup(request):
-	response = HttpResponse()  # 返回HttpResponse对象
+	# response = HttpResponse()  # 返回HttpResponse对象
+	response = {}
 	if (request.method == 'POST'):
 		if test_signup:
 			# return HttpResponse(request.body)
@@ -89,12 +90,19 @@ def signup(request):
 		response['message'] = "ERROR! This URL accepts POST ONLY!"  # 错误提示信息
 		response['id'] = -1  # 用非法id -1 表征当前为错误情况
 		# return HttpResponse("ERROR! This URL accepts POST ONLY!")
-	return response
+	# return response
+	return JsonResponse({
+		'succeed': response['response'],
+		'code': response['code'],
+		'message': response['message'],
+		'id': response['id']
+	})
 
 try_cross = True
 @csrf_exempt
 def login(request):
-	response = HttpResponse()
+	# response = HttpResponse()
+	response = {}
 	if request.method == "POST":
 		if (try_cross) :
 			return JsonResponse({'errno': 0, 'msg': "试验成功!"})
@@ -142,5 +150,12 @@ def login(request):
 		response['id'] = -1
 		response['balance'] = -1
 		response['identity'] = "FAIL"
-
-	return response
+	return JsonResponse({
+		'succeed': response['succeed'],
+		'code': response['code'],
+		'message': response['message'],
+		'id': response['id'],
+		'balance': response['balance'],
+		'identity': response['identity']
+	})
+	# return response
