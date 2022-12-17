@@ -110,7 +110,8 @@ AUTH_PASSWORD_VALIDATORS = [
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 #允许所有的请求头
-CORS_ALLOW_HEADERS = default_headers + ('*')
+# CORS_ALLOW_HEADERS = default_headers + ('*')
+CORS_ALLOW_HEADERS = default_headers
 
 # 配置允许的请求方式
 CORS_ALLOW_METHODS = [
