@@ -169,12 +169,13 @@ def addGoods(request):
 		if testAddGoods:
 			if good.is_valid():
 				return JsonResponse({
-					"message": "succeed",
-					"good_id": good.good_id,
-					"name": good.name,
-					"price": good.price,
-					"seller": good.seller,
-					"maker": good.marker
+					#"message": "succeed",
+					#"good_id": good.good_id,
+					#"name": good.name,
+					#"price": good.price,
+					#"seller": good.seller,
+					#"maker": good.marker
+					"name": good.name
 				})
 			else:
 				return JsonResponse({
