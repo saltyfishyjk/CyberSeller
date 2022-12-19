@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from backendapp.models import Account
 from django.views.decorators.csrf import csrf_exempt  # 用于忽略scrf攻击
+from .Good import GoodForm
 
 # 合法身份identity列表
 legal_identity = ["admin", "customer", "seller"]
@@ -159,3 +160,23 @@ def login(request):
 		'identity': response['identity']
 	})
 	# return response
+
+testAddGoods = True
+@csrf_exempt
+def addGoods(request):
+	if request.method == 'POST':
+		good = GoodForm(request.POST)
+		if testAddGoods:
+			if good.is_valid():
+				return JsonResponse({
+					"message": "succeed",
+					"good_id": good.good_id,
+					"name": good.name,
+					"price": good.price,
+					"seller": good.seller,
+					"marker": good.marker
+				})
+			else:
+				return JsonResponse({
+					"message": "fail"
+				})
