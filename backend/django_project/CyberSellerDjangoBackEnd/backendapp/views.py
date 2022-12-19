@@ -178,5 +178,6 @@ def addGoods(request):
 				})
 			else:
 				return JsonResponse({
-					"message": "fail"
+					"message": "fail",
+					'good': good
 				})
