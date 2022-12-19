@@ -174,7 +174,7 @@ def addGoods(request):
 					"name": good.name,
 					"price": good.price,
 					"seller": good.seller,
-					"marker": good.marker
+					"maker": good.marker
 				})
 			else:
 				return JsonResponse({

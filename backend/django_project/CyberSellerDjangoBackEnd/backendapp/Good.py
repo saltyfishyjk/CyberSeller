@@ -5,4 +5,4 @@ class GoodForm(forms.Form):
 	name = forms.CharField(max_length=100)
 	price = forms.FloatField()
 	seller = forms.CharField(max_length=100)
-	marker = forms.CharField(max_length=100)
+	maker = forms.CharField(max_length=100)
