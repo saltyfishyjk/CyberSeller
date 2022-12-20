@@ -13,4 +13,5 @@ urlpatterns = [
 	}),
 	path(r'mainRecommendGoods', views.mainRecommendGoods, name='mainRecommendGoods'),
 	path(r'updateShopCart', views.updateShopCart, name='updateShopCart'),
+	path(r'getGood', views.getGood, name='getGood'),
 ]

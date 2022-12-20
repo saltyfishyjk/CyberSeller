@@ -336,3 +336,20 @@ def mainRecommendGoods(request):
 			goods_json.append(good_json)
 		ret_json['goods'] = goods_json
 		return JsonResponse(ret_json)
+
+@csrf_exempt
+def getGood(request):
+	if request.method == 'POST':
+		good_id = request.POST.get('good_id')
+		good = Good.objects.get(id=good_id)
+		return JsonResponse({
+			'id': good.id,
+			'name': good.name,
+			'price': good.price,
+			'seller_id': good.seller_id,
+			'maker': good.maker,
+			'picture': good.picture,
+			'description': good.description,
+			'date': good.date,
+			'shelf_life': good.shelf_life
+		})
