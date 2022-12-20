@@ -1,10 +1,12 @@
 import json
+import os.path
 
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from backendapp.models import Account
 from django.views.decorators.csrf import csrf_exempt  # 用于忽略scrf攻击
 from .Good import GoodForm
+from CyberSellerDjangoBackEnd.settings import IMG_UPLOAD
 
 # 合法身份identity列表
 legal_identity = ["admin", "customer", "seller"]
@@ -178,9 +180,24 @@ def addGoods(request):
 			maker = data.get('maker')
 			print('maker = ' + str(maker) + ' maker type : ' + str(type(maker)))
 			# pic_file = request.FILES.get('picture')
+			# 获取图片文件列表
 			pic_files = request.FILES.get('picture')
 			for pic_file in pic_files:
-				print('picture file = ' + str(pic_file) + ' type : ' + str(type))
+				# 获取文件全名
+				pic_name = pic_file.name
+				# 获取文件名
+				mobile = os.path.splitext(pic_name)[0]
+				# 获取文件后缀
+				ext = os.path.splitext(pic_name)[1]
+				# 重定义文件名
+				pic_name = f'avatar-{mobile}{ext}'
+				# 从配置文件中加载图片保存路径
+				pic_path = os.path.join(IMG_UPLOAD, pic_name)
+				# 保存文件
+				with open(pic_path, 'ab') as fp:
+					for chunk in pic_file.chunks():
+						fp.write(chunk)
+				# print('picture file = ' + str(pic_file) + ' type : ' + str(type))
 			return JsonResponse({
 				'message': 'success'
 			})
