@@ -165,20 +165,25 @@ testAddGoods = True
 @csrf_exempt
 def addGoods(request):
 	if request.method == 'POST':
-		good = GoodForm(request.POST)
+		# good = GoodForm(request.POST)
 		if testAddGoods:
-			if good.is_valid():
-				return JsonResponse({
+			name = request.POST.get('name')
+			print("name = " + str(name))
+			return JsonResponse({
+				'message': 'success'
+			})
+			# if good.is_valid():
+			#	return JsonResponse({
 					#"message": "succeed",
 					#"good_id": good.good_id,
 					#"name": good.name,
 					#"price": good.price,
 					#"seller": good.seller,
 					#"maker": good.marker
-					"name": good.name
-				})
-			else:
-				return JsonResponse({
-					"message": "fail",
-					'good': good
-				})
+					# "name": good.name
+				# })
+			# else:
+				#return JsonResponse({
+					#"message": "fail",
+					#'good': good
+				#})
