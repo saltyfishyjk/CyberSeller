@@ -454,11 +454,12 @@ def getSixPictures(request):
 		n = 6
 		pictures = []
 		for i in range(0, 6):
+			print("id : " + goods[i].id)
 			pictures.append(Good.objects.get(id=goods[i].id).picture)
 		return JsonResponse({
 			'succeed': True,
 			'code': '090101',
-			'message': 'SUCCESS! Got 6 hea pictures',
+			'message': 'SUCCESS! Got 6 head pictures',
 			'n': n,
 			'pictures': pictures
 		})
