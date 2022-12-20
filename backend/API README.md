@@ -189,7 +189,7 @@
 
 - 使用`POST`方法向服务器提供登录申请，数据格式`form-data`
 
-- URL:`http://43.143.179.158:8080/mainRecommentGoods`
+- URL:`http://43.143.179.158:8080/mainRecommendGoods`
 
 - 具体属性如下：
 
@@ -298,7 +298,7 @@
 | shelf_life  | 保质期    | 字符串，形如yyyy-mm-dd-hh        |
 | num         | 商品数量  | 整数                             |
 
-### [08] addStar添加收藏关系
+### [08] updateStar更新收藏关系
 
 #### 发送
 
