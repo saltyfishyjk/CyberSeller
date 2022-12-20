@@ -3,7 +3,7 @@ import os.path
 
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from backendapp.models import Account, Good, ShopCart
+from backendapp.models import Account, Good, ShopCart, Star
 from django.views.decorators.csrf import csrf_exempt  # 用于忽略scrf攻击
 from CyberSellerDjangoBackEnd.settings import IMG_UPLOAD
 
@@ -301,6 +301,7 @@ def mainRecommendGoods(request):
 	if request.method == 'POST':
 		# 获取用户名
 		id = request.POST.get('user_id')
+		print("arrive here 1")
 		if id is None:
 			return JsonResponse({
 				'succeed': False,
@@ -308,6 +309,7 @@ def mainRecommendGoods(request):
 				'message': 'ERROR! Need non-null userid!'
 			})
 		user = Account.objects.get(id=id)
+		print("arrive here 2")
 		if user is None:
 			return JsonResponse({
 				'succeed': False,
@@ -381,3 +383,42 @@ def searchShopCart(request):
 			'n': n,
 			'goods': goods_list
 		})
+
+@csrf_exempt
+def updateStar(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		good_id = request.POST.get('good_id')
+		like = request.POST.get('like')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '080000',
+				'message': 'ERROR! Need available user_id!'
+			})
+		if good_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '080001',
+				'message': 'ERROR! Need available good_id!'
+			})
+		if like is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '080002',
+				'message': 'ERROR! Need available like!'
+			})
+	stars = Star.objects.filter(user_id=user_id, good_id=good_id)
+	if stars.count() == 0:
+		star = Star(user_id=user_id, good_id=good_id)
+		star.like = like
+		star.save()
+	else:
+		star = Star.objects.get(user_id=user_id, good_id=good_id)
+		star.like = like
+		star.save()
+	return JsonResponse({
+		'succeed': True,
+		'code': '080101',
+		'message': 'SUCCESS! Star a good successfully!'
+	})

@@ -28,3 +28,10 @@ class ShopCart(models.Model):
 	user_id = models.IntegerField()  # 用户ID，和Account相对应
 	good_id = models.IntegerField()  # 商品ID，和Good相对应
 	num = models.IntegerField()  # 购物车内商品数量
+
+# 收藏表
+class Star(models.Model):
+	id = models.AutoField(primary_key=True)  # 收藏元组ID，由数据库自动分配并自增
+	user_id = models.IntegerField()  # 用户ID，和Account相对应
+	good_id = models.IntegerField()  # 商品ID，和Good相对应
+	like = models.IntegerField()  # 是否收藏，为1表示收藏，为0表示不收藏
