@@ -9,7 +9,7 @@
             <el-input v-model="ruleForm.price" style="width: 300px"></el-input>
         </el-form-item>
         <el-form-item label="商品图片">
-            <input type="file"  @change="getImageFile" id="img">
+            <input accept=".png, .jpg" type="file" ref="file" @change="getImageFile" />
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">发布商品</el-button>
@@ -42,7 +42,7 @@ export default {
             },
             ruleForm: {
                 name: '',
-                image: '',
+                image: null,
                 price: ''
             },
             rules: {
@@ -74,13 +74,19 @@ export default {
             });
         },
         getImageFile: function (e) {
-            let file = e.target.files[0];
-            this.ruleForm.image = file;
-            console.log(typeof file)
+        console.log(this.$refs["file"].files);
+        console.log(this.$refs["file"].files[0]);
+        if (this.$refs["file"].files[0]) {
+            this.ruleForm.image = this.$refs["file"].files[0];     
+        } else {
+            this.ruleForm.image = null;
+        }
+        console.log('上传类型')
+        console.log(typeof this.ruleForm.image)
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
-            this.ruleForm.image = '';
+            this.ruleForm.image = null;
         },
     }
 }
