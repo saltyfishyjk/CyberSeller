@@ -283,6 +283,7 @@ def updateShopCart(request):
 			shop_cart_ele = ShopCart(user_id=user_id, good_id=good_id, num=new_num)
 		else:
 			shop_cart_ele.num = new_num
+			shop_cart_ele = ShopCart.objects.get(user_id=user_id, good_id=good_id)
 		shop_cart_ele.save()
 		return JsonResponse({
 			'succeed': True,
