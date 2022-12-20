@@ -324,6 +324,11 @@ def mainRecommendGoods(request):
 					'n': n}
 		goods_json = []
 		for good in goods:
+			like = 0
+			stars = Star.objects.filter(user_id=id, good_id=good.id)
+			if stars.count() == 1:
+				star = Star.objects.get(user_id=id, good_id=good.id)
+				like = star.like
 			good_json = {
 				'id': good.id,
 				'name': good.name,
@@ -334,7 +339,8 @@ def mainRecommendGoods(request):
 				'picture': good.picture,
 				'description': good.description,
 				'date': good.date,
-				'shelf_life': good.shelf_life
+				'shelf_life': good.shelf_life,
+				'like': like
 			}
 			goods_json.append(good_json)
 		ret_json['goods'] = goods_json
