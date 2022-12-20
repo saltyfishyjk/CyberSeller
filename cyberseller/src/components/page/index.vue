@@ -73,6 +73,7 @@ export default {
   data() {
     return {
       ishow: false,
+      init_data: true,
       current: 0,
       selectd: '',
       currentDate: new Date(),
