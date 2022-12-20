@@ -569,6 +569,7 @@ def goodsRecommendGoods(request):
 		ret_list = []
 		goods = Good.objects.all()
 		n = goods.count()
+		print('arrive here 1')
 		for good_index in goods:
 			good_index_id = good_index.id
 			value = 0
@@ -582,6 +583,7 @@ def goodsRecommendGoods(request):
 									maker=good_index.maker, picture=good_index.picture, description=good_index.description,
 									date=good_index.date, shelf_life=good_index.shelf_life, value=value)
 			ret_list.append(good_obj)
+		print('arrive here 2')
 		ret_list.sort()
 		goods_json = []
 		for good in ret_list:
@@ -598,6 +600,7 @@ def goodsRecommendGoods(request):
 				'shelf_life': good.shelf_life,
 			}
 			goods_json.append(good_json)
+		print('arrive here 3')
 		return JsonResponse({
 			'n': n,
 			'goods': goods_json
