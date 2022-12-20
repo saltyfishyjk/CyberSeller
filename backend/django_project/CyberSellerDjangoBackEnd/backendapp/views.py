@@ -215,7 +215,7 @@ def addGoods(request):
 			shelf_life = DEFAULT_SHELF_LIFE
 		# 获取图片文件
 		pic_file = request.FILES.get('picture')
-		test_non_file = False
+		test_non_file = True
 		if test_non_file:
 			pic_file = data.get('picture')
 			print('picfile : ' + str(pic_file) + ' type : ' + str(type(pic_file)))
@@ -277,8 +277,8 @@ def updateShopCart(request):
 				'message': 'ERROR! Need available new_num!'
 			})
 		shop_cart_ele = ShopCart.objects.filter(user_id=int(user_id), good_id=int(good_id))
-		print("arrive here")
-		print("shop cart ele type : " + str(type(shop_cart_ele)))
+		# print("arrive here")
+		# print("shop cart ele type : " + str(type(shop_cart_ele)))
 		if shop_cart_ele.count() == 0:
 			shop_cart_ele = ShopCart(user_id=user_id, good_id=good_id, num=new_num)
 		else:
