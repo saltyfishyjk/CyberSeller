@@ -302,7 +302,7 @@ def getRecommandGoods(user_id):
 	cnt = 0
 	for good in goods:
 		ret_list.append(good)
-	return ret_list
+	return goods
 
 # 获取对用户的个性推荐
 @csrf_exempt
@@ -455,9 +455,14 @@ def getSixPictures(request):
 		n = 6
 		pictures = []
 		# print('goods : ' + goods)
-		for i in range(0, 6):
-			print("id : " + goods[i].id)
-			pictures.append(Good.objects.get(id=goods[i].id).picture)
+		#for i in range(0, 6):
+			#print("id : " + goods[i].id)
+			#pictures.append(Good.objects.get(id=goods[i].id).picture)
+		cnt = 0
+		for good in goods:
+			pictures.append(good.picture)
+			if cnt >= 6:
+				break
 		return JsonResponse({
 			'succeed': True,
 			'code': '090101',
