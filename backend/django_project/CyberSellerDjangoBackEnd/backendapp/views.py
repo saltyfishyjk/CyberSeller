@@ -215,10 +215,11 @@ def addGoods(request):
 			shelf_life = DEFAULT_SHELF_LIFE
 		# 获取图片文件
 		pic_file = request.FILES.get('picture')
-		test_non_file = True
+		test_non_file = False
 		if test_non_file:
 			pic_file = data.get('picture')
 			print('picfile : ' + str(pic_file) + ' type : ' + str(type(pic_file)))
+		print('picfile : ' + str(pic_file) + ' type : ' + str(type(pic_file)))
 		if pic_file is None:
 			return JsonResponse({
 				'succeed': False,
