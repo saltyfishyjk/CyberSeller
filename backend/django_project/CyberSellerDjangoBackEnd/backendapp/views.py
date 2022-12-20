@@ -329,6 +329,7 @@ def mainRecommendGoods(request):
 				'name': good.name,
 				'price': good.price,
 				'seller_id': good.seller_id,
+				'seller_name': Account.objects.get(id=good.seller_id).name,
 				'maker': good.maker,
 				'picture': good.picture,
 				'description': good.description,
