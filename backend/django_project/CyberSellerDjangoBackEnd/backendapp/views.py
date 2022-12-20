@@ -453,6 +453,7 @@ def getSixPictures(request):
 		goods = getRecommandGoods(user_id)
 		n = 6
 		pictures = []
+		print('goods : ' + goods)
 		for i in range(0, 6):
 			print("id : " + goods[i].id)
 			pictures.append(Good.objects.get(id=goods[i].id).picture)
