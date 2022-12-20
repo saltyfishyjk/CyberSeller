@@ -237,6 +237,7 @@ def addGoods(request):
 		# 从配置文件中加载图片保存路径
 		pic_path = os.path.join(IMG_UPLOAD, pic_name)
 		# 保存文件
+		print('arrive here')
 		with open(pic_path, 'wb+') as fp:
 			fp.write(pic_file.read())
 		# 获取图片URL
