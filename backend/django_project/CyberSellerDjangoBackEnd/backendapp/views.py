@@ -167,13 +167,18 @@ def addGoods(request):
 	if request.method == 'POST':
 		# good = GoodForm(request.POST)
 		if testAddGoods:
-			name = request.POST.get('name')
+			data = request.POST
+			# name = request.POST.get('name')
+			name = data.get('name')
 			print("name = " + str(name) + " name type : " + str(type(name)))
-			price = request.POST.get('price')
+			# price = request.POST.get('price')
+			price = data.get('price')
 			print("price = " + str(price) + " price type : " + str(type(price)))
-			seller = request.POST.get('seller')
+			# seller = request.POST.get('seller')
+			seller = data.get('seller')
 			print('seller = ' + str(seller) + ' seller type : ' + str(type(seller)))
-			maker = request.POST.get('maker')
+			# maker = request.POST.get('maker')
+			maker = data.get('maker')
 			print('maker = ' + str(maker) + ' maker type : ' + str(type(maker)))
 			return JsonResponse({
 				'message': 'success'
