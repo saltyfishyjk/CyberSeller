@@ -93,3 +93,48 @@
 | `False` | `020002` | `ERROR! Non-exist name, make sure the name is correct`     | -1                   | -1      | `FAIL`       | 用户名错误                        |
 | `False` | `020003` | `ERROR! Wrong password, make sure the password is correct` | <数据库自动赋予的id> | -1      | <该用户身份> | 密码错误                          |
 
+### addGoods添加售卖商品
+
+#### 发送
+
+- 使用`POST`方法向服务器提供登录申请，数据格式`form-data`
+
+- URL:`http://43.143.179.158:8080/addGoods`
+
+- 具体属性如下：
+
+ | 属性        | 说明     | 类型                                                 |
+  | ----------- | -------- | ---------------------------------------------------- |
+  | name        | 商品名   | 字符串，非空，长度小于`64`                           |
+  | price       | 价格     | 精确小数（小数点后2位），非空，长度小于`20`          |
+  | seller_id   | 卖家ID   | 整数，非空，对应Account表中的ID                      |
+  | maker       | 制造商   | 字符串，可空，长度小于64                             |
+  | picture     | 图片     | 文件，非空，只能发送一张图片                         |
+  | description | 描述     | 字符串，可空，长度小于512                            |
+  | date        | 生产日期 | 字符串，可空，须形如yyyy-mm-dd，如`2021-01-10`       |
+  | shelf_life  | 保质期   | 字符串，可空，须形如yyyy-mm-dd-hh，如`0001-10-23-03` |
+
+#### 接收
+
+返回一个`JsonResponse`对象，属性列表如下：
+
+| 属性    | 说明             | 类型                                                         |
+| ------- | ---------------- | ------------------------------------------------------------ |
+| succeed | 是否成功添加商品 | 布尔值                                                       |
+| code    | 处理结果代码     | 六位字符串，标识不同正确/错误情况，前两位固定为`03`表示是`addGoods`的code；中间两位错误时为`00`，正确时为`01`；最后两位表明是正确/错误情况中的具体情形，可以查阅下方的表 |
+| message | 提示信息         | 提供更多关于本次请求处理结果的信息                           |
+
+- 正确情况
+
+| succeed | code     | message                             |
+| ------- | -------- | ----------------------------------- |
+| `True`  | `030101` | `SUCCESS! Add a good successfully!` |
+
+- 错误情况
+
+| succeed | code     | message                             |
+| ------- | -------- | ----------------------------------- |
+| `False` | `030000` | `ERROR! Need available good name! ` |
+| `False` | `030001` | `ERROR! Need available good price!` |
+| `False` | `030002` | `ERROR! Need available seller id`   |
+| `False` | `030003` | `ERROR! Need available pic file`    |
