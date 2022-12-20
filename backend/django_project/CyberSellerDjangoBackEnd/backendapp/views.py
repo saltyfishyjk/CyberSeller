@@ -6,7 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from backendapp.models import Account, Good, ShopCart, Star, Repo
 from django.views.decorators.csrf import csrf_exempt  # 用于忽略scrf攻击
 from CyberSellerDjangoBackEnd.settings import IMG_UPLOAD
-from GoodClass import GoodClass
+from backendapp.GoodClass import GoodClass
 
 # 合法身份identity列表
 legal_identity = ["admin", "customer", "seller"]
