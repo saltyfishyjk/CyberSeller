@@ -6,6 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from backendapp.models import Account, Good, ShopCart, Star, Repo
 from django.views.decorators.csrf import csrf_exempt  # 用于忽略scrf攻击
 from CyberSellerDjangoBackEnd.settings import IMG_UPLOAD
+from GoodClass import GoodClass
 
 # 合法身份identity列表
 legal_identity = ["admin", "customer", "seller"]
@@ -294,15 +295,33 @@ def updateShopCart(request):
 			'message': 'SUCCESS! Update ShopCart successfully!'
 		})
 
+# 对给定用户计算推荐商品排序
+# 对于加入购物车的商品增加5 * i的权重，其中i是购物车中的数量
+# 对于收藏的商品增加3的权重
+# 对于其他商品不增加权重
 
-def getRecommandGoods(user_id):
-	# TODO : 待完善
+
+def getMainRecommandGoods(user_id):
 	ret_list = []
 	goods = Good.objects.all()
 	cnt = 0
 	for good in goods:
-		ret_list.append(good)
-	return goods
+		good_id = good.id
+		like = 0
+		stars = Star.objects.filter(user_id=user_id, good_id=good_id)
+		if stars.count() != 0:
+			star = Star.objects.get(user_id=user_id, good_id=good_id)
+			like = star.like
+		num = 0
+		shopCarts = ShopCart.objects.filter(user_id=user_id, good_id=good_id)
+		if shopCarts.count() != 0:
+			shopCart = ShopCart.objects.get(user_id=user_id, good_id=good_id)
+			num = shopCart.num
+		goodObj = GoodClass(id=good_id, name=good.name, price=good.price, seller_id=good.seller_id, maker=good.maker, picture=good.picture, description=good.description, date=good.date, shelf_life=good.shelf_life, like=like, num=num)
+		ret_list.append(goodObj)
+	ret_list.sort()
+	return ret_list
+	# return goods
 
 # 获取对用户的个性推荐
 @csrf_exempt
@@ -326,19 +345,20 @@ def mainRecommendGoods(request):
 				'message': 'ERROR! Need available userid!'
 			})
 		# goods = Good.objects.all()
-		goods = getRecommandGoods(id)
-		n = goods.count()
+		goods = getMainRecommandGoods(id)
+		# n = goods.count()
+		n = len(goods)
 		ret_json = {'succeed': True,
 					'code': '050101',
 					'message': 'SUCCESS! Get goods recommended successfully!',
 					'n': n}
 		goods_json = []
 		for good in goods:
-			like = 0
-			stars = Star.objects.filter(user_id=id, good_id=good.id)
-			if stars.count() == 1:
-				star = Star.objects.get(user_id=id, good_id=good.id)
-				like = star.like
+			# like = 0
+			# stars = Star.objects.filter(user_id=id, good_id=good.id)
+			# if stars.count() == 1:
+				# star = Star.objects.get(user_id=id, good_id=good.id)
+				# like = star.like
 			good_json = {
 				'id': good.id,
 				'name': good.name,
@@ -350,7 +370,7 @@ def mainRecommendGoods(request):
 				'description': good.description,
 				'date': good.date,
 				'shelf_life': good.shelf_life,
-				'like': like
+				'like': good.like
 			}
 			goods_json.append(good_json)
 		ret_json['goods'] = goods_json
@@ -451,7 +471,7 @@ def getSixPictures(request):
 				'message': 'ERROR! Need available user_id!'
 			})
 		print('user_id : ' + str(user_id))
-		goods = getRecommandGoods(user_id)
+		goods = getMainRecommandGoods(user_id)
 		n = 6
 		pictures = []
 		cnt = 0
