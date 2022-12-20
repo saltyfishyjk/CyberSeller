@@ -461,6 +461,7 @@ def getSixPictures(request):
 		cnt = 0
 		for good in goods:
 			pictures.append(good.picture)
+			cnt += 1
 			if cnt >= 6:
 				break
 		return JsonResponse({
