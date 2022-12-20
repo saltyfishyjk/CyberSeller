@@ -300,7 +300,7 @@ def updateShopCart(request):
 def mainRecommendGoods(request):
 	if request.method == 'POST':
 		# 获取用户名
-		id = request.POST.get('id')
+		id = request.POST.get('user_id')
 		if id is None:
 			return JsonResponse({
 				'succeed': False,
