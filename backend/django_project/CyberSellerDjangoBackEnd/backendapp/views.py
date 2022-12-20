@@ -200,8 +200,9 @@ def addGoods(request):
 				print('pic_path : ' + str(pic_path))
 				# 保存文件
 				with open(pic_path, 'ab') as fp:
-					for chunk in pic_file.chunks():
-						fp.write(chunk)
+					fp.write(pic_file)
+					# for chunk in pic_file.chunks():
+						# fp.write(chunk)
 				# print('picture file = ' + str(pic_file) + ' type : ' + str(type))
 			return JsonResponse({
 				'message': 'success'
