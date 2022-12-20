@@ -95,7 +95,7 @@ def signup(request):
 		# return HttpResponse("ERROR! This URL accepts POST ONLY!")
 	# return response
 	return JsonResponse({
-		'succeed': response['response'],
+		'succeed': response['succeed'],
 		'code': response['code'],
 		'message': response['message'],
 		'id': response['id']
