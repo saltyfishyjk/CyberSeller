@@ -219,7 +219,7 @@ def addGoods(request):
 		test_non_file = True
 		if test_non_file:
 			pic_file = data.get('picture')
-			print('picfile : ' + str(pic_file))
+			print('picfile : ' + str(pic_file) + ' type : ' + str(type(pic_file)))
 		if pic_file is None:
 			return JsonResponse({
 				'succeed': False,
