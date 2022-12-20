@@ -199,8 +199,8 @@ def addGoods(request):
 				pic_path = os.path.join(IMG_UPLOAD, pic_name)
 				print('pic_path : ' + str(pic_path))
 				# 保存文件
-				with open(pic_path, 'ab') as fp:
-					fp.write(pic_file)
+				with open(pic_path, 'wb+') as fp:
+					fp.write(pic_file.read())
 					# for chunk in pic_file.chunks():
 						# fp.write(chunk)
 				# print('picture file = ' + str(pic_file) + ' type : ' + str(type))
