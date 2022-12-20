@@ -13,3 +13,4 @@ class GoodGoodClass(object):
 		self.value = value
 	def __lt__(self, other):
 		return self.value > other.value
+

@@ -578,10 +578,10 @@ def goodsRecommendGoods(request):
 				value += 1
 			if (price - good_index.price) / price < 0.25:
 				value += 1
-			goodObj = GoodGoodClass(id=good_id, name=good.name, price=good.price, seller_id=good.seller_id,
-									maker=good.maker, picture=good.picture, description=good.description,
-									date=good.date, shelf_life=good.shelf_life, value=value)
-			ret_list.append(goodObj)
+			good_obj = GoodGoodClass(id=good_index_id, name=good_index.name, price=good_index.price, seller_id=good_index.seller_id,
+									maker=good_index.maker, picture=good_index.picture, description=good_index.description,
+									date=good_index.date, shelf_life=good_index.shelf_life, value=value)
+			ret_list.append(good_obj)
 		ret_list.sort()
 		goods_json = []
 		for good in ret_list:
