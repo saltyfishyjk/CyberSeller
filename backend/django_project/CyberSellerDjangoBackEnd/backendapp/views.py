@@ -564,7 +564,7 @@ def goodsRecommendGoods(request):
 	if request.method == 'POST':
 		good_id = request.POST.get('good_id')
 		print('good_id : ' + str(good_id))
-		good = Good.objects.get(good_id=good_id)
+		good = Good.objects.get(id=good_id)
 		seller_id = good.seller_id
 		price = good.price
 		ret_list = []
