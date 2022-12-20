@@ -272,7 +272,7 @@ def mainRecommendGoods(request):
 				'message': 'ERROR! Need available userid!'
 			})
 		goods = Good.objects.all()
-		n = goods.__sizeof__()
+		n = goods.count()
 		ret_json = {'succeed': True,
 					'code': '050101',
 					'message': 'SUCCESS! Get goods recommended successfully!',
