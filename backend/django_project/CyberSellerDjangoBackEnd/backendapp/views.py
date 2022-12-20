@@ -185,14 +185,19 @@ def addGoods(request):
 			for pic_file in pic_files:
 				# 获取文件全名
 				pic_name = pic_file.name
+				print("pic_name : " + str(pic_name))
 				# 获取文件名
 				mobile = os.path.splitext(pic_name)[0]
+				print('mobile : ' + str(mobile))
 				# 获取文件后缀
 				ext = os.path.splitext(pic_name)[1]
+				print('ext : ' + str(ext))
 				# 重定义文件名
 				pic_name = f'avatar-{mobile}{ext}'
+				print('pic_name : ' + pic_name)
 				# 从配置文件中加载图片保存路径
 				pic_path = os.path.join(IMG_UPLOAD, pic_name)
+				print('pic_path : ' + str(pic_path))
 				# 保存文件
 				with open(pic_path, 'ab') as fp:
 					for chunk in pic_file.chunks():
