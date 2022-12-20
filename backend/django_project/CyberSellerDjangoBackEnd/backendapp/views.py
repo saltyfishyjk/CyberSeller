@@ -191,7 +191,7 @@ def addGoods(request):
 				'message': 'ERROR! Need available good price!'
 			})
 		# 卖家ID
-		seller_id = data.get('sellerId')
+		seller_id = data.get('seller_id')
 		if seller_id is None:
 			return JsonResponse({
 				'succeed': False,
