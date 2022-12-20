@@ -17,4 +17,4 @@ class GoodClass(object):
 		print('name : ' + self.name + ' value : ' + str(self.value))
 
 	def __lt__(self, other):
-		return self.value > other
+		return self.value > other.value
