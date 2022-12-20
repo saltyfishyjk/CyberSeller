@@ -201,6 +201,9 @@ def addGoods(request):
 		# 获取图片URL
 		pic_url = 'http://43.143.179.158:8080/img/' + pic_name
 		print('pic_url : ' + pic_url)
+		return JsonResponse({
+			'message': 'success'
+		})
 		if testAddGoods:
 			# 获取除了文件之外的数据
 			data = request.POST
