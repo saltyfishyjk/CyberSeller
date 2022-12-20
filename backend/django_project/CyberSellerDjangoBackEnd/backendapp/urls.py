@@ -10,5 +10,6 @@ urlpatterns = [
 	path(r'addGoods', views.addGoods, name='addGoods'),
 	re_path(r'^img/(?P<path>.*)$', serve, {
 		'document_root': IMG_UPLOAD
-	})
+	}),
+	path(r'mainRecommendGoods', views.mainRecommendGoods, name='mainRecommendGoods'),
 ]

@@ -168,6 +168,7 @@ DEFAULT_MAKER = 'bank'
 DEFAULT_DESCRIPTION = 'This is a nice product'
 DEFAULT_DATE = '2022-12-19'
 DEFAULT_SHELF_LIFE = '10-11-12-13'
+# 添加商品
 @csrf_exempt
 def addGoods(request):
 	if request.method == 'POST':
@@ -245,3 +246,50 @@ def addGoods(request):
 			'code': '030101',
 			'message': 'SUCCESS! Add a good successfully!'
 		})
+
+# 添加商品到购物车
+@csrf_exempt
+def addShopCart(request):
+	return None
+
+# 获取对用户的个性推荐
+@csrf_exempt
+def mainRecommendGoods(request):
+	if request.method == 'POST':
+		# 获取用户名
+		id = request.POST.get('id')
+		if id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '050000',
+				'message': 'ERROR! Need non-null userid!'
+			})
+		user = Account.objects.get(id=id)
+		if user is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '050001',
+				'message': 'ERROR! Need available userid!'
+			})
+		goods = Good.objects.all()
+		n = goods.__sizeof__()
+		ret_json = {'succeed': True,
+					'code': '050101',
+					'message': 'SUCCESS! Get goods recommended successfully!',
+					'n': n}
+		goods_json = []
+		for good in goods:
+			good_json = {
+				'id': good.id,
+				'name': good.name,
+				'price': good.price,
+				'seller_id': good.seller_id,
+				'maker': good.maker,
+				'picture': good.picture,
+				'description': good.description,
+				'date': good.date,
+				'shelf_life': good.shelf_life
+			}
+			goods_json.append(good_json)
+		ret_json['goods'] = goods_json
+		return JsonResponse(ret_json)
