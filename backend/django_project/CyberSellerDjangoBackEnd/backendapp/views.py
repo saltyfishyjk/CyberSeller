@@ -362,7 +362,9 @@ def searchShopCart(request):
 		goods = ShopCart.objects.filter(user_id=user_id)
 		n = goods.count()
 		goods_list = []
-		for good in goods:
+		for good_index in goods:
+			good_id = good_index.good_id
+			good = Good.objects.get(id=good_id)
 			goods_list.append({
 				'id': good.id,
 				'name': good.name,
@@ -372,7 +374,8 @@ def searchShopCart(request):
 				'picture': good.picture,
 				'description': good.description,
 				'date': good.date,
-				'shelf_life': good.shelf_life
+				'shelf_life': good.shelf_life,
+				'num': good_index.num
 			})
 		return JsonResponse({
 			'n': n,

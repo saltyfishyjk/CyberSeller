@@ -49,6 +49,12 @@ List<goods> goodsRecommendGoods(Goods goods)
 
 
 
+```
+收藏
+```
+
+
+
 ## Part 4 Other
 
 
