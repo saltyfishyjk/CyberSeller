@@ -17,7 +17,7 @@ class Good(models.Model):
 	price = models.DecimalField(max_digits=20, decimal_places=2)  # 价格，精确到小数点后2位
 	seller_id = models.IntegerField()  # 卖家ID，对应Account的id
 	maker = models.CharField(max_length=128)  # 制造商名称
-	picture = models.CharField(max_length=1024)  #商品图片url
+	picture = models.CharField(max_length=1024)  # 商品图片url
 	description = models.CharField(max_length=1024)  # 商品描述
 	date = models.CharField(max_length=128)  # 生产日期，形如yyyy-mm-dd
 	shelf_life = models.CharField(max_length=128)  # 保质期，形如yyyy-mm-dd-hh

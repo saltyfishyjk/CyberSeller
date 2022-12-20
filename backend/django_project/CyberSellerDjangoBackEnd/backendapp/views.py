@@ -353,3 +353,28 @@ def getGood(request):
 			'date': good.date,
 			'shelf_life': good.shelf_life
 		})
+
+@csrf_exempt
+def searchShopCart(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		user = Account.objects.get(id=user_id)
+		goods = ShopCart.objects.filter(user_id=user_id)
+		n = goods.count()
+		goods_list = []
+		for good in goods:
+			goods_list.append({
+				'id': good.id,
+				'name': good.name,
+				'price': good.price,
+				'seller_id': good.seller_id,
+				'maker': good.maker,
+				'picture': good.picture,
+				'description': good.description,
+				'date': good.date,
+				'shelf_life': good.shelf_life
+			})
+		return JsonResponse({
+			'n': n,
+			'goods': goods_list
+		})

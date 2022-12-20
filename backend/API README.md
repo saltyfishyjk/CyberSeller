@@ -8,7 +8,7 @@
 
 ## 用户注册与登录
 
-### signup用户注册
+### [01] signup用户注册
 
 #### 发送
 
@@ -52,7 +52,7 @@
 | `False` | `010004` | `ERROR! Illegal identity, make sure identity is admin, customer or seller` | `-1` | 非法身份                                   | 不执行请求，对数据库不产生影响 |
 | `False` | `010005` | `ERROR! This name has been signed up, please choose another name` | `-1` | 重名用户名                                 | 不执行请求，对数据库不产生影响 |
 
-### login用户登录
+### [02] login用户登录
 
 #### 发送
 
@@ -93,7 +93,7 @@
 | `False` | `020002` | `ERROR! Non-exist name, make sure the name is correct`     | -1                   | -1      | `FAIL`       | 用户名错误                        |
 | `False` | `020003` | `ERROR! Wrong password, make sure the password is correct` | <数据库自动赋予的id> | -1      | <该用户身份> | 密码错误                          |
 
-### addGoods添加售卖商品
+### [03] addGoods添加售卖商品
 
 #### 发送
 
@@ -139,7 +139,7 @@
 | `False` | `030002` | `ERROR! Need available seller id`   |
 | `False` | `030003` | `ERROR! Need available pic file`    |
 
-### updateShopCart添加商品到购物车
+### [04] updateShopCart添加商品到购物车
 
 #### 发送
 
@@ -183,7 +183,7 @@
 
 
 
-### mainRecommendGoods为用户推荐商品
+### [05] mainRecommendGoods为用户推荐商品
 
 #### 发送
 
@@ -234,7 +234,7 @@
 | `False` | `050000` | `ERROR! Need non-null userid! ` |
 | `False` | `050001` | `ERROR! Need available userid!` |
 
-### getGood获取指定商品所有信息
+### [06] getGood获取指定商品所有信息
 
 #### 发送
 
@@ -249,6 +249,41 @@
 | good_id | 商品id | 整数，**非空**，和`Good`对应 |
 
 #### 接收
+
+| 属性        | 说明      | 类型                             |
+| ----------- | --------- | -------------------------------- |
+| id          | 商品`id`  | 互不相同的整数，是标识商品的主码 |
+| name        | 商品名    | 字符串，商品名                   |
+| price       | 价格      | 字符串，精确到小数点后两位       |
+| seller_id   | 卖家`id`  | 互不相同的整数，是标识用户的主码 |
+| maker       | 制造商名  | 字符串，制造商名                 |
+| picture     | 图片`url` | 字符串，商品图片`url`            |
+| description | 商品描述  | 字符串，商品详细描述             |
+| date        | 生产日期  | 字符串，形如yyyy-mm-dd           |
+| shelf_life  | 保质期    | 字符串，形如yyyy-mm-dd-hh        |
+
+### [07] searchShopCart
+
+#### 发送
+
+- 使用`POST`方法向服务器提供登录申请，数据格式`form-data`
+
+- URL:`http://43.143.179.158:8080/searchShopCart`
+
+- 具体属性如下：
+
+| 属性    | 说明   | 类型                            |
+| ------- | ------ | ------------------------------- |
+| user_id | 用户id | 整数，**非空**，和`Account`对应 |
+
+#### 接收
+
+| 属性  | 说明                 | 类型                                                         |
+| ----- | -------------------- | ------------------------------------------------------------ |
+| n     | 购物车内商品种类数量 | 整数，是`goods`列表的长度                                    |
+| goods | 商品列表             | 包含有`n`个元素，每个元素是一个商品`json`，每个商品`json`结构见下表。 |
+
+**商品`json`**
 
 | 属性        | 说明      | 类型                             |
 | ----------- | --------- | -------------------------------- |
