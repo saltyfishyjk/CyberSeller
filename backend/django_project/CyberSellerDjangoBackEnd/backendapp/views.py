@@ -167,7 +167,7 @@ testAddGoods = False
 DEFAULT_MAKER = 'bank'
 DEFAULT_DESCRIPTION = 'This is a nice product'
 DEFAULT_DATE = '2022-12-19'
-DEFAULT_SHELF_LIFE = '10-11-12-13'
+DEFAULT_SHELF_LIFE = '0010-11-12-13'
 # 添加商品
 @csrf_exempt
 def addGoods(request):
