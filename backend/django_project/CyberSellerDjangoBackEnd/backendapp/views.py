@@ -236,7 +236,7 @@ def addGoods(request):
 			fp.write(pic_file.read())
 		# 获取图片URL
 		pic_url = 'http://43.143.179.158:8080/img/' + pic_name
-		good = Good(id=id, name=name, price=price, seller_id=seller_id,
+		good = Good(name=name, price=price, seller_id=seller_id,
 					maker=maker, picture=pic_url, description=description,
 					date=date, shelf_life=shelf_life)
 		good.save()
