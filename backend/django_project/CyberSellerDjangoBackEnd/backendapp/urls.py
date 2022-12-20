@@ -20,4 +20,5 @@ urlpatterns = [
 	path(r'updateRepo', views.updateRepo, name='updateRepo'),
 	path(r'getSellGoods', views.getSellGoods, name='getSellGoods'),
 	path(r'goodsRecommendGoods', views.goodsRecommendGoods, name='goodsRecommendGoods'),
+	path(r'getStarGoods', views.getStarGoods, name='getStarGoods'),
 ]

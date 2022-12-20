@@ -563,14 +563,14 @@ def getSellGoods(request):
 def goodsRecommendGoods(request):
 	if request.method == 'POST':
 		good_id = request.POST.get('good_id')
-		print('good_id : ' + str(good_id))
+		# print('good_id : ' + str(good_id))
 		good = Good.objects.get(id=good_id)
 		seller_id = good.seller_id
 		price = good.price
 		ret_list = []
 		goods = Good.objects.all()
 		n = goods.count()
-		print('arrive here 1')
+		# print('arrive here 1')
 		for good_index in goods:
 			good_index_id = good_index.id
 			value = 0
@@ -584,7 +584,7 @@ def goodsRecommendGoods(request):
 									maker=good_index.maker, picture=good_index.picture, description=good_index.description,
 									date=good_index.date, shelf_life=good_index.shelf_life, value=value)
 			ret_list.append(good_obj)
-		print('arrive here 2')
+		# print('arrive here 2')
 		ret_list.sort()
 		goods_json = []
 		for good in ret_list:
@@ -601,7 +601,35 @@ def goodsRecommendGoods(request):
 				'shelf_life': good.shelf_life,
 			}
 			goods_json.append(good_json)
-		print('arrive here 3')
+		# print('arrive here 3')
+		return JsonResponse({
+			'n': n,
+			'goods': goods_json
+		})
+
+@csrf_exempt
+def getStarGoods(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		stars = Star.objects.filter(user_id=user_id)
+		n = stars.count()
+		goods_json = []
+		for star in stars:
+			good_id = star.good_id
+			good = Good.objects.get(id=good_id)
+			good_json = {
+				'id': good.id,
+				'name': good.name,
+				'price': good.price,
+				'seller_id': good.seller_id,
+				'seller_name': Account.objects.get(id=good.seller_id).name,
+				'maker': good.maker,
+				'picture': good.picture,
+				'description': good.description,
+				'date': good.date,
+				'shelf_life': good.shelf_life,
+			}
+			goods_json.append(good_json)
 		return JsonResponse({
 			'n': n,
 			'goods': goods_json
