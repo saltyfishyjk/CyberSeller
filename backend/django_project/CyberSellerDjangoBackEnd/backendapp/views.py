@@ -238,7 +238,7 @@ def addGoods(request):
 		pic_path = os.path.join(IMG_UPLOAD, pic_name)
 		# 保存文件
 		print('arrive here')
-		with open(pic_path, 'wb+') as fp:
+		with open(pic_path, 'wb') as fp:
 			fp.write(pic_file.read())
 		# 获取图片URL
 		pic_url = 'http://43.143.179.158:8080/img/' + pic_name
