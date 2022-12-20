@@ -17,41 +17,34 @@
         :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
         @selection-change="handleSelectionChange"
         style="width: 100%;">
-<!--        多选框-->
+
         <el-table-column align="center"  type="selection" width="55" :selectable="canSelect"></el-table-column>
-<!--        商品图片-->
         <el-table-column label="商品" prop="img" width="110px" align="center">
           <template slot-scope="scope">
             <el-image style="width: 100px; height: 100px;" :src="scope.row.img"/>
           </template>
         </el-table-column>
-<!--        商品名字-->
         <el-table-column label="商品名" prop="name" align="center"></el-table-column>
-<!--        上下架状态-->
         <el-table-column label="状态"  prop="prize" width="110px" align="center">
           <template slot-scope="scope">
             <el-tag :type="goodsStatus(scope.row.status)">{{scope.row.status==1?"下架":"在售"}}</el-tag>
           </template>
         </el-table-column>
-<!--        商品单价-->
         <el-table-column label="单价"  prop="prize" width="110px" align="center">
           <template slot-scope="scope">
             <span>&yen;</span>{{scope.row.price}}
           </template>
         </el-table-column>
-<!--        商品数量-->
         <el-table-column label="数量"  prop="num" width="140px" align="center">
           <template slot-scope="scope">
             <el-input-number size="mini" v-model="scope.row.nums" :disabled="scope.row.status==1?true:false"></el-input-number>
           </template>
         </el-table-column>
-<!--        商品小计-->
         <el-table-column label="小计"  prop="allPrize" width="110px" align="center">
           <template slot-scope="scope">
             <span>&yen;</span>{{parseFloat(scope.row.price*scope.row.nums).toFixed(2)}}
           </template>
         </el-table-column>
-<!--        操作-->
         <el-table-column align="right">
           <template slot="header" slot-scope="scope">
             <el-input v-model="search" size="mini" placeholder="输入关键字搜索"/>

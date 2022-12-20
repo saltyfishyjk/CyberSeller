@@ -102,3 +102,17 @@ export function postForm(url, data = {}) {
         })
     })
 }
+
+
+export const mainRecommendGoods = async () => {
+    let fd = new FormData()
+    fd.append('user_id', localStorage.getItem('userId'))
+    console.log('user_id' + localStorage.getItem('userId'))
+    postForm(`http://43.143.179.158:8080/mainRecommendGoods`, fd).then(res => {
+        console.log(res)
+        return Promise.resolve(res.goods)
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+}
