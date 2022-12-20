@@ -3,8 +3,7 @@ import os.path
 
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from backendapp.models import Account
-from backendapp.models import Good
+from backendapp.models import Account, Good, ShopCart
 from django.views.decorators.csrf import csrf_exempt  # 用于忽略scrf攻击
 from CyberSellerDjangoBackEnd.settings import IMG_UPLOAD
 
@@ -275,8 +274,20 @@ def updateShopCart(request):
 			return JsonResponse({
 				'succeed': False,
 				'code': '040002',
-				'message': 'ERROR! Need avaliable new_num!'
+				'message': 'ERROR! Need available new_num!'
 			})
+		shop_cart_ele = ShopCart.objects.get(user_id=user_id, good_id=good_id)
+		if shop_cart_ele is None:
+			shop_cart_ele = ShopCart(user_id=user_id, good_id=good_id, num=new_num)
+		else:
+			shop_cart_ele.num = new_num
+		shop_cart_ele.save()
+		return JsonResponse({
+			'succeed': True,
+			'code': '040101',
+			'message': 'SUCCESS! Update ShopCart successfully!'
+		})
+
 
 # 获取对用户的个性推荐
 @csrf_exempt

@@ -156,11 +156,30 @@
 | good_id | 商品id       | 精确小数（小数点后2位），**非空**，和Good对应 |
 | new_num | 更新后的数量 | 整数，**非空**，应当大于等于`0`               |
 
-/* TODO */
-
 #### 接收
 
-/* TODO */
+返回一个`JsonResponse`对象，属性列表如下：
+
+| 属性    | 说明             | 类型                                                         |
+| ------- | ---------------- | ------------------------------------------------------------ |
+| succeed | 是否成功添加商品 | 布尔值                                                       |
+| code    | 处理结果代码     | 六位字符串，标识不同正确/错误情况，前两位固定为`03`表示是`addGoods`的code；中间两位错误时为`00`，正确时为`01`；最后两位表明是正确/错误情况中的具体情形，可以查阅下方的表 |
+| message | 提示信息         | 提供更多关于本次请求处理结果的信息                           |
+
+- 正确情况
+
+| succeed | code     | message                             |
+| ------- | -------- | ----------------------------------- |
+| `True`  | `040101` | `SUCCESS! Add a good successfully!` |
+
+- 错误情况
+
+| succeed | code     | message                           |
+| ------- | -------- | --------------------------------- |
+| `False` | `040000` | `ERROR! Need available user_id! ` |
+| `False` | `040001` | `ERROR! Need available good_id!`  |
+| `False` | `040002` | `ERROR! Need available new_num!`  |
+| `False` | `030003` | `ERROR! Need available pic file`  |
 
 
 
