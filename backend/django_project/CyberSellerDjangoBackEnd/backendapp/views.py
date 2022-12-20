@@ -6,7 +6,8 @@ from django.http import HttpResponse, JsonResponse
 from backendapp.models import Account, Good, ShopCart, Star, Repo
 from django.views.decorators.csrf import csrf_exempt  # 用于忽略scrf攻击
 from CyberSellerDjangoBackEnd.settings import IMG_UPLOAD
-from backendapp.GoodClass import GoodClass
+from backendapp.UserGoodClass import UserGoodClass
+from backendapp.GoodGoodClass import GoodGoodClass
 
 # 合法身份identity列表
 legal_identity = ["admin", "customer", "seller"]
@@ -317,7 +318,7 @@ def getMainRecommandGoods(user_id):
 		if shopCarts.count() != 0:
 			shopCart = ShopCart.objects.get(user_id=user_id, good_id=good_id)
 			num = shopCart.num
-		goodObj = GoodClass(id=good_id, name=good.name, price=good.price, seller_id=good.seller_id, maker=good.maker, picture=good.picture, description=good.description, date=good.date, shelf_life=good.shelf_life, like=like, num=num)
+		goodObj = UserGoodClass(id=good_id, name=good.name, price=good.price, seller_id=good.seller_id, maker=good.maker, picture=good.picture, description=good.description, date=good.date, shelf_life=good.shelf_life, like=like, num=num)
 		ret_list.append(goodObj)
 	ret_list.sort()
 	return ret_list
@@ -556,4 +557,48 @@ def getSellGoods(request):
 		return JsonResponse({
 			'n': n,
 			'goods': goods_list
+		})
+
+@csrf_exempt
+def goodsRecommendGoods(request):
+	if request.method == 'POST':
+		good_id = request.POST.get('good_id')
+		good = Good.objects.get(good_id=good_id)
+		seller_id = good.seller_id
+		price = good.price
+		ret_list = []
+		goods = Good.objects.all()
+		n = goods.count()
+		for good_index in goods:
+			good_index_id = good_index.id
+			value = 0
+			if good_index_id == good_id:
+				value += 1
+			if seller_id == good_index.seller_id:
+				value += 1
+			if (price - good_index.price) / price < 0.25:
+				value += 1
+			goodObj = GoodGoodClass(id=good_id, name=good.name, price=good.price, seller_id=good.seller_id,
+									maker=good.maker, picture=good.picture, description=good.description,
+									date=good.date, shelf_life=good.shelf_life, value=value)
+			ret_list.append(goodObj)
+		ret_list.sort()
+		goods_json = []
+		for good in ret_list:
+			good_json = {
+				'id': good.id,
+				'name': good.name,
+				'price': good.price,
+				'seller_id': good.seller_id,
+				'seller_name': Account.objects.get(id=good.seller_id).name,
+				'maker': good.maker,
+				'picture': good.picture,
+				'description': good.description,
+				'date': good.date,
+				'shelf_life': good.shelf_life,
+			}
+			goods_json.append(good_json)
+		return JsonResponse({
+			'n': n,
+			'goods': goods_json
 		})

@@ -1,5 +1,5 @@
 # 用于计算用户推荐商品排序
-class GoodClass(object):
+class UserGoodClass(object):
 	# id为编号，like为是否收藏，num为购物车中数量（没有加入购物车即为0）
 	def __init__(self, id, name, price, seller_id, maker, picture, description, date, shelf_life, like, num):
 		self.id = id
