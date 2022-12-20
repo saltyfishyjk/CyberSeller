@@ -167,34 +167,18 @@ def addGoods(request):
 	if request.method == 'POST':
 		# good = GoodForm(request.POST)
 		if testAddGoods:
+			# 获取除了文件之外的数据
 			data = request.POST
-			# name = request.POST.get('name')
 			name = data.get('name')
 			print("name = " + str(name) + " name type : " + str(type(name)))
-			# price = request.POST.get('price')
 			price = data.get('price')
 			print("price = " + str(price) + " price type : " + str(type(price)))
-			# seller = request.POST.get('seller')
 			seller = data.get('seller')
 			print('seller = ' + str(seller) + ' seller type : ' + str(type(seller)))
-			# maker = request.POST.get('maker')
 			maker = data.get('maker')
 			print('maker = ' + str(maker) + ' maker type : ' + str(type(maker)))
+			pic_file = request.FILES.get('picture')
+			print('picture file = ' + str(pic_file) + ' type : ' + str(type))
 			return JsonResponse({
 				'message': 'success'
 			})
-			# if good.is_valid():
-			#	return JsonResponse({
-					#"message": "succeed",
-					#"good_id": good.good_id,
-					#"name": good.name,
-					#"price": good.price,
-					#"seller": good.seller,
-					#"maker": good.marker
-					# "name": good.name
-				# })
-			# else:
-				#return JsonResponse({
-					#"message": "fail",
-					#'good': good
-				#})
