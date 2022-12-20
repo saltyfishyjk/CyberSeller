@@ -3,7 +3,7 @@ import os.path
 
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from backendapp.models import Account, Good, ShopCart, Star
+from backendapp.models import Account, Good, ShopCart, Star, Repo
 from django.views.decorators.csrf import csrf_exempt  # 用于忽略scrf攻击
 from CyberSellerDjangoBackEnd.settings import IMG_UPLOAD
 
@@ -454,10 +454,6 @@ def getSixPictures(request):
 		goods = getRecommandGoods(user_id)
 		n = 6
 		pictures = []
-		# print('goods : ' + goods)
-		#for i in range(0, 6):
-			#print("id : " + goods[i].id)
-			#pictures.append(Good.objects.get(id=goods[i].id).picture)
 		cnt = 0
 		for good in goods:
 			pictures.append(good.picture)
@@ -470,4 +466,35 @@ def getSixPictures(request):
 			'message': 'SUCCESS! Got 6 head pictures',
 			'n': n,
 			'pictures': pictures
+		})
+
+@csrf_exempt
+def updateRepo(request):
+	if request.method == 'POST':
+		good_id = request.POST.get('good_id')
+		repo = request.POST.get('repo')
+		if good_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '100000',
+				'message': 'ERROR! Need available good_id!'
+			})
+		if repo is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '100001',
+				'message': 'ERROR! Need available repo!'
+			})
+		repos = Repo.objects.filter(good_id=good_id)
+		if repos.count() == 0:
+			new_repo_ele = Repo(good_id=good_id, repo=repo)
+			new_repo_ele.save()
+		else:
+			repo_ele = Repo.objects.get(good_id=good_id)
+			repo_ele.repo = repo
+			repo_ele.save()
+		return JsonResponse({
+			'succeed': True,
+			'code': '100101',
+			'message': 'SUCCESS! Update a good\'s repo successfully!'
 		})

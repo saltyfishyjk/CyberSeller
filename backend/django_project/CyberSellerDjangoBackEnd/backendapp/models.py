@@ -35,3 +35,9 @@ class Star(models.Model):
 	user_id = models.IntegerField()  # 用户ID，和Account相对应
 	good_id = models.IntegerField()  # 商品ID，和Good相对应
 	like = models.IntegerField()  # 是否收藏，为1表示收藏，为0表示不收藏
+
+# 库存表
+class Repo(models.Model):
+	id = models.AutoField(primary_key=True)  # 库存元组ID，由数据库自动分配并自增
+	good_id = models.IntegerField()  # 商品ID，和Good相对应
+	repo = models.IntegerField()  # 库存，为整数

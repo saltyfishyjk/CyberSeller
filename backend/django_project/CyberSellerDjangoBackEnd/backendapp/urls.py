@@ -17,4 +17,5 @@ urlpatterns = [
 	path(r'searchShopCart', views.searchShopCart, name='searchShopCart'),
 	path(r'updateStar', views.updateStar, name='updateStar'),
 	path(r'getSixPictures', views.getSixPictures, name='getSixPictures'),
+	path(r'updateRepo', views.updateRepo, name='updateRepo'),
 ]
