@@ -295,6 +295,15 @@ def updateShopCart(request):
 		})
 
 
+def getRecommandGoods(user_id):
+	# TODO : 待完善
+	ret_list = []
+	goods = Good.objects.all()
+	cnt = 0
+	for good in goods:
+		ret_list.append(good)
+	return ret_list
+
 # 获取对用户的个性推荐
 @csrf_exempt
 def mainRecommendGoods(request):
@@ -316,7 +325,8 @@ def mainRecommendGoods(request):
 				'code': '050001',
 				'message': 'ERROR! Need available userid!'
 			})
-		goods = Good.objects.all()
+		# goods = Good.objects.all()
+		goods = getRecommandGoods(id)
 		n = goods.count()
 		ret_json = {'succeed': True,
 					'code': '050101',
@@ -429,3 +439,26 @@ def updateStar(request):
 		'code': '080101',
 		'message': 'SUCCESS! Star a good successfully!'
 	})
+
+@csrf_exempt
+def getSixPictures(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '090000',
+				'message': 'ERROR! Need available user_id!'
+			})
+		goods = getRecommandGoods(user_id)
+		n = 6
+		pictures = []
+		for i in range(0, 6):
+			pictures.append(Good.objects.get(id=goods[i].id).picture)
+		return JsonResponse({
+			'succeed': True,
+			'code': '090101',
+			'message': 'SUCCESS! Got 6 hea pictures',
+			'n': n,
+			'pictures': pictures
+		})

@@ -340,3 +340,25 @@
 | `False` | `080000` | `ERROR! Need available user_id! ` |
 | `False` | `080001` | `ERROR! Need available good_id!`  |
 | `False` | `080002` | `ERROR! Need available like!`     |
+
+### [09]getSixPictures获取首页六张滚播图
+
+#### 发送
+
+- 使用`POST`方法向服务器提供登录申请，数据格式`form-data`
+
+- URL:`http://43.143.179.158:8080/getSixPictures`
+
+- 具体属性如下：
+
+| 属性    | 说明   | 类型                            |
+| ------- | ------ | ------------------------------- |
+| user_id | 用户id | 整数，**非空**，和`Account`对应 |
+
+#### 接收
+
+| 属性     | 说明        | 类型                                   |
+| -------- | ----------- | -------------------------------------- |
+| n        | 图片数量    | 整数，执行正确应当是6                  |
+| pictures | 图片url列表 | 包含有`n`个元素，每个元素是一个商品url |
+

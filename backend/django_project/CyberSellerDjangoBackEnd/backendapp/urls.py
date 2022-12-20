@@ -15,5 +15,6 @@ urlpatterns = [
 	path(r'updateShopCart', views.updateShopCart, name='updateShopCart'),
 	path(r'getGood', views.getGood, name='getGood'),
 	path(r'searchShopCart', views.searchShopCart, name='searchShopCart'),
-	path(r'updateStar', views.updateStar, name='updateStar')
+	path(r'updateStar', views.updateStar, name='updateStar'),
+	path(r'getSixPictures', views.getSixPictures, name='getSixPictures'),
 ]
