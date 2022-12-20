@@ -177,8 +177,10 @@ def addGoods(request):
 			print('seller = ' + str(seller) + ' seller type : ' + str(type(seller)))
 			maker = data.get('maker')
 			print('maker = ' + str(maker) + ' maker type : ' + str(type(maker)))
-			pic_file = request.FILES.get('picture')
-			print('picture file = ' + str(pic_file) + ' type : ' + str(type))
+			# pic_file = request.FILES.get('picture')
+			pic_files = request.FILES.get('picture')
+			for pic_file in pic_files:
+				print('picture file = ' + str(pic_file) + ' type : ' + str(type))
 			return JsonResponse({
 				'message': 'success'
 			})
