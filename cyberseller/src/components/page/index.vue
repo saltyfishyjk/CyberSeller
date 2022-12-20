@@ -82,7 +82,7 @@
           selectd: '',
           currentDate: new Date(),
           imageList:[
-            {id:1,title:"test1", address:"https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2013319254,3446577563&fm=26&gp=0.jpg"},
+            {id: 1, title: "test1", address: "http://43.143.179.158:8080/img/avatar-%E6%8A%97%E5%8E%9F.jpg"},
             {id:2,title:"test2", address:"https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2013319254,3446577563&fm=26&gp=0.jpg"},
             {id:3,title:"test3", address:"https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2013319254,3446577563&fm=26&gp=0.jpg"},
             {id:4,title:"test4", address:"https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2013319254,3446577563&fm=26&gp=0.jpg"},

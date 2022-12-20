@@ -13,6 +13,7 @@
     "axios": "^0.20.0",
     "element-china-area-data": "^5.0.2",
     "element-ui": "^2.13.2",
+    "qs": "^6.11.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

@@ -1,10 +1,5 @@
 // appfront/src/api/api.js
 import axios from "axios"
-var user = {
-    name: "123@qq.com",
-    password: "123",
-    identity: "customer"
-}
 
 axios.interceptors.response.use(response => { //axios拦截器
 
@@ -31,16 +26,15 @@ export function post(url, params = {}, json = false) {
     };
     // FormData格式请求头
     const headerFormData = {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+        "Content-Type": 'multipart/form-data'
     };
     return new Promise((resolve, reject) => {
         axios
-            .post(url, json ? JSON.stringify(params) : qs.stringify(params), {
+            .post(url, json ? JSON.stringify(params) : params, {
                 headers: json ? headerJSON : headerFormData,
                 responseType: "json"
             })
             .then(res => {
-                console.log(res['message']);
                 resolve(res.data);
             })
             .catch(err => {
@@ -49,26 +43,62 @@ export function post(url, params = {}, json = false) {
     });
 }
 
-export const userLogin = async () => {
+export const userLogin = async (para) => {
     await post(`http://43.143.179.158:8080/login`, {
-        "name": "123@qq.com",
-        "password": "123"
+        "name": para.username,
+        "password": para.password
     }, true).then(res => {
+        console.log(res)
+        if (res.succeed) {
+            localStorage.setItem('username', para.username);
+            localStorage.setItem('userId', res.id);
+        } else {
+            localStorage.setItem('username', 'admin');
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+}
 
-        console.log(res['message']);
-        console.log(res.message);
+export const userSignUp = async (para) => {
+    await post(`http://43.143.179.158:8080/signup`, {
+        "name": para.username,
+        "password": para.password,
+        "identity": "customer"
+    }, true).then(res => {
+        console.log(res)
+        if (res.succeed) {
+            localStorage.setItem('username', para.username);
+            localStorage.setItem('userId', para.id);
+        } else {
+            localStorage.setItem('username', 'admin');
+        }
     })
         .catch(function (error) {
             console.log(error);
         });
 }
 
-export const userSignUp = async () => {
-    let result = await post(`http://43.143.179.158:8080/signup`, {
-        "name": "123@qq.com",
-        "password": "123",
-        "identity": "customer"
-    }, true)
-    console.log("result->" + result)
+export const addGoods = async (para) => {
+    console.log(para.get('name'))
+    await post(`http://43.143.179.158:8080/addGoods`, para, false).then(res => {
+        console.log(res)
+    })
+        .catch(function (error) {
+            console.log(error);
+        });
 }
 
+export function postForm(url, data = {}) {
+    return new Promise((resolve, reject) => {
+        axios.create({
+            withCredentials: true,
+            headers: {  'Content-Type': "multipart/form-data" },
+        }).post(url, data).then(response => {
+            resolve(response.data)
+        }, err => {
+            reject(err)
+        })
+    })
+}

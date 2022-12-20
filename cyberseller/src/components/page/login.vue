@@ -1,7 +1,7 @@
 <template>
     <div class="login-wrap">
         <div class="ms-login">
-            <div class="ms-title">后台管理系统</div>
+            <div class="ms-title">CyberSeller</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
                     <el-input v-model="param.username" placeholder="username">
@@ -21,21 +21,22 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
-
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
+                <div class="register-btn">
+                    <el-button type="primary" @click="register()">注册</el-button>
+                </div>
             </el-form>
         </div>
     </div>
 </template>
 
 <script>
-import { userLogin, userSignUp } from "@/api";
+import { userLogin } from "@/api";
 export default {
     data: function() {
         return {
             param: {
-                username: 'admin',
-                password: '123123',
+                username: '',
+                password: '',
             },
             rules: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -45,19 +46,22 @@ export default {
     },
     methods: {
         submitForm() {
-            userLogin(this.param);
-            this.$refs.login.validate(valid => {
-                if (valid) {
-                    this.$message.success('登录成功');
-                    localStorage.setItem('ms_username', this.param.username);
+            userLogin(this.param).then(res => { 
+                let name=localStorage.getItem('username')
+                if (name!='admin') {
+                    this.$message.success('登录成功!');
                     this.$router.push('/');
                 } else {
-                    this.$message.error('请输入账号和密码');
+                    this.$message.error('登录失败,请检查你的用户名与密码!');
                     console.log('error submit!!');
                     return false;
                 }
-            });
+                }
+            )
         },
+        register() { 
+            this.$router.replace('/register');
+        }
     },
 };
 </script>
@@ -98,9 +102,14 @@ export default {
     height: 36px;
     margin-bottom: 10px;
 }
-.login-tips {
-    font-size: 12px;
-    line-height: 30px;
-    color: #fff;
+
+.register-btn {
+    text-align: center;
+}
+
+.register-btn button {
+    width: 100%;
+    height: 36px;
+    margin-bottom: 10px;
 }
 </style>

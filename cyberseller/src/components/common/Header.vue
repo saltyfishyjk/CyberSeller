@@ -22,7 +22,7 @@
 <!--          </el-tooltip>-->
 <!--        </div>-->
         <!-- 我的购物车 -->
-        <div class="btn-bell">
+        <div class="btn-bell" v-if="login_state()">
           <el-tooltip effect="dark" content="我的购物车" placement="bottom">
             <router-link to="/carts">
               <i class="el-icon-shopping-cart-2"  style="color: #F2F8FE;"></i>
@@ -30,7 +30,7 @@
           </el-tooltip>
         </div>
         <!-- 我的收藏 -->
-        <div class="btn-bell">
+        <div class="btn-bell" v-if="login_state()">
           <el-tooltip effect="dark" content="我的收藏" placement="bottom">
             <router-link to="/collection">
               <i class="el-icon-star-on" style="color: #F2F8FE;"></i>
@@ -38,7 +38,7 @@
           </el-tooltip>
         </div>
         <!-- 消息中心 -->
-        <div class="btn-bell">
+        <div class="btn-bell" v-if="login_state()">
           <el-tooltip
             effect="dark"
             :content="message?`有${message}条未读消息`:`消息中心`"
@@ -49,7 +49,7 @@
           <span class="btn-bell-badge" v-if="message"></span>
         </div>
         <!-- 用户头像 -->
-        <div class="user-avator">
+        <div class="user-avator" v-if="login_state()">
           <img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2057588226,2402156864&fm=11&gp=0.jpg" />
         </div>
 
@@ -60,12 +60,11 @@
                         <i class="el-icon-caret-bottom"></i>
                     </span>
           <el-dropdown-menu slot="dropdown">
-            <router-link to="/myOrders"><el-dropdown-item>我的订单</el-dropdown-item> </router-link>
-            <router-link to="/userInfo"><el-dropdown-item>我的信息</el-dropdown-item> </router-link>
-            <router-link to="/addressMag"><el-dropdown-item>地址管理</el-dropdown-item> </router-link>
-            <a href="https://github.com/zengxiaochao/hello-mall"><el-dropdown-item>Git仓库</el-dropdown-item> </a>
-            <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
-<!--            <el-dropdown-item>退出登录</el-dropdown-item>-->
+            <router-link to="/myOrders"><el-dropdown-item v-if="login_state()">我的订单</el-dropdown-item> </router-link>
+            <router-link to="/userInfo"><el-dropdown-item v-if="login_state()">我的信息</el-dropdown-item> </router-link>
+            <router-link to="/addressMag"><el-dropdown-item v-if="login_state()">地址管理</el-dropdown-item> </router-link>
+            <router-link to="/sellGoods"><el-dropdown-item v-if="login_state()">发布商品</el-dropdown-item> </router-link>
+            <el-dropdown-item divided command="loginout">{{ loginout_user }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -100,22 +99,28 @@
       return {
         collapse: false,
         fullscreen: false,
-        name: '金刚葫芦娃',
+        name: 'admin',
         message: 2,
         drawer: false,
       };
     },
     computed: {
       username() {
-        let username = localStorage.getItem('ms_username');
+        let username = localStorage.getItem('username');
         return username ? username : this.name;
+      },
+      loginout_user() { 
+        return this.username == 'admin' ? '登录' : '退出登录';
       }
     },
     methods: {
+      login_state() { 
+        return this.username != 'admin';
+      },
       // 用户名下拉菜单选择事件
       handleCommand(command) {
         if (command == 'loginout') {
-          localStorage.removeItem('ms_username');
+          localStorage.removeItem('username');
           this.$router.push('/login');
         }
       },
