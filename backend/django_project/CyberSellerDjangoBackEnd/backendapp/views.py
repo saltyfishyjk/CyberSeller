@@ -216,6 +216,10 @@ def addGoods(request):
 			shelf_life = DEFAULT_SHELF_LIFE
 		# 获取图片文件
 		pic_file = request.FILES.get('picture')
+		test_non_file = True
+		if test_non_file:
+			pic_file = data.get('picture')
+			print('picfile : ' + str(pic_file))
 		if pic_file is None:
 			return JsonResponse({
 				'succeed': False,
@@ -249,8 +253,30 @@ def addGoods(request):
 
 # 添加商品到购物车
 @csrf_exempt
-def addShopCart(request):
-	return None
+def updateShopCart(request):
+	if request.method == 'POST':
+		data = request.POST
+		user_id = data.get('user_id')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '040000',
+				'message': 'ERROR! Need available user_id!'
+			})
+		good_id = data.get('good_id')
+		if good_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '040001',
+				'message': 'ERROR! Need available good_id!'
+			})
+		new_num = data.get('new_num')
+		if new_num is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '040002',
+				'message': 'ERROR! Need avaliable new_num!'
+			})
 
 # 获取对用户的个性推荐
 @csrf_exempt

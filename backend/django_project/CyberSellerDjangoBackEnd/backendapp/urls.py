@@ -12,4 +12,5 @@ urlpatterns = [
 		'document_root': IMG_UPLOAD
 	}),
 	path(r'mainRecommendGoods', views.mainRecommendGoods, name='mainRecommendGoods'),
+	path(r'updateShopCart', views.updateShopCart, name='updateShopCart'),
 ]

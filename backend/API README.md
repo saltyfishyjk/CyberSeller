@@ -139,21 +139,22 @@
 | `False` | `030002` | `ERROR! Need available seller id`   |
 | `False` | `030003` | `ERROR! Need available pic file`    |
 
-### addShopCart添加商品到购物车
+### updateShopCart添加商品到购物车
 
 #### 发送
 
 - 使用`POST`方法向服务器提供登录申请，数据格式`form-data`
 
-- URL:`http://43.143.179.158:8080/addShopCart`
+- URL:`http://43.143.179.158:8080/updateShopCart`
 
 - 具体属性如下：
 
-| 属性      | 说明   | 类型                                          |
-| --------- | ------ | --------------------------------------------- |
-| user_id   | 用户id | 整数，**非空**，和Account对应                 |
-| good_id   | 商品id | 精确小数（小数点后2位），**非空**，和Good对应 |
-| seller_id | 卖家ID | 整数，**非空**，对应Account表中的ID           |
+| 属性    | 说明         | 类型                                          |
+| ------- | ------------ | --------------------------------------------- |
+| id      | 一条数据的   | 整数，**非空**，对应Account表中的ID           |
+| user_id | 用户id       | 整数，**非空**，和Account对应                 |
+| good_id | 商品id       | 精确小数（小数点后2位），**非空**，和Good对应 |
+| new_num | 更新后的数量 | 整数，**非空**，应当大于等于`0`               |
 
 /* TODO */
 
