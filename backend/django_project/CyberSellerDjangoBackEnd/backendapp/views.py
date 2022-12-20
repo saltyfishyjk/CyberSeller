@@ -277,6 +277,7 @@ def updateShopCart(request):
 				'message': 'ERROR! Need available new_num!'
 			})
 		shop_cart_ele = ShopCart.objects.get(user_id=user_id, good_id=good_id)
+		print("arrive here")
 		if shop_cart_ele is None:
 			shop_cart_ele = ShopCart(user_id=user_id, good_id=good_id, num=new_num)
 		else:
