@@ -450,6 +450,7 @@ def getSixPictures(request):
 				'code': '090000',
 				'message': 'ERROR! Need available user_id!'
 			})
+		print('user_id : ' + user_id)
 		goods = getRecommandGoods(user_id)
 		n = 6
 		pictures = []
