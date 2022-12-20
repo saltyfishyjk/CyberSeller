@@ -18,4 +18,5 @@ urlpatterns = [
 	path(r'updateStar', views.updateStar, name='updateStar'),
 	path(r'getSixPictures', views.getSixPictures, name='getSixPictures'),
 	path(r'updateRepo', views.updateRepo, name='updateRepo'),
+	path(r'getSellGoods', views.getSellGoods, name='getSellGoods'),
 ]

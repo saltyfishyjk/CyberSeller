@@ -498,3 +498,42 @@ def updateRepo(request):
 			'code': '100101',
 			'message': 'SUCCESS! Update a good\'s repo successfully!'
 		})
+
+@csrf_exempt
+def getSellGoods(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '110000',
+				'message': 'ERROR! Need available user_id!'
+			})
+		goods = Good.objects.filter(seller_id=user_id)
+		n = goods.count()
+		goods_list = []
+		for good in goods:
+			good_id = good.id
+			repos = Repo.objects.filter(good_id=good_id)
+			repo_num = 0
+			if repos.count() == 0:
+				repo = Repo(good_id=good_id, repo=0)
+				repo.save()
+			else:
+				repo_num = Repo.objects.get(good_id=good_id).repo
+			goods_list.append({
+				'id': good.id,
+				'name': good.name,
+				'price': good.price,
+				'seller_id': good.seller_id,
+				'maker': good.maker,
+				'picture': good.picture,
+				'description': good.description,
+				'date': good.date,
+				'shelf_life': good.shelf_life,
+				'repo': repo_num
+			})
+		return JsonResponse({
+			'n': n,
+			'goods': goods_list
+		})
