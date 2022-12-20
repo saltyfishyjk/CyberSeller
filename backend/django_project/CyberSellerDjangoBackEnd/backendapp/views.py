@@ -181,7 +181,7 @@ def addGoods(request):
 			print('maker = ' + str(maker) + ' maker type : ' + str(type(maker)))
 			# pic_file = request.FILES.get('picture')
 			# 获取图片文件列表
-			pic_files = request.FILES.get('picture')
+			pic_files = request.FILES.getlist('picture')
 			for pic_file in pic_files:
 				# 获取文件全名
 				pic_name = pic_file.name
