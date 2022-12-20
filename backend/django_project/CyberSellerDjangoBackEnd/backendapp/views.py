@@ -278,6 +278,7 @@ def updateShopCart(request):
 			})
 		shop_cart_ele = ShopCart.objects.filter(user_id=int(user_id), good_id=int(good_id))
 		print("arrive here")
+		print("shop cart ele type : " + str(type(shop_cart_ele)))
 		if shop_cart_ele is None:
 			shop_cart_ele = ShopCart(user_id=user_id, good_id=good_id, num=new_num)
 		else:
