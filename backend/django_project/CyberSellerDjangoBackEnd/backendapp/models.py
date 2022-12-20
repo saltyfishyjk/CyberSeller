@@ -18,5 +18,5 @@ class Good(models.Model):
 	picture = models.CharField(max_length=1024)  #商品图片url
 	description = models.CharField(max_length=1024)  # 商品描述
 	date = models.CharField(max_length=128)  # 生产日期，形如yyyy-mm-dd
-	shelfLife = models.CharField(max_length=128)  # 保质期，形如yyyy-mm-dd-hh
+	shelf_life = models.CharField(max_length=128)  # 保质期，形如yyyy-mm-dd-hh
 

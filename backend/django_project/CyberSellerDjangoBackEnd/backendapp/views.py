@@ -164,6 +164,10 @@ def login(request):
 	# return response
 
 testAddGoods = False
+DEFAULT_MAKER = 'bank'
+DEFAULT_DESCRIPTION = 'This is a nice product'
+DEFAULT_DATE = '2022-12-19'
+DEFAULT_SHELF_LIFE = '10-11-12-13'
 @csrf_exempt
 def addGoods(request):
 	if request.method == 'POST':
@@ -171,23 +175,52 @@ def addGoods(request):
 		data = request.POST
 		# 商品名
 		name = data.get('name')
+		if name is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '030000',
+				'message': 'ERROR! Need available good name!'
+			})
 		# 价格
 		price = data.get('price')
+		if price is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '030001',
+				'message': 'ERROR! Need available good price!'
+			})
 		# 卖家ID
 		seller_id = data.get('sellerId')
+		if seller_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '030002',
+				'message': 'ERROR! Need available seller id'
+			})
 		# 制造商名称
 		maker = data.get('maker')
+		if maker is None:
+			maker = DEFAULT_MAKER
 		# 商品描述
 		description = data.get('description')
+		if description is None:
+			description = DEFAULT_DESCRIPTION
 		# 生产日期
 		date = data.get('date')
-		print("date : " + str(date) + " type : " + str(type(date)))
-		if date == None:
-			print("None!")
+		if date is None:
+			date = DEFAULT_DATE
 		# 保质期
-		shelfLife = data.get('shelfLife')
+		shelf_life = data.get('shelfLife')
+		if shelf_life is None:
+			shelf_life = DEFAULT_SHELF_LIFE
 		# 获取图片文件
 		pic_file = request.FILES.get('picture')
+		if pic_file is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '030003',
+				'message': 'ERROR! Need available pic file'
+			})
 		# 获取文件全名
 		pic_name = pic_file.name
 		# 获取文件名
@@ -203,7 +236,15 @@ def addGoods(request):
 			fp.write(pic_file.read())
 		# 获取图片URL
 		pic_url = 'http://43.143.179.158:8080/img/' + pic_name
-		# print('pic_url : ' + pic_url)
+		good = Good(id=id, name=name, price=price, seller_id=seller_id,
+					maker=maker, picture=pic_url, description=description,
+					date=date, shelf_life=shelf_life)
+		good.save()
+		return JsonResponse({
+			'succeed': True,
+			'code': '030101',
+			'message': 'SUCCESS! Add a good successfully!'
+		})
 
 		return JsonResponse({
 			'message': 'success'
