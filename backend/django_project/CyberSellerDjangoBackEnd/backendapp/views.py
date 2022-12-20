@@ -4,8 +4,8 @@ import os.path
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from backendapp.models import Account
+from backendapp.models import Good
 from django.views.decorators.csrf import csrf_exempt  # 用于忽略scrf攻击
-from .Good import GoodForm
 from CyberSellerDjangoBackEnd.settings import IMG_UPLOAD
 
 # 合法身份identity列表
@@ -163,11 +163,44 @@ def login(request):
 	})
 	# return response
 
-testAddGoods = True
+testAddGoods = False
 @csrf_exempt
 def addGoods(request):
 	if request.method == 'POST':
-		# good = GoodForm(request.POST)
+		# 获取除了文件之外的数据
+		data = request.POST
+		# 商品名
+		name = data.get('name')
+		# 价格
+		price = data.get('price')
+		# 卖家ID
+		seller_id = data.get('sellerId')
+		# 制造商名称
+		maker = data.get('maker')
+		# 商品描述
+		description = data.get('description')
+		# 生产日期
+		date = data.get('date')
+		# 保质期
+		shelfLife = data.get('shelfLife')
+		# 获取图片文件
+		pic_file = request.FILES.get('picture')
+		# 获取文件全名
+		pic_name = pic_file.name
+		# 获取文件名
+		mobile = os.path.splitext(pic_name)[0]
+		# 获取文件后缀
+		ext = os.path.splitext(pic_name)[1]
+		# 重定义文件名
+		pic_name = f'avatar-{mobile}{ext}'
+		# 从配置文件中加载图片保存路径
+		pic_path = os.path.join(IMG_UPLOAD, pic_name)
+		# 保存文件
+		with open(pic_path, 'wb+') as fp:
+			fp.write(pic_file.read())
+		# 获取图片URL
+		pic_url = 'http://43.143.179.158:8080/img/' + pic_name
+		print('pic_url : ' + pic_url)
 		if testAddGoods:
 			# 获取除了文件之外的数据
 			data = request.POST
