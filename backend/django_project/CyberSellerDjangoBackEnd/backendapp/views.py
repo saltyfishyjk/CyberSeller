@@ -181,6 +181,9 @@ def addGoods(request):
 		description = data.get('description')
 		# 生产日期
 		date = data.get('date')
+		print("date : " + str(date) + " type : " + str(type(date)))
+		if date == None:
+			print("None!")
 		# 保质期
 		shelfLife = data.get('shelfLife')
 		# 获取图片文件
@@ -200,7 +203,8 @@ def addGoods(request):
 			fp.write(pic_file.read())
 		# 获取图片URL
 		pic_url = 'http://43.143.179.158:8080/img/' + pic_name
-		print('pic_url : ' + pic_url)
+		# print('pic_url : ' + pic_url)
+
 		return JsonResponse({
 			'message': 'success'
 		})
