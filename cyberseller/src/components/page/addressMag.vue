@@ -81,7 +81,8 @@
 
 <script>
 import { postForm } from "@/api";
-    export default {
+export default {
+  inject: ['reload'],
         name: "addressMag",
       data()
       {
@@ -116,10 +117,33 @@ import { postForm } from "@/api";
       },
   methods: {
         setDefault(item) {
-          
+          console.log(item)
+          let fd = new FormData()
+          fd.append('address_id', item.address_id)
+          fd.append('default', 1)
+          console.log(item.address_id)
+          postForm(`http://43.143.179.158:8080/updateDefaultAddress`, fd).then(res => {
+            console.log(res)
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
+          this.loadAddrData()
+          this.reload()
         },
         deleteAddr(item) {
-      
+          console.log(item)
+          let fd = new FormData()
+          fd.append('address_id', item.address_id)
+          console.log(item.address_id)
+          postForm(`http://43.143.179.158:8080/deleteAddress`, fd).then(res => {
+            console.log(res)
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
+          this.loadAddrData()
+          this.reload();
         },
         loadAddrData() {
           console.log('initialize data in')
@@ -171,7 +195,7 @@ import { postForm } from "@/api";
             .catch(function (error) {
               console.log(error)
             });
-          this.loadAddrData()
+          this.reload();
         },
         resetForm(formName) {
           this.$refs[formName].resetFields();
