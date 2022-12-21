@@ -55,6 +55,16 @@ List<goods> goodsRecommendGoods(Goods goods)
 
 
 
+```
+存储过程、触发器、函数
+excel：商品详情->表格图片
+数据的自动获取：商品推荐商品，使用服务器API
+高级用户：查询售卖商品/订单返回全部
+订单API
+```
+
+
+
 ## Part 4 Other
 
 

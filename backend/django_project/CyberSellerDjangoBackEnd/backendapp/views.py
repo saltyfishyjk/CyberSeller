@@ -5,9 +5,10 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from backendapp.models import Account, Good, ShopCart, Star, Repo
 from django.views.decorators.csrf import csrf_exempt  # 用于忽略scrf攻击
-from CyberSellerDjangoBackEnd.settings import IMG_UPLOAD
+from CyberSellerDjangoBackEnd.settings import IMG_UPLOAD, EXCEL_UPLOAD
 from backendapp.UserGoodClass import UserGoodClass
 from backendapp.GoodGoodClass import GoodGoodClass
+import openpyxl
 
 # 合法身份identity列表
 legal_identity = ["admin", "customer", "seller"]
@@ -662,3 +663,50 @@ def deleteGood(request):
 			'code': '140101',
 			'message': 'SUCCESS! Delete a good successfully!'
 		})
+
+@csrf_exempt
+def analyseExcel(request):
+	if request.method == 'POST':
+		excel_file = request.FILES.get('excel')
+		if excel_file is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '150000',
+				'message': 'ERROR! Need available excel file'
+			})
+		# 获取文件全名
+		excel_name = excel_file.name
+		# 获取文件名
+		mobile = os.path.splitext(excel_name)[0]
+		# 获取文件后缀
+		ext = os.path.splitext(excel_name)[1]
+		# 重定义文件名
+		excel_name = f'avatar-{mobile}{ext}'
+		# 从配置文件中加载excel保存路径
+		excel_path = os.path.join(EXCEL_UPLOAD, excel_name)
+		# 保存文件
+		with open(excel_path, 'wb') as fp:
+			fp.write(excel_file.read())
+		# 解析文件
+		os.chdir(EXCEL_UPLOAD)
+		workbook = openpyxl.load_workbook(excel_name)
+		sheet = workbook['Sheet1']
+		ret_json = []
+		n = 0
+		for i in sheet.iter_rows():
+			key = 'None'
+			value = 'None'
+			for j in i:
+				if key == 'None':
+					key = str(j.value)
+				else:
+					value = str(j.value)
+			ret_json.append({key:value})
+			n += 1
+		return JsonResponse({
+			'n': n,
+			'jsons': ret_json
+		})
+
+
+

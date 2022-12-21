@@ -22,4 +22,5 @@ urlpatterns = [
 	path(r'goodsRecommendGoods', views.goodsRecommendGoods, name='goodsRecommendGoods'),
 	path(r'getStarGoods', views.getStarGoods, name='getStarGoods'),
 	path(r'deleteGood', views.deleteGood, name='deleteGood'),
+	path(r'analyseExcel', views.analyseExcel, name='analyseExcel'),
 ]

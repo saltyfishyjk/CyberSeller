@@ -149,5 +149,7 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# 设置文件保存地址
+# 设置图片保存地址
 IMG_UPLOAD = os.path.join(BASE_DIR, 'static/uploads')
+# 设置excel保存地址
+EXCEL_UPLOAD = os.path.join(BASE_DIR, 'static/excel')
