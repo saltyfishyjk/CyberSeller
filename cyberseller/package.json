@@ -1,8 +1,8 @@
 {
-  "name": "hello-mall",
+  "name": "CyberSeller",
   "version": "1.0.0",
-  "description": "基于Vue+Element-ui+axios开发的一套电商平台前端模板",
-  "author": "zengxiaochao <zengxiaochao666@gmail.com>",
+  "description": "基于Vue+Element-ui+axios开发电商平台",
+  "author": "buaa-zry-yjk-jsh",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
