@@ -725,9 +725,9 @@ def analyseShopCart(request):
 			print("arrive here 2")
 			good_id = shop_cart.good_id
 			num = shop_cart.num
-			print("arrive here 3")
-			seller_id = Good.objects.get(id=good_id).seller_id
 
+			seller_id = Good.objects.get(id=good_id).seller_id
+			print("arrive here 3")
 			price = Good.objects.get(good_id=good_id).price * num
 			flag = False
 
