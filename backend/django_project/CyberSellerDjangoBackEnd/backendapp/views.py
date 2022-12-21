@@ -1022,6 +1022,7 @@ def updateDefaultAddress(request):
 				'message': 'ERROR! Need available default!'
 			})
 		user_id = Address.objects.get(id=address_id).user_id
+		print('default : ' + str(default) + ' type : ' + str(type(default)))
 		if default == 1:
 			print('arrive here')
 			addresses = Address.objects.filter(user_id=user_id, default=1)
