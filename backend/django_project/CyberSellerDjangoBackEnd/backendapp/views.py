@@ -910,6 +910,24 @@ def analyseSale(request):
 				'code': '200000',
 				'message': 'ERROR! Need available user_id!'
 			})
+		sales = Sale.objects.filter(user_id=user_id)
+		ret_list = []
+		for sale in sales:
+			date = str(sale.date.strftime("%Y-%m-%d"))
+			price = sale.price
+			flag = False
+			for ele in ret_list:
+				if ele['date'] == date:
+					ele['price'] = ele['price'] + price
+					flag = True
+					break
+			if not flag:
+				ele['date'] = date
+				ele['price'] = price
+				ret_list.append(ele)
+		return JsonResponse({
+			'tuples': ret_list
+		})
 		'''
 		return JsonResponse({
 			'tuples': ret_list
