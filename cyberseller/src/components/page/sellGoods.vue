@@ -10,7 +10,7 @@
             <el-input v-model="ruleForm.price" style="width: 300px"></el-input>
         </el-form-item>
         <el-form-item label="商品图片" prop="image">
-            <input accept=".png, .jpg" type="file" ref="file" @change="getImageFile" />
+            <input accept=".png, .jpg" type="file" ref="img" @change="getImageFile" />
         </el-form-item>
         <el-form-item label="制造商" prop="maker">
             <el-input v-model="ruleForm.maker" clearable style="width: 300px"></el-input>
@@ -23,6 +23,9 @@
         </el-form-item>
         <el-form-item label="描述" prop="description">
             <el-input v-model="ruleForm.description" style="width: 300px"></el-input>
+        </el-form-item>
+        <el-form-item label="其他" prop="others">
+            <input accept=".xls, .xlsx" type="file" ref="file" @change="getExcelFile" />
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">发布商品</el-button>
@@ -61,7 +64,7 @@
                 </el-table-column>
                 <el-table-column align="right">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">下架商品</el-button>
+                        <el-button size="mini" type="danger" @click="handleDelete(scope.row)">下架商品</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -78,6 +81,7 @@ export default {
             tableData: null,
             init_sell_data: true,
             search: '',
+            good_id:'',
             //选中列表
             multipleSelection: [],
             chooseList: [],
@@ -89,7 +93,8 @@ export default {
                 maker: '',
                 description: '',
                 date: '',
-                shelf_life: ''
+                shelf_life: '',
+                others:null
             },
             rules: {
                 name: [
@@ -139,24 +144,47 @@ export default {
             console.log(typeof this.ruleForm.price)
             console.log(this.ruleForm.price)
             console.log(localStorage.getItem('userId'))
-            
             postForm(`http://43.143.179.158:8080/addGoods`, fd).then(res => {
                 console.log(res)
+                this.good_id=res.good_id
             })
             .catch(function (error) {
                 console.log(error);
             });
+            if (this.ruleForm.others != null) {
+                console.log(this.ruleForm.others)
+                let excel_file = new FormData()
+                excel_file.append('excel', this.ruleForm.others)
+                excel_file.append('good_id', this.good_id)
+                postForm(`http://43.143.179.158:8080/analyseExcel`, excel_file).then(res => {
+                    console.log(res)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
         },
         getImageFile: function (e) {
-        console.log(this.$refs["file"].files);
-        console.log(this.$refs["file"].files[0]);
-        if (this.$refs["file"].files[0]) {
-            this.ruleForm.image = this.$refs["file"].files[0];     
-        } else {
-            this.ruleForm.image = null;
-        }
-        console.log('上传类型')
-        console.log(typeof this.ruleForm.image)
+            console.log(this.$refs["img"].files);
+            console.log(this.$refs["img"].files[0]);
+            if (this.$refs["img"].files[0]) {
+                this.ruleForm.image = this.$refs["img"].files[0];     
+            } else {
+                this.ruleForm.image = null;
+            }
+            console.log('上传类型')
+            console.log(typeof this.ruleForm.image)
+        },
+        getExcelFile: function(e) {
+            console.log(this.$refs["file"].files);
+            console.log(this.$refs["file"].files[0]);
+            if (this.$refs["file"].files[0]) {
+                this.ruleForm.others = this.$refs["file"].files[0];
+            } else {
+                this.ruleForm.others = null;
+            }
+            console.log('上传类型')
+            console.log(typeof this.ruleForm.others)
         },
         resetForm(formName) {
             this.$refs.ruleForm.resetFields()
@@ -174,7 +202,9 @@ export default {
             fd.append('repo', row.repo)
             fd.append('good_id', repo_goods_id)
             postForm(`http://43.143.179.158:8080/updateRepo`, fd).then(res => {
-                this.tableData = res.goods
+                if (res.succeed) {
+                    this.init_sell_data = true
+                }
             })
                 .catch(function (error) {
                 });
@@ -182,33 +212,28 @@ export default {
                 return false
             }
         },
+        handleDelete(row) {
+            let repo_goods_id = row.id
+            console.log('delete '+row.id)
+            let fd = new FormData()
+            fd.append('good_id', repo_goods_id)
+            postForm(`http://43.143.179.158:8080/deleteGood`, fd).then(res => {
+                if (res.succeed) {
+                    this.init_sell_data = true
+                }
+            })
+                .catch(function (error) {
+                });
+            if (this.tableData == null) {
+                return false
+            }
+        }
+        ,
         goodsStatus(status) {
             if (status == "1")
                 return "danger";
             else if (status == "2")
                 return "";
-        },
-        changeNumPri(which) {
-            const length = this.tableData.length;
-            //总价
-            //全部数量
-            let allPricess = 0.0;
-            let allNumss = 0;
-            for (let i = 0; i < length; i++) {
-                if (this.tableData[i].status != 1) {
-                    allPricess += this.tableData[i].nums * this.tableData[i].price;
-                    allNumss += this.tableData[i].nums;
-                }
-            }
-            if (which == '2') {
-                return parseFloat(allPricess).toFixed(2);
-            } else {
-                return allNumss;
-            }
-        },
-        // 多选操作
-        handleSelectionChange(val) {
-            this.multipleSelection = val;
         },
         getSellData() {
             if (!this.init_sell_data) {

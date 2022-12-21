@@ -2,7 +2,7 @@
   <div>
     <el-carousel :interval="4000" type="card" height="200px" style="background: #F2F8FE">
       <el-carousel-item v-for="item in imageList" :key="item">
-        <img :src="item">
+        <img :src="item" alt="" class="rightulliimg">
       </el-carousel-item>
     </el-carousel>
     <br>
@@ -19,7 +19,6 @@
           <span>热门搜索：</span>
           <a href="">月饼</a>
           <a href="">狐狸</a>
-          <a href="">课表</a>
         </p>
 
       </div>
@@ -108,6 +107,7 @@ export default {
     fd.append('user_id', localStorage.getItem('userId'))
     console.log('user_id' + localStorage.getItem('userId'))
     postForm(`http://43.143.179.158:8080/mainRecommendGoods`, fd).then(res => {
+      console.log('get goods')
       console.log(res)
       this.goodsList = res.goods
     })
@@ -126,7 +126,7 @@ export default {
 </script>
 
 <style scoped>
-  .el-carousel__item h3 {
+.el-carousel__item h3 {
     color: #475669;
     font-size: 14px;
     opacity: 0.75;
@@ -235,4 +235,20 @@ export default {
     box-shadow: 0 0 0 3px #57DD43, 0px 21px 5px -18px rgba(0, 0, 0, 0.6);
     background: #57DD43;
   }
+.rightullidiv {
+  width: 100%;
+  height: 200px;
+  background: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+}
+    .rightulliimg {
+      max-width: 100%;
+      max-height: 200px;
+      vertical-align: middle;
+      text-align: center;
+    }
 </style>

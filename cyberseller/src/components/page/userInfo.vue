@@ -1,96 +1,130 @@
 <template>
-  <div style="text-align: center;width: 20%;margin-left: 40%;margin-top: 30px;">
+    <div class="dashboard">
+      <div class="flex-container column">
+        <div style="display: flex">
+            <div class="item one" @click="clickChart('1')">
+              <v-chart class="chart" :option="sellers_tmp" :update-options="true" />
+            </div>
+            <div class="item two" @click="clickChart('2')">
+              <v-chart class="chart" :option="sellers_tmp" :update-options="true" />
+            </div>
+        </div>
+        <div style="display: flex">
+          <div class="item three" @click="clickChart('3')">
+            <v-chart class="chart" :option="sellers_tmp" :update-options="true" />
+          </div>
+          <div class="item four active" @click="clickChart('4')">
+            <v-chart class="chart" :option="sellers_tmp" :update-options="true" />
+          </div>
+        </div>
+      </div>
+    </div>
 
-   <div>
-     <el-upload
-       class="avatar-uploader"
-       action="https://jsonplaceholder.typicode.com/posts/"
-       :show-file-list="false"
-       :on-success="handleAvatarSuccess"
-       :before-upload="beforeAvatarUpload">
-       <img v-if="form.img" :src="form.img" class="avatar">
-       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-     </el-upload>
-   </div>
-    <br>
-
-
-    <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="用户名">
-        <el-input v-model="form.name" size="medium" :disabled="editable"></el-input>
-      </el-form-item>
-      <el-form-item label="电话">
-        <el-input v-model="form.tel" size="medium" :disabled="editable"></el-input>
-      </el-form-item>
-      <el-form-item label="电子邮件">
-        <el-input v-model="form.email" size="medium" :disabled="editable"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit" v-show="!editable">提交修改</el-button>
-        <el-button type="primary" @click="editabled" v-show="editable">修改个人信息</el-button>
-        <el-button type="primary" @click="editPwd" v-show="editable">修改密码</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
+  
 </template>
 
 <script>
-    export default {
-      name: "userInfo",
-      data() {
-        return {
-          editable:true,
-          imageUrl: '',
-          form: {
-            name:'admin',
-            tel:'17654255635',
-            email:'zengxiaochao666@163.com',
-            img:'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2057588226,2402156864&fm=11&gp=0.jpg'
+import { use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { PieChart } from 'echarts/charts';
+import {
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+} from 'echarts/components';
+import VChart, { THEME_KEY } from 'vue-echarts';
+import { postForm } from "@/api";
 
-          }
+
+use([
+  CanvasRenderer,
+  PieChart,
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+]);
+
+export default ({
+  name: 'HelloWorld',
+  components: {
+    VChart,
+  },
+  provide: {
+    [THEME_KEY]: 'dark',
+  },
+  data() {
+    let sellers = this.getSellerData()
+    return {
+      in_seller_data: true,
+      goodsList: null,
+      sellers_tmp: sellers,
+
+    };
+  },
+  methods: {
+    getSellerData() {
+      console.log('init')
+      let fd = new FormData()
+      var seller_name_list = []
+      var seller_name2value = []
+      fd.append('user_id', localStorage.getItem('userId'))
+      console.log('user_id' + localStorage.getItem('userId'))
+      postForm(`http://43.143.179.158:8080/analyseShopCart`, fd).then(res => {
+        console.log(res)
+        var data_list = res.tuples
+        for (var item in data_list) {
+          var row=data_list[item]
+          console.log(row)
+          var json_e = { value: row.price, name: row.seller_name }
+          seller_name2value.push(json_e)
+          seller_name_list.push(row.seller_name)
         }
-      },
-      methods: {
-        onSubmit() {
-          this.editable = !this.editable;
+      })
+        .catch(function (error) {
+          console.log(error);
+        });
+      var para_seller = {
+        title: {
+          text: '我的购物车',
+            top: '5%',
+          left: 'center',
         },
-        editabled() {
-          this.editable = !this.editable;
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)',
         },
-        editPwd() {
-
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+          data: seller_name_list
         },
-        handleAvatarSuccess(res, file) {
-          this.form.img = URL.createObjectURL(file.raw);
-        },
-        beforeAvatarUpload(file) {
-          const isJPG = file.type === 'image/jpeg';
-          const isPng = file.type === 'image/png';
-          const isLt2M = file.size / 1024 / 1024 < 2;
-
-          if (!isJPG) {
-            this.$message.error('上传头像图片只能是 JPG 格式!');
-          }
-          if (!isLt2M) {
-            this.$message.error('上传头像图片大小不能超过 2MB!');
-          }
-          return isJPG && isLt2M;
-        }
+        series: [
+          {
+            name: '卖家分布',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data: seller_name2value,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)',
+              },
+            },
+          },
+        ],
       }
+      return para_seller
     }
+  },
+});
 </script>
 
 <style scoped>
-
-  .avatar {
-    width: 100px;
-    height: 100px;
-  }
-  .el-upload{
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
-    margin-left: 60px;
-  }
-
+.chart {
+  height: 45vh;
+  width: 100vh;
+  margin-right: 0;
+}
 </style>

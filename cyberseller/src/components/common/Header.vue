@@ -37,21 +37,6 @@
             </router-link>
           </el-tooltip>
         </div>
-        <!-- 消息中心 -->
-        <div class="btn-bell" v-if="login_state()">
-          <el-tooltip
-            effect="dark"
-            :content="message?`有${message}条未读消息`:`消息中心`"
-            placement="bottom">
-            <i class="el-icon-bell" @click="drawer = true"></i>
-
-          </el-tooltip>
-          <span class="btn-bell-badge" v-if="message"></span>
-        </div>
-        <!-- 用户头像 -->
-        <div class="user-avator" v-if="login_state()">
-          <img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2057588226,2402156864&fm=11&gp=0.jpg" />
-        </div>
 
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" @command="handleCommand">
@@ -69,28 +54,6 @@
         </el-dropdown>
       </div>
     </div>
-    <el-drawer
-      title="我是标题"
-      style="color:#000;"
-      :visible.sync="drawer"
-      :with-header="false">
-      <el-card class="box-card" style="margin-top: 20px;text-align: center;">
-        <div slot="header" class="clearfix">
-          <span style="font-size: 22px;">订单已发货</span>
-          <el-button style="float: right; padding: 3px 0" type="text">已读</el-button>
-        </div>
-        <span style="font-size: 18px;">您购买的【华为P30 Pro】卖家已在【2020-10-23 13:22】于【广东】发货</span>
-      </el-card>
-
-      <el-card class="box-card" style="margin-top: 20px;text-align: center;">
-        <div slot="header" class="clearfix">
-          <span style="font-size: 22px;">收藏已到货</span>
-          <el-button style="float: right; padding: 3px 0" type="text">已读</el-button>
-        </div>
-        <span style="font-size: 18px;">您收藏的【iphone XS Max 256G】库存更新</span>
-      </el-card>
-
-    </el-drawer>
   </div>
 </template>
 <script>
