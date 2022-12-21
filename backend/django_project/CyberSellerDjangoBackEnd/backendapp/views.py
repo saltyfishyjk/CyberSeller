@@ -706,6 +706,7 @@ def analyseExcel(request):
 			key = 'None'
 			value = 'None'
 			for j in i:
+				print('i = ' + str(i) + ' j = ' + str(j) + ' value = ' + str(j.value))
 				if key == 'None':
 					key = str(j.value)
 				else:
