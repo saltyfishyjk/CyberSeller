@@ -933,11 +933,6 @@ def analyseSale(request):
 		return JsonResponse({
 			'tuples': ret_list
 		})
-		'''
-		return JsonResponse({
-			'tuples': ret_list
-		})
-		'''
 
 @csrf_exempt
 def getGoodDetail(request):
@@ -962,3 +957,30 @@ def getGoodDetail(request):
 			'tuples': ret_list
 		})
 
+@csrf_exempt
+def getAddress(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '220000',
+				'message': 'ERROR! Need available user_id!'
+			})
+		addresses = Address.objects.filter(user_id=user_id)
+		ret_list = []
+		for address in addresses:
+			ele = {
+				'user_id': address.user_id,
+				'address_id': address.id,
+				'receiver_name': address.receiver_name,
+				'phone': address.phone,
+				'addr': address.addr,
+				'detailed_addr': address.detailed_addr,
+				'comment': address.comment,
+				'default': address.default
+			}
+			ret_list.append(ele)
+		return JsonResponse({
+			'addresses': ret_list
+		})
