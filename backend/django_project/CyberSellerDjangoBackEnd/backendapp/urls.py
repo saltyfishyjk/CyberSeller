@@ -24,4 +24,5 @@ urlpatterns = [
 	path(r'deleteGood', views.deleteGood, name='deleteGood'),
 	path(r'analyseExcel', views.analyseExcel, name='analyseExcel'),
 	path(r'analyseShopCart', views.analyseShopCart, name='analyseShopCart'),
+	path(r'addAddress', views.addAddress, name='addAddress'),
 ]

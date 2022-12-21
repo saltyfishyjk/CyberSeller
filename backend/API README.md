@@ -594,3 +594,50 @@
 | 属性   | 说明     | 类型                                                  |
 | ------ | -------- | ----------------------------------------------------- |
 | tuples | 数据元组 | 列表，包含若干个形如`(price, seller_name, num)`的json |
+
+### [17] addAddress 添加地址
+
+#### 发送
+
+- 使用`POST`方法向服务器提供添加售卖商品申请，数据格式`form-data`
+
+- URL:`http://43.143.179.158:8080/addAddress`
+
+- 具体属性如下：
+
+| 属性          | 说明           | 类型                                 |
+| ------------- | -------------- | ------------------------------------ |
+| user_id       | 用户id         | 整数，**非空**，和`Account`对应      |
+| receiver_name | 收件人姓名     | 字符串，**非空**                     |
+| phone         | 收件人电话号   | 字符串，**非空**                     |
+| addr          | 收件人地址     | 字符串，**非空**                     |
+| detailed_addr | 收件人详细地址 | 字符串，**非空**                     |
+| comment       | 备注           | 字符串，可以为空                     |
+| default       | 是否为默认地址 | 整数，为1表示是默认地址，为0表示不是 |
+
+#### 接收
+
+返回一个`JsonResponse`对象，属性列表如下：
+
+| 属性    | 说明             | 类型                                                         |
+| :------ | :--------------- | :----------------------------------------------------------- |
+| succeed | 是否成功添加商品 | 布尔值                                                       |
+| code    | 处理结果代码     | 六位字符串，标识不同正确/错误情况，前两位固定为`10`表示是`updateRepo`的code；中间两位错误时为`00`，正确时为`01`；最后两位表明是正确/错误情况中的具体情形，可以查阅下方的表 |
+| message | 提示信息         | 提供更多关于本次请求处理结果的信息                           |
+
+- 正确情况
+
+| succeed | code     | message                                 |
+| ------- | -------- | --------------------------------------- |
+| `True`  | `170101` | `SUCCESS! Add an address successfully!` |
+
+- 错误情况
+
+| succeed | code     | message                                 |
+| ------- | -------- | --------------------------------------- |
+| `False` | `170000` | `ERROR! Need available user_id! `       |
+| `False` | `170001` | `ERROR! Need available receiver_name! ` |
+| `False` | `170002` | `ERROR! Need available phone! `         |
+| `False` | `170003` | `ERROR! Need available addr! `          |
+| `False` | `170004` | `ERROR! Need available detailed_addr! ` |
+| `False` | `170005` | `ERROR! Need available default! `       |

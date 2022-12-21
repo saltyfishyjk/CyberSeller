@@ -4,6 +4,7 @@ import os.path
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from backendapp.models import Account, Good, ShopCart, Star, Repo
+from backendapp.models import Address, Sale, SaleGood
 from django.views.decorators.csrf import csrf_exempt  # 用于忽略scrf攻击
 from CyberSellerDjangoBackEnd.settings import IMG_UPLOAD, EXCEL_UPLOAD
 from backendapp.UserGoodClass import UserGoodClass
@@ -748,5 +749,62 @@ def analyseShopCart(request):
 		print("arrive here 5")
 		return JsonResponse({
 			'tuples': ret_list
+		})
+
+DEFAULT_COMMENT = ''
+@csrf_exempt
+def addAddress(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '170000',
+				'message': 'ERROR! Need available user_id!'
+			})
+		receiver_name = request.POST.get('receiver_name')
+		if receiver_name is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '170001',
+				'message': 'ERROR! Need available receiver_name!'
+			})
+		phone = request.POST.get('phone')
+		if phone is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '170002',
+				'message': 'ERROR! Need available phone!'
+			})
+		addr = request.POST.get('addr')
+		if addr is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '170003',
+				'message': 'ERROR! Need available addr!'
+			})
+		detailed_addr = request.POST.get('detailed_addr')
+		if detailed_addr is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '170004',
+				'message': 'ERROR! Need available detailed_addr!'
+			})
+		comment = request.POST.get('comment')
+		if comment is None:
+			comment = DEFAULT_COMMENT
+		default = request.POST.get('default')
+		if default is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '170005',
+				'message': 'ERROR! Need available default!'
+			})
+		address = Address(user_id=user_id, receiver_name=receiver_name, phone=phone, addr=addr, detailed_addr=detailed_addr, comment=comment, default=default)
+		address.save()
+		return JsonResponse({
+			'succeed': True,
+			'code': '170101',
+			'message': 'SUCCESS! Add an address successfully!'
 		})
 

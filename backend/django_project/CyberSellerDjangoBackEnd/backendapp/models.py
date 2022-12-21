@@ -41,3 +41,29 @@ class Repo(models.Model):
 	id = models.AutoField(primary_key=True)  # 库存元组ID，由数据库自动分配并自增
 	good_id = models.IntegerField()  # 商品ID，和Good相对应
 	repo = models.IntegerField()  # 库存，为整数
+
+# 地址表
+class Address(models.Model):
+	id = models.AutoField(primary_key=True)  # 地址元组ID，由数据库自动分配
+	user_id = models.IntegerField()  # 用户ID，和Account相对应
+	receiver_name = models.CharField(max_length=128)  # 收件人姓名，字符串
+	phone = models.CharField(max_length=128)  # 收件人电话号码，字符串
+	addr = models.CharField(max_length=256)  # 地址
+	detailed_addr = models.CharField(max_length=1024)  # 详细地址
+	comment = models.CharField(max_length=1024)  # 备注
+	default = models.IntegerField()  # 整数，为1表示是默认地址，为0表示不是默认地址
+
+# 订单表
+class Sale(models.Model):
+	id = models.AutoField(primary_key=True)  # 订单元组ID，由数据库自动分配
+	user_id = models.IntegerField()  # 用户ID，和Account相对应
+	address_id = models.IntegerField()  # 地址ID，和Address相对应
+	price = models.IntegerField()  # 订单总价
+	date = models.DateTimeField(auto_now=True)  # 由Django自动生成时间戳
+
+# 订单商品表
+class SaleGood(models.Model):
+	id = models.AutoField(primary_key=True)  # 订单商品元组ID，由数据库自动分配
+	sale_id = models.IntegerField()  # 订单ID，和Sale相对应
+	good_id = models.IntegerField()  # 商品ID，和Good相对应
+	num = models.IntegerField()  # 订单中该商品数量
