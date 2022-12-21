@@ -832,6 +832,7 @@ def addSale(request):
 				'code': '180002',
 				'message': 'ERROR! Need available address_id!'
 			})
+		'''
 		goods = request.POST.get('goods')
 		if goods is None:
 			return JsonResponse({
@@ -839,6 +840,7 @@ def addSale(request):
 				'code': '180003',
 				'message': 'ERROR! Need available goods!'
 			})
+		'''
 		sale = Sale(user_id=user_id, address_id=address_id, price=price)
 		sale.save()
 		sale_id = sale.id
