@@ -14,7 +14,7 @@ class UserGoodClass(object):
 		self.like = like
 		self.num = num
 		self.value = 5 * self.num + 3 * like
-		print('name : ' + self.name + ' value : ' + str(self.value))
+		# print('name : ' + self.name + ' value : ' + str(self.value))
 
 	def __lt__(self, other):
 		return self.value > other.value
