@@ -26,4 +26,5 @@ urlpatterns = [
 	path(r'analyseShopCart', views.analyseShopCart, name='analyseShopCart'),
 	path(r'addAddress', views.addAddress, name='addAddress'),
 	path(r'addSale', views.addSale, name='addSale'),
+	path(r'addSaleGood', views.addSaleGood, name='addSaleGood'),
 ]

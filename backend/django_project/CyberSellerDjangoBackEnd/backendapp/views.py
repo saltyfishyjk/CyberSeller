@@ -842,16 +842,48 @@ def addSale(request):
 		sale = Sale(user_id=user_id, address_id=address_id, price=price)
 		sale.save()
 		sale_id = sale.id
+		'''
 		for good in goods:
 			good_id = good['good_id']
 			num = good['num']
 			sale_good = SaleGood(sale_id=sale_id, good_id=good_id, num=num)
 			sale_good.save()
+		'''
 		return JsonResponse({
-			'succeed': False,
+			'succeed': True,
 			'code': '180101',
-			'message': 'SUCCESS! Add a sale successfully!'
+			'message': 'SUCCESS! Add a sale successfully!',
+			'sale_id': sale_id
 		})
 
-
-
+@csrf_exempt
+def addSaleGood(request):
+	if request.method == 'POST':
+		sale_id = request.POST.get('sale_id')
+		if sale_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '190000',
+				'message': 'ERROR! Need available sale_id!'
+			})
+		good_id = request.POST.get('good_id')
+		if good_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '190001',
+				'message': 'ERROR! Need available good_id!'
+			})
+		num = request.POST.get('num')
+		if num is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '190002',
+				'message': 'ERROR! Need available num!'
+			})
+		sale_good = SaleGood(sale_id=sale_id, good_id=good_id, num=num)
+		sale_good.save()
+		return JsonResponse({
+			'succeed': True,
+			'code': '190101',
+			'message': 'SUCCESS! Add a sale_good successfully!'
+		})
