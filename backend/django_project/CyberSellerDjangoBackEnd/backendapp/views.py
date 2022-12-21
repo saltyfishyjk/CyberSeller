@@ -720,18 +720,22 @@ def analyseShopCart(request):
 			})
 		shop_carts = ShopCart.objects.filter(user_id=user_id)
 		ret_list = []
+		print("arrive here 1")
 		for shop_cart in shop_carts:
+			print("arrive here 2")
 			good_id = shop_cart.good_id
 			num = shop_cart.num
 			seller_id = Good.objects.get(good_id=good_id).seller_id
 			price = Good.objects.get(good_id=good_id).price * num
 			flag = False
+			print("arrive here 3")
 			for ele in ret_list:
 				if ele['seller_id'] == seller_id:
 					flag = True
 					ele['price'] = ele['price'] + price
 					ele['num'] = ele['num'] + num
 					break
+			print("arrive here 4")
 			if not flag:
 				ele = {}
 				ele['seller_id'] = seller_id
@@ -739,6 +743,7 @@ def analyseShopCart(request):
 				ele['price'] = price
 				ele['num'] = num
 				ret_list.append(ele)
+		print("arrive here 5")
 		return JsonResponse({
 			'tuples': ret_list
 		})
