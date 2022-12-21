@@ -634,3 +634,23 @@ def getStarGoods(request):
 			'n': n,
 			'goods': goods_json
 		})
+
+@csrf_exempt
+def deleteGood(request):
+	if request.method == 'POST':
+		good_id = request.POST.get('good_id')
+		if good_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '140000',
+				'message': 'ERROR! Need available good_id!'
+			})
+		Good.objects.filter(id=good_id).delete()
+		ShopCart.objects.filter(good_id=good_id).delete()
+		Star.objects.filter(good_id=good_id).delete()
+		Repo.objects.filter(good_id=good_id).delete()
+		return JsonResponse({
+			'succeed': True,
+			'code': '140101',
+			'message': 'SUCCESS! Delete a good successfully!'
+		})
