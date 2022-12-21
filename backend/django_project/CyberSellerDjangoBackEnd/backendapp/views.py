@@ -1003,3 +1003,33 @@ def deleteAddress(request):
 			'code': '230101',
 			'message': 'SUCCESS! Delete an address successfully!'
 		})
+
+@csrf_exempt
+def updateDefaultAddress(request):
+	if request.method == 'POST':
+		address_id = request.POST.get('address_id')
+		if address_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '240000',
+				'message': 'ERROR! Need available address_id!'
+			})
+		default = request.POST.get('default')
+		if default is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '240001',
+				'message': 'ERROR! Need available default!'
+			})
+		user_id = Address.objects.get(id=address_id).user_id
+		if default == 1:
+			addresses = Address.objects.filter(user_id=user_id)
+			for address in addresses:
+				if address.default == 1:
+					address.default = 0
+		Address.objects.get(id=address_id).default = default
+	return JsonResponse({
+		'succeed': True,
+		'code': '240101',
+		'message': 'SUCCESS! Update address default successfully!'
+	})

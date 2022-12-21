@@ -31,4 +31,5 @@ urlpatterns = [
 	path(r'getGoodDetail', views.getGoodDetail, name='getGoodDetail'),
 	path(r'getAddress', views.getAddress, name='getAddress'),
 	path(r'deleteAddress', views.deleteAddress, name='deleteAddress'),
+	path(r'updateDefaultAddress', views.updateDefaultAddress, name ='updateDefaultAddress'),
 ]
