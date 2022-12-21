@@ -929,8 +929,8 @@ def getGoodDetail(request):
 		good_details = GoodDetail.objects.filter(good_id=good_id)
 		ret_list = []
 		for good_detail in good_details:
-			key = good_detail['key']
-			value = good_detail['value']
+			key = good_detail.key
+			value = good_detail.value
 			ret_list.append({
 				'key': key,
 				'value': value
