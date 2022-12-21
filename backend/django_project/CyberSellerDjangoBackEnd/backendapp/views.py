@@ -912,19 +912,23 @@ def analyseSale(request):
 			})
 		sales = Sale.objects.filter(user_id=user_id)
 		ret_list = []
+		print('arrive here 1')
 		for sale in sales:
 			date = str(sale.date.strftime("%Y-%m-%d"))
 			price = sale.price
 			flag = False
+			print('arrive here 2')
 			for ele in ret_list:
 				if ele['date'] == date:
 					ele['price'] = ele['price'] + price
 					flag = True
 					break
+			print('arrive here 3')
 			if not flag:
 				ele['date'] = date
 				ele['price'] = price
 				ret_list.append(ele)
+		print('arrive here 4')
 		return JsonResponse({
 			'tuples': ret_list
 		})
