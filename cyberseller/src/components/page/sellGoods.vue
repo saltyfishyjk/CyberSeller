@@ -32,8 +32,8 @@
         <br>
         
     </div>
-        <div class="title" style="width: 65%;margin-left: 30%;" v-if="getSellData()">
-            <h3>售卖中</h3>
+        <div class="title" style="width: 65%;margin-left: 30%;">
+            <h3 v-once v-if="getSellData()">售卖中</h3>
             <el-table 
                 :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
                  style="width: 100%;">
@@ -76,6 +76,7 @@ export default {
     data() {
         return {
             tableData: null,
+            init_sell_data: true,
             search: '',
             //选中列表
             multipleSelection: [],
@@ -210,16 +211,19 @@ export default {
             this.multipleSelection = val;
         },
         getSellData() {
+            if (!this.init_sell_data) {
+                return true
+            }
+            this.init_sell_data =false
             let fd = new FormData()
             fd.append('user_id', localStorage.getItem('userId'))
+            console.log('Call Database for SellData')
             postForm(`http://43.143.179.158:8080/getSellGoods`, fd).then(res => {
                 this.tableData = res.goods
             })
                 .catch(function (error) {
+                    console.log(error)
                 });
-            if (this.tableData == null) {
-                return false
-            }
             return true
         }
     }
