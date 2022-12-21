@@ -708,5 +708,38 @@ def analyseExcel(request):
 			'jsons': ret_json
 		})
 
-
+@csrf_exempt
+def analyseShopCart(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '160000',
+				'message': 'ERROR! Need available user_id!'
+			})
+		shop_carts = ShopCart.objects.filter(user_id=user_id)
+		ret_list = []
+		for shop_cart in shop_carts:
+			good_id = shop_cart.good_id
+			num = shop_cart.num
+			seller_id = Good.objects.get(good_id=good_id).seller_id
+			price = Good.objects.get(good_id=good_id).price * num
+			flag = False
+			for ele in ret_list:
+				if ele['seller_id'] == seller_id:
+					flag = True
+					ele['price'] = ele['price'] + price
+					ele['num'] = ele['num'] + num
+					break
+			if not flag:
+				ele = {}
+				ele['seller_id'] = seller_id
+				ele['seller_name'] = Account.objects.get(id=seller_id).name
+				ele['price'] = price
+				ele['num'] = num
+				ret_list.append(ele)
+		return JsonResponse({
+			'tuples': ret_list
+		})
 
