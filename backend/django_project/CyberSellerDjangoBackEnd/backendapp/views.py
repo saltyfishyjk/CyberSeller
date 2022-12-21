@@ -1023,11 +1023,13 @@ def updateDefaultAddress(request):
 			})
 		user_id = Address.objects.get(id=address_id).user_id
 		if default == 1:
-			addresses = Address.objects.filter(user_id=user_id)
+			addresses = Address.objects.filter(user_id=user_id, default=1).update(default=0)
+			'''
 			for address in addresses:
 				if address.default == 1:
 					address.default = 0
 					address.save()
+			'''
 		address = Address.objects.get(id=address_id)
 		address.default = default
 		address.save()
