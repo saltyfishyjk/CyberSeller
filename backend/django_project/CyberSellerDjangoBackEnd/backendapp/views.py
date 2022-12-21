@@ -985,3 +985,21 @@ def getAddress(request):
 		return JsonResponse({
 			'addresses': ret_list
 		})
+
+@csrf_exempt
+def deleteAddress(request):
+	if request.method == 'POST':
+		address_id = request.POST.get('address_id')
+		if address_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '230000',
+				'message': 'ERROR! Need available address_id!'
+			})
+		address = Address.objects.get(id=address_id)
+		address.delete()
+		return JsonResponse({
+			'succeed': True,
+			'code': '230101',
+			'message': 'SUCCESS! Delete an address successfully!'
+		})
