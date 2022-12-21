@@ -1027,7 +1027,11 @@ def updateDefaultAddress(request):
 			for address in addresses:
 				if address.default == 1:
 					address.default = 0
-		Address.objects.get(id=address_id).default = default
+					address.save()
+		address = Address.objects.get(id=address_id)
+		address.default = default
+		address.save()
+
 	return JsonResponse({
 		'succeed': True,
 		'code': '240101',
