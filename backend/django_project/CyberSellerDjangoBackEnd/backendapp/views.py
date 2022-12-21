@@ -1025,12 +1025,14 @@ def updateDefaultAddress(request):
 		print('default : ' + str(default) + ' type : ' + str(type(default)))
 		if default == '1':
 			print('arrive here')
-			addresses = Address.objects.filter(user_id=user_id, default=1)
+			addresses = Address.objects.filter(user_id=user_id, default=1).update(default=0)
+			'''
 			for address in addresses:
 				new_address_id = address.id
 				new_address = Address.objects.get(new_address_id)
 				new_address.default = 0
 				new_address.save()
+			'''
 			'''
 			for address in addresses:
 				if address.default == 1:
