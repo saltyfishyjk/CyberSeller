@@ -67,3 +67,10 @@ class SaleGood(models.Model):
 	sale_id = models.IntegerField()  # 订单ID，和Sale相对应
 	good_id = models.IntegerField()  # 商品ID，和Good相对应
 	num = models.IntegerField()  # 订单中该商品数量
+
+# 商品详情表
+class GoodDetail(models.Model):
+	id = models.AutoField(primary_key=True)  # 商品详情元组ID，由数据库自动
+	good_id = models.IntegerField()  # 商品ID，和Good相对应
+	key = models.CharField(max_length=128)  # 字符串，键值
+	value = models.CharField(max_length=128)  # 字符串，值

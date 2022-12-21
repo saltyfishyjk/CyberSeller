@@ -4,7 +4,7 @@ import os.path
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from backendapp.models import Account, Good, ShopCart, Star, Repo
-from backendapp.models import Address, Sale, SaleGood
+from backendapp.models import Address, Sale, SaleGood, GoodDetail
 from django.views.decorators.csrf import csrf_exempt  # 用于忽略scrf攻击
 from CyberSellerDjangoBackEnd.settings import IMG_UPLOAD, EXCEL_UPLOAD
 from backendapp.UserGoodClass import UserGoodClass
@@ -254,7 +254,8 @@ def addGoods(request):
 		return JsonResponse({
 			'succeed': True,
 			'code': '030101',
-			'message': 'SUCCESS! Add a good successfully!'
+			'message': 'SUCCESS! Add a good successfully!',
+			'good_id': good.id
 		})
 
 # 添加商品到购物车
@@ -675,6 +676,13 @@ def analyseExcel(request):
 				'code': '150000',
 				'message': 'ERROR! Need available excel file'
 			})
+		good_id = request.POST.get('good_id')
+		if good_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '150001',
+				'message': 'ERROR! Need available good_id!'
+			})
 		# 获取文件全名
 		excel_name = excel_file.name
 		# 获取文件名
@@ -702,8 +710,10 @@ def analyseExcel(request):
 					key = str(j.value)
 				else:
 					value = str(j.value)
-			ret_json.append({key:value})
+			ret_json.append({key: value})
 			n += 1
+			good_detail = GoodDetail(good_id=good_id, key=key, value=value)
+			good_detail.save()
 		return JsonResponse({
 			'n': n,
 			'jsons': ret_json
@@ -889,3 +899,20 @@ def addSaleGood(request):
 			'code': '190101',
 			'message': 'SUCCESS! Add a sale_good successfully!'
 		})
+
+@csrf_exempt
+def analyseSale(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '200000',
+				'message': 'ERROR! Need available user_id!'
+			})
+		'''
+		return JsonResponse({
+			'tuples': ret_list
+		})
+		'''
+
