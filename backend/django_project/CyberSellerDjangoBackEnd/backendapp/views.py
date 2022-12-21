@@ -725,19 +725,18 @@ def analyseShopCart(request):
 			print("arrive here 2")
 			good_id = shop_cart.good_id
 			num = shop_cart.num
-
 			seller_id = Good.objects.get(id=good_id).seller_id
+			price = Good.objects.get(id=good_id).price * num
 			print("arrive here 3")
-			price = Good.objects.get(good_id=good_id).price * num
 			flag = False
 
-			if len(ret_list) > 0:
-				for ele in ret_list:
-					if ele['seller_id'] == seller_id:
-						flag = True
-						ele['price'] = ele['price'] + price
-						ele['num'] = ele['num'] + num
-						break
+			for ele in ret_list:
+				if ele['seller_id'] == seller_id:
+					flag = True
+					ele['price'] = ele['price'] + price
+					ele['num'] = ele['num'] + num
+					break
+
 			print("arrive here 4")
 			if not flag:
 				ele = {}
