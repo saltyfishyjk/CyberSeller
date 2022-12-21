@@ -27,4 +27,5 @@ urlpatterns = [
 	path(r'addAddress', views.addAddress, name='addAddress'),
 	path(r'addSale', views.addSale, name='addSale'),
 	path(r'addSaleGood', views.addSaleGood, name='addSaleGood'),
+	path(r'getGoodDetail', views.getGoodDetail, name='getGoodDetail'),
 ]
