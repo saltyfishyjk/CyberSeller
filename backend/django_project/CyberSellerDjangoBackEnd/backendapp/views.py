@@ -721,14 +721,14 @@ def analyseShopCart(request):
 			})
 		shop_carts = ShopCart.objects.filter(user_id=user_id)
 		ret_list = []
-		print("arrive here 1")
+		#print("arrive here 1")
 		for shop_cart in shop_carts:
-			print("arrive here 2")
+			#print("arrive here 2")
 			good_id = shop_cart.good_id
 			num = shop_cart.num
 			seller_id = Good.objects.get(id=good_id).seller_id
 			price = Good.objects.get(id=good_id).price * num
-			print("arrive here 3")
+			#print("arrive here 3")
 			flag = False
 
 			for ele in ret_list:
@@ -738,7 +738,7 @@ def analyseShopCart(request):
 					ele['num'] = ele['num'] + num
 					break
 
-			print("arrive here 4")
+			#print("arrive here 4")
 			if not flag:
 				ele = {}
 				ele['seller_id'] = seller_id
@@ -746,7 +746,7 @@ def analyseShopCart(request):
 				ele['price'] = price
 				ele['num'] = num
 				ret_list.append(ele)
-		print("arrive here 5")
+		#print("arrive here 5")
 		return JsonResponse({
 			'tuples': ret_list
 		})
@@ -833,6 +833,12 @@ def addSale(request):
 				'message': 'ERROR! Need available address_id!'
 			})
 		goods = request.POST.get('goods')
+		if goods is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '180003',
+				'message': 'ERROR! Need available goods!'
+			})
 		sale = Sale(user_id=user_id, address_id=address_id, price=price)
 		sale.save()
 		sale_id = sale.id
