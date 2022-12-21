@@ -925,6 +925,7 @@ def analyseSale(request):
 					break
 			print('arrive here 3')
 			if not flag:
+				ele = {}
 				ele['date'] = date
 				ele['price'] = price
 				ret_list.append(ele)
