@@ -641,3 +641,20 @@
 | `False` | `170003` | `ERROR! Need available addr! `          |
 | `False` | `170004` | `ERROR! Need available detailed_addr! ` |
 | `False` | `170005` | `ERROR! Need available default! `       |
+
+### [18] addSale 添加订单
+
+#### 发送
+
+- 使用`POST`方法向服务器提供添加售卖商品申请，数据格式`form-data`
+
+- URL:`http://43.143.179.158:8080/addSale`
+
+- 具体属性如下：
+
+| 属性       | 说明     | 类型                                                         |
+| ---------- | -------- | ------------------------------------------------------------ |
+| user_id    | 用户id   | 整数，**非空**，和`Account`对应                              |
+| price      | 订单总价 | 整数，**非空**                                               |
+| address_id | 地址id   | 整数，**非空**，和`Address`对应                              |
+| goods      | 商品列表 | 列表，**非空**，包含若干的元素，每个元素是`{good_id, num}`的json |

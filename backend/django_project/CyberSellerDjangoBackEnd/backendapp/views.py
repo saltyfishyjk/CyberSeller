@@ -808,3 +808,44 @@ def addAddress(request):
 			'message': 'SUCCESS! Add an address successfully!'
 		})
 
+@csrf_exempt
+def addSale(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '180000',
+				'message': 'ERROR! Need available user_id!'
+			})
+		price = request.POST.get('price')
+		if price is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '180001',
+				'message': 'ERROR! Need available price!'
+			})
+		address_id = request.POST.get('address_id')
+		if address_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '180002',
+				'message': 'ERROR! Need available address_id!'
+			})
+		goods = request.POST.get('goods')
+		sale = Sale(user_id=user_id, address_id=address_id, price=price)
+		sale.save()
+		sale_id = sale.id
+		for good in goods:
+			good_id = good['good_id']
+			num = good['num']
+			sale_good = SaleGood(sale_id=sale_id, good_id=good_id, num=num)
+			sale_good.save()
+		return JsonResponse({
+			'succeed': False,
+			'code': '180101',
+			'message': 'SUCCESS! Add a sale successfully!'
+		})
+
+
+
