@@ -306,6 +306,14 @@ def getMainRecommandGoods(user_id):
 	ret_list = []
 	goods = Good.objects.all()
 	cnt = 0
+	# 对于admin账号直接返回所有商品
+	if user_id == 1:
+		for good in goods:
+			good_id = good.id
+			like = 0
+			num = 0
+			ret_list.append(UserGoodClass(id=good_id, name=good.name, price=good.price, seller_id=good.seller_id, maker=good.maker, picture=good.picture, description=good.description, date=good.date, shelf_life=good.shelf_life, like=like, num=num))
+		return ret_list
 	for good in goods:
 		good_id = good.id
 		like = 0
@@ -330,7 +338,7 @@ def mainRecommendGoods(request):
 	if request.method == 'POST':
 		# 获取用户名
 		id = request.POST.get('user_id')
-		print("arrive here 1")
+		# print("arrive here 1")
 		if id is None:
 			return JsonResponse({
 				'succeed': False,
@@ -338,7 +346,7 @@ def mainRecommendGoods(request):
 				'message': 'ERROR! Need non-null userid!'
 			})
 		user = Account.objects.get(id=id)
-		print("arrive here 2")
+		# print("arrive here 2")
 		if user is None:
 			return JsonResponse({
 				'succeed': False,
