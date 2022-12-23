@@ -300,6 +300,7 @@
 | date        | 生产日期  | 字符串，形如yyyy-mm-dd           |
 | shelf_life  | 保质期    | 字符串，形如yyyy-mm-dd-hh        |
 | num         | 商品数量  | 整数                             |
+| repo        | 库存      | 整数，是商品库存                 |
 
 ### [08] updateStar更新收藏关系
 

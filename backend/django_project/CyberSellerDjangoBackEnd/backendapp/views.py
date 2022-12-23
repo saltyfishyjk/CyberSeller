@@ -416,6 +416,10 @@ def searchShopCart(request):
 		for good_index in goods:
 			good_id = good_index.good_id
 			good = Good.objects.get(id=good_id)
+			repo = 0
+			repos = Repo.objects.filter(id=good_id)
+			if repos.count() != 0:
+				repo = Repo.objects.get(id=good_id).repo
 			goods_list.append({
 				'id': good.id,
 				'name': good.name,
@@ -426,7 +430,8 @@ def searchShopCart(request):
 				'description': good.description,
 				'date': good.date,
 				'shelf_life': good.shelf_life,
-				'num': good_index.num
+				'num': good_index.num,
+				'repo': repo
 			})
 		return JsonResponse({
 			'n': n,
