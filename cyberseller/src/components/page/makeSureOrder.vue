@@ -7,26 +7,26 @@
              v-for="(item, index) in userAddress"
              @click="setFirst(index)">
 <!--          地址卡片-->
-          <el-card class="box-card" :style="item.isFirst==1?'background: #F2F8FE':'background: #606266'">
+          <el-card class="box-card" :style="item.default==1?'background: #F2F8FE':'background: #606266'">
             <div slot="header" class="clearfix">
-              <span>{{item.isFirst==1?"默认地址":"备用地址"}}</span>
+              <span>{{item.default==1?"默认地址":"备用地址"}}</span>
 <!--              设置默认按钮-->
               <el-button style="float: right; padding: 3px 0"
                          type="text"
-                         v-show="item.isFirst==1?false:true">
+                         v-show="item.default==1?false:true">
                 设置为默认
               </el-button>
 <!--              选中标志-->
               <el-button style="float: right; padding: 3px 0"
                          type="success" icon="el-icon-check"
-                         v-show="item.isFirst==1?true:false">
+                         v-show="item.default==1?true:false">
               </el-button>
 <!--              地址具体信息-->
             </div>
-            <p>{{item.name}}</p>
-            <p>{{item.tel}}</p>
-            <p>{{item.loc}}</p>
-            <p>{{item.loc2}}</p>
+            <p>{{item.receiver_name}}</p>
+            <p>{{item.phone}}</p>
+            <p>{{item.addr}}</p>
+            <p>{{item.detailed_addr}}</p>
           </el-card>
         </div>
     </div>
@@ -44,7 +44,7 @@
         <!--        商品图片-->
         <el-table-column label="商品" prop="img" width="110px" align="center">
           <template slot-scope="scope">
-            <el-image style="width: 100px; height: 100px;" :src="scope.row.img"/>
+            <el-image style="width: 100px; height: 100px;" :src="scope.row.picture"/>
           </template>
         </el-table-column>
         <!--        商品名字-->
@@ -58,13 +58,13 @@
         <!--        商品数量-->
         <el-table-column label="数量"  prop="num" width="140px" align="center">
           <template slot-scope="scope">
-            <span>{{scope.row.nums}}</span>
+            <span>{{scope.row.num}}</span>
           </template>
         </el-table-column>
         <!--        商品小计-->
         <el-table-column label="小计"  prop="allPrize" width="110px" align="center">
           <template slot-scope="scope">
-            <span>&yen;</span>{{parseFloat(scope.row.price*scope.row.nums).toFixed(2)}}
+            <span>&yen;</span>{{parseFloat(scope.row.price*scope.row.num).toFixed(2)}}
           </template>
         </el-table-column>
       </el-table>
@@ -91,67 +91,47 @@
 </template>
 
 <script>
+  import { postForm } from '../../api';
   export default {
     name: "makeSureOrder",
     data()
     {
       return{
-        tableData: [{
-          name: '华为P40 Pro',
-          price:5988.00,
-          status:"2",
-          img:"http://05imgmini.eastday.com/mobile/20200507/20200507135939_9e1683aae3ee6fe14f853d422cdc32be_2.jpeg",
-          nums:1
-        }, {
-          name: 'iPhone 11 Pro Max',
-          price:6338.90,
-          status:"2",
-          img:"https://img12.360buyimg.com/n1/jfs/t1/68636/31/9824/169738/5d780ed7E97e88252/7b62380330636738.jpg",
-          nums:2
-        }],
-        userAddress:[{
-            name: '光头强',
-            tel:'17654236555',
-            loc:"山东省烟台市白云区关东升街道",
-            loc2:"黑土大学",
-            isFirst:1
-          },{
-            name: '泡泡',
-            tel:'16548965754',
-            loc:"青范省富华市白云区关东升街道",
-            loc2:"黑土大学",
-            isFirst:2
-          },{
-            name: '光头强',
-            tel:'17654236555',
-            loc:"山东省烟台市白云区关东升街道",
-            loc2:"黑土大学",
-            isFirst:2
-          }
-        ],
+        tableData: null,
+        userAddress:null,
         search : '',
         //选中列表
         multipleSelection : [],
       }
     },
     created() {
+      this.getData();
     },
     methods:{
+      getData() {
+        this.tableData = JSON.parse(this.$route.query.obj);
+        console.log(this.tableData);
+
+        let fd = new FormData()
+        fd.append('user_id', localStorage.getItem('userId'))
+        postForm(`http://43.143.179.158:8080/getAddress`, fd).then(res => {
+        this.userAddress = res.addresses
+        console.log(this.userAddress)
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      },
+
       setFirst(index)
       {
         const length = this.userAddress.length;
         for (let i = 0; i < length; i++) {
-            this.userAddress[i].isFirst = 2;
+            this.userAddress[i].default = 0;
         }
-        this.userAddress[index].isFirst = 1;
-      }
-      ,goodsStatus(status)
-      {
-        if(status=="1")
-          return "danger";
-        else if(status=="2")
-          return "";
+        this.userAddress[index].default = 1;
       },
+    
       changeNumPri(which)
       {
         const length = this.tableData.length;
@@ -160,11 +140,9 @@
         let allPricess = 0.0;
         let allNumss = 0;
         for (let i = 0; i < length; i++) {
-          if(this.tableData[i].status!=1)
-          {
-            allPricess += this.tableData[i].nums*this.tableData[i].price;
-            allNumss += this.tableData[i].nums;
-          }
+            allPricess += this.tableData[i].num*this.tableData[i].price;
+            allNumss += this.tableData[i].num;
+          
         }
         if(which=='2'){
           return parseFloat(allPricess).toFixed(2);
