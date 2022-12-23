@@ -123,13 +123,15 @@ export default {
           fd.append('default', 1)
           console.log(item.address_id)
           postForm(`http://43.143.179.158:8080/updateDefaultAddress`, fd).then(res => {
+            console.log('setDefault')
             console.log(res)
+            this.loadAddrData()
+            this.reload()
           })
           .catch(function (error) {
             console.log(error)
           });
-          this.loadAddrData()
-          this.reload()
+
         },
         deleteAddr(item) {
           console.log(item)
@@ -138,18 +140,20 @@ export default {
           console.log(item.address_id)
           postForm(`http://43.143.179.158:8080/deleteAddress`, fd).then(res => {
             console.log(res)
+            this.loadAddrData()
+            this.reload();
           })
           .catch(function (error) {
             console.log(error)
           });
-          this.loadAddrData()
-          this.reload();
+
         },
         loadAddrData() {
           console.log('initialize data in')
           let fd = new FormData()
           fd.append('user_id', localStorage.getItem('userId'))
           postForm(`http://43.143.179.158:8080/getAddress`, fd).then(res => {
+            console.log('getAddress')
             console.log(res)
             this.userAddress = res.addresses
           })

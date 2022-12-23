@@ -416,6 +416,10 @@ def searchShopCart(request):
 		for good_index in goods:
 			good_id = good_index.good_id
 			good = Good.objects.get(id=good_id)
+			repo = 0
+			repos = Repo.objects.filter(id=good_id)
+			if repos.count() != 0:
+				repo = Repo.objects.get(id=good_id).repo
 			goods_list.append({
 				'id': good.id,
 				'name': good.name,
@@ -426,7 +430,8 @@ def searchShopCart(request):
 				'description': good.description,
 				'date': good.date,
 				'shelf_life': good.shelf_life,
-				'num': good_index.num
+				'num': good_index.num,
+				'repo': repo
 			})
 		return JsonResponse({
 			'n': n,
@@ -628,6 +633,10 @@ def getStarGoods(request):
 		for star in stars:
 			good_id = star.good_id
 			good = Good.objects.get(id=good_id)
+			repos = Repo.objects.filter(id=good_id)
+			repo = 0
+			if repos.count() != 0:
+				repo = Repo.objects.get(id=good_id).repo
 			good_json = {
 				'id': good.id,
 				'name': good.name,
@@ -639,6 +648,7 @@ def getStarGoods(request):
 				'description': good.description,
 				'date': good.date,
 				'shelf_life': good.shelf_life,
+				'repo': repo,
 			}
 			goods_json.append(good_json)
 		return JsonResponse({
@@ -1048,3 +1058,145 @@ def updateDefaultAddress(request):
 		'code': '240101',
 		'message': 'SUCCESS! Update address default successfully!'
 	})
+
+@csrf_exempt
+def analyseLike(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '250000',
+				'message': 'ERROR! Need available user_id!'
+			})
+		stars = Star.objects.filter(user_id=user_id)
+		ret_list = []
+		#print("arrive here 1")
+		for star in stars:
+			#print("arrive here 2")
+			good_id = star.good_id
+			num = 1
+			seller_id = Good.objects.get(id=good_id).seller_id
+			price = Good.objects.get(id=good_id).price * num
+			#print("arrive here 3")
+			flag = False
+
+			for ele in ret_list:
+				if ele['seller_id'] == seller_id:
+					flag = True
+					ele['price'] = ele['price'] + price
+					ele['num'] = ele['num'] + num
+					break
+
+			#print("arrive here 4")
+			if not flag:
+				ele = {}
+				ele['seller_id'] = seller_id
+				ele['seller_name'] = Account.objects.get(id=seller_id).name
+				ele['price'] = price
+				ele['num'] = num
+				ret_list.append(ele)
+		#print("arrive here 5")
+		return JsonResponse({
+			'tuples': ret_list
+		})
+
+@csrf_exempt
+def updateShopCartNum(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '250000',
+				'message': 'ERROR! Need an available user_id!'
+			})
+		good_id = request.POST.get('good_id')
+		if good_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '250001',
+				'message': 'ERROR! Need an available good_id!'
+			})
+		new_num = request.POST.get('new_num')
+		if new_num is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '250002',
+				'message': 'ERROR! Need an available new_num!'
+			})
+		shop_carts = ShopCart.objects.filter(user_id=user_id, good_id=good_id)
+		if shop_carts.count() == 0:
+			return JsonResponse({
+				'succeed': False,
+				'code': '250003',
+				'message': 'ERROR! No such good in this user\'s shop cart!'
+			})
+		elif shop_carts.count() != 1:
+			return JsonResponse({
+				'succeed': False,
+				'code': '250004',
+				'message': 'ERROR! Unknown error, please contact YJK!'
+			})
+		else:
+			shop_cart = ShopCart.objects.get(user_id=user_id, good_id=good_id)
+			shop_cart.num = new_num
+			shop_cart.save()
+			return JsonResponse({
+				'succeed': True,
+				'code': '250101',
+				'message': 'SUCCESS! Update ShopCart num successfully!'
+			})
+
+@csrf_exempt
+def analyseOrder(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '270000',
+				'message': 'ERROR! Need available user_id!'
+			})
+		sales = Sale.objects.filter(user_id=user_id)
+		ret_list = []
+		print("arrive here 1")
+		for sale in sales:
+			print("arrive here 2")
+			sale_id = sale.id
+			goods = SaleGood.objects.filter(sale_id=sale_id)
+			for good in goods:
+				good_id = good.good_id
+				num = good.num
+				seller_id = Good.objects.get(id=good_id).seller_id
+				price = Good.objects.get(id=good_id).price * num
+				print("arrive here 3")
+				flag = False
+
+				for ele in ret_list:
+					if ele['seller_id'] == seller_id:
+						flag = True
+						ele['price'] = ele['price'] + price
+						ele['num'] = ele['num'] + num
+						break
+
+				print("arrive here 4")
+				if not flag:
+					ele = {}
+					ele['seller_id'] = seller_id
+					ele['seller_name'] = Account.objects.get(id=seller_id).name
+					ele['price'] = price
+					ele['num'] = num
+					ret_list.append(ele)
+		print("arrive here 5")
+		return JsonResponse({
+			'tuples': ret_list
+		})
+
+@csrf_exempt
+def checked(request):
+	return JsonResponse({
+		'checked': False
+	})
+
+

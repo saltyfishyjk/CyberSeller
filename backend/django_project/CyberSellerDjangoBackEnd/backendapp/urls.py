@@ -31,5 +31,9 @@ urlpatterns = [
 	path(r'getGoodDetail', views.getGoodDetail, name='getGoodDetail'),
 	path(r'getAddress', views.getAddress, name='getAddress'),
 	path(r'deleteAddress', views.deleteAddress, name='deleteAddress'),
-	path(r'updateDefaultAddress', views.updateDefaultAddress, name ='updateDefaultAddress'),
+	path(r'updateDefaultAddress', views.updateDefaultAddress, name='updateDefaultAddress'),
+	path(r'analyseLike', views.analyseLike, name='analyseLike'),
+	path(r'updateShopCartNum', views.updateShopCartNum, name='updateShopCartNum'),
+	path(r'analyseOrder', views.analyseOrder, name='analyseOrder'),
+	path(r'checked', views.checked, name='checked'),
 ]

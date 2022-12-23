@@ -75,6 +75,7 @@
 <script>
 import { postForm } from "@/api";
 export default {
+    inject: ['reload'],
     name: "goodsInfo",
     data() {
         return {
@@ -146,6 +147,8 @@ export default {
             console.log(localStorage.getItem('userId'))
             postForm(`http://43.143.179.158:8080/addGoods`, fd).then(res => {
                 console.log(res)
+                this.getSellData()
+                this.reload()
                 this.good_id=res.good_id
             })
             .catch(function (error) {
