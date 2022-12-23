@@ -1160,17 +1160,17 @@ def analyseOrder(request):
 			})
 		sales = Sale.objects.filter(user_id=user_id)
 		ret_list = []
-		#print("arrive here 1")
+		print("arrive here 1")
 		for sale in sales:
-			#print("arrive here 2")
+			print("arrive here 2")
 			sale_id = sale.id
 			goods = SaleGood.objects.filter(sale_id=sale_id)
 			for good in goods:
 				good_id = good.id
-				num = 1
+				num = good.num
 				seller_id = Good.objects.get(id=good_id).seller_id
 				price = Good.objects.get(id=good_id).price * num
-				# print("arrive here 3")
+				print("arrive here 3")
 				flag = False
 
 				for ele in ret_list:
@@ -1180,7 +1180,7 @@ def analyseOrder(request):
 						ele['num'] = ele['num'] + num
 						break
 
-				# print("arrive here 4")
+				print("arrive here 4")
 				if not flag:
 					ele = {}
 					ele['seller_id'] = seller_id
@@ -1188,7 +1188,7 @@ def analyseOrder(request):
 					ele['price'] = price
 					ele['num'] = num
 					ret_list.append(ele)
-		#print("arrive here 5")
+		print("arrive here 5")
 		return JsonResponse({
 			'tuples': ret_list
 		})
