@@ -92,6 +92,12 @@ updateShopCartNum()
 
 
 
+```
+checked()
+```
+
+
+
 ## Part 4 Other
 
 
