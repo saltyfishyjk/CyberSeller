@@ -1,0 +1,135 @@
+## 系统实现报告
+
+##### `yjk`
+
+### Part 1 实现环境
+
+| 环境   | 版本  |
+| ------ | ----- |
+| Ubuntu | 20.04 |
+| Python | 3.9.7 |
+| Django | 3.2   |
+| MySQL  | 8.0   |
+
+### Part 2 系统功能结构图
+
+/* TODO */
+
+### Part 3 基本表的定义，主外码等完整性约束定义，索引的定义
+
+#### Account用户表
+
+| 属性名   | 中文名 | 数据类型 | 备注 |
+| -------- | ------ | -------- | ---- |
+| id       | 编号   | INT      | 主码 |
+| name     | 用户名 | VARCHAR  |      |
+| password | 密码   | VARCHAR  |      |
+| identity | 身份   | VARCHAR  |      |
+| balance  | 余额   | DECIMAL  |      |
+
+#### Good商品表
+
+| 属性名      | 中文名   | 数据类型 | 备注        |
+| ----------- | -------- | -------- | ----------- |
+| id          | 编号     | INT      | 主码        |
+| name        | 商品名   | VARCHAR  |             |
+| price       | 价格     | DECIMAL  |             |
+| seller_id   | 卖家编号 | VARCHAR  | 外键        |
+| maker       | 制造商   | VARCHAR  |             |
+| picture     | 图片地址 | VARCHAR  | 存储图片URL |
+| description | 详细描述 | VARCHAR  |             |
+| date        | 生产日期 | VARCHAR  |             |
+| shelf_life  | 保质期   | VARCHAR  |             |
+
+### ShopCart购物车表
+
+| 属性名  | 中文名           | 数据类型 | 备注 |
+| ------- | ---------------- | -------- | ---- |
+| id      | 编号             | INT      | 主码 |
+| user_id | 用户编号         | INT      | 外键 |
+| good_id | 商品编号         | INT      | 外键 |
+| num     | 购物车内商品数量 | INT      |      |
+
+#### Star收藏表
+
+| 属性名  | 中文名   | 数据类型 | 备注 |
+| ------- | -------- | -------- | ---- |
+| id      | 编号     | INT      | 主码 |
+| user_id | 用户编号 | INT      | 外键 |
+| good_id | 商品编号 | INT      | 外键 |
+| like    | 是否收藏 | INT      |      |
+
+#### Repo库存表
+
+| 属性名  | 中文名   | 数据类型 | 备注 |
+| ------- | -------- | -------- | ---- |
+| id      | 编号     | INT      | 主码 |
+| user_id | 用户编号 | INT      | 外键 |
+| good_id | 商品编号 | INT      | 外键 |
+| like    | 是否收藏 | INT      |      |
+
+#### Address地址表
+
+| 属性名        | 中文名         | 数据类型 | 备注 |
+| ------------- | -------------- | -------- | ---- |
+| id            | 编号           | INT      | 主码 |
+| user_id       | 用户编号       | INT      | 外键 |
+| receiver_name | 收件人姓名     | VARCHAR  |      |
+| phone         | 收件人电话     | VARCHAR  |      |
+| addr          | 地址           | VARCHAR  |      |
+| detailed_addr | 详细地址       | VARCHAR  |      |
+| comment       | 备注           | VARCHAR  |      |
+| default       | 是否为默认地址 | VARCHAR  |      |
+
+#### Sale订单表
+
+| 属性名     | 中文名   | 数据类型 | 备注 |
+| ---------- | -------- | -------- | ---- |
+| id         | 编号     | INT      | 主码 |
+| user_id    | 用户编号 | INT      | 外键 |
+| address_id | 地址编号 | INT      | 外键 |
+| price      | 价格     | INT      |      |
+| date       | 日期     | DATETIME |      |
+
+#### 订单商品表
+
+| 属性名  | 中文名   | 数据类型 | 备注 |
+| ------- | -------- | -------- | ---- |
+| id      | 编号     | INT      | 主码 |
+| sale_id | 订单编号 | INT      | 外键 |
+| good_id | 商品ID   | INT      | 外键 |
+| num     | 商品数量 | INT      |      |
+
+#### GoodDetail商品详情表
+
+| 属性名     | 中文名   | 数据类型 | 备注 |
+| ---------- | -------- | -------- | ---- |
+| id         | 编号     | INT      | 主码 |
+| user_id    | 用户编号 | INT      | 外键 |
+| address_id | 地址编号 | INT      | 外键 |
+| price      | 价格     | INT      |      |
+| date       | 日期     | DATETIME |      |
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Part 4 系统的安全性设计，不同人员的外模式及相关权限
+
+### Part 5 存储过程、触发器和函数的代码说明
+
+### Part 6 实现过程中主要技术和主要模块的论述
+
+### Part 7 若干展示系统功能的运行实例
+
+### Part 8 源程序简要说明
+
+### Part 9 收获和体会
