@@ -4,7 +4,6 @@
 <!--头部-->
     <div style="width: 80%;margin-left: 20%;">
       <span>
-<!--        <h1>哈喽商城</h1>-->
 <!--        <h1>购物车</h1>-->
       </span>
     </div>

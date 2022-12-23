@@ -35,7 +35,10 @@ import {
 import VChart, { THEME_KEY } from 'vue-echarts';
 import { postForm } from "@/api";
 import * as echarts from "echarts";
-
+import JSZipUtils from 'jszip-utils';
+import docxtemplater from 'docxtemplater';
+import { saveAs } from 'file-saver';
+import PizZip from 'pizzip';
 use([
   CanvasRenderer,
   PieChart,
@@ -331,7 +334,74 @@ export default ({
         ],
       }
       return para_seller
-    }
+    },
+    base64DataURLToArrayBuffer(dataURL) {
+      const base64Regex = /^data:image\/(png|jpg|svg|svg\+xml);base64,/;
+      if (!base64Regex.test(dataURL)) {
+        return false;
+      }
+      const stringBase64 = dataURL.replace(base64Regex, "");
+      let binaryString;
+      if (typeof window !== "undefined") {
+        binaryString = window.atob(stringBase64);
+      } else {
+        binaryString = new Buffer(stringBase64, "base64").toString("binary");
+      }
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        const ascii = binaryString.charCodeAt(i);
+        bytes[i] = ascii;
+      }
+      return bytes.buffer;
+    },
+    // 导出word
+    exportWord() {
+      //这里要引入处理图片的插件，下载docxtemplater后，引入的就在其中了
+      var ImageModule = require('docxtemplater-image-module-free');
+      var that = this;
+      //这里是我的Word路径，在static文件下
+      JSZipUtils.getBinaryContent("../../static/word.docx", function (error, content) {
+        if (error) {
+          throw error
+        };
+        let opts = {}
+        opts.centered = true;
+        opts.fileType = "docx";
+        opts.getImage = (tag) => {
+          return that.base64DataURLToArrayBuffer(tag);
+        }
+        opts.getSize = () => {
+          return [600, 400]//这里可更改输出的图片宽和高
+        }
+        let zip = new PizZip(content);
+        let doc = new docxtemplater();
+        doc.attachModule(new ImageModule(opts));
+        doc.loadZip(zip);
+        doc.setData({
+          ...that.wordData//我的最外层包裹一切要导出的数据名称
+        });
+        try {
+          doc.render()
+        } catch (error) {
+          var e = {
+            message: error.message,
+            name: error.name,
+            stack: error.stack,
+            properties: error.properties,
+          }
+          console.log(JSON.stringify({
+            error: e
+          }));
+          throw error;
+        }
+        var out = doc.getZip().generate({
+          type: "blob",
+          mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        })
+        saveAs(out, "成绩报表.docx")
+      })
+    },
   },
 });
 </script>

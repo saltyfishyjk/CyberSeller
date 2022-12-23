@@ -1,5 +1,5 @@
 .header{
-    background-color: #07c4a8;
+    background-color: #778899;
 }
 .login-wrap{
     background: rgba(56, 157, 170, 0.82);;
@@ -8,22 +8,22 @@
     background: #f2f2f2;
 }
 .plugins-tips a{
-    color: #00d1b2;
+    color: #778899;
 }
 .el-upload--text em {
-    color: #00d1b2;
+    color: #778899;
 }
 .pure-button{
-    background: #00d1b2;
+    background: #778899;
 }
 .pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus, .pagination > .active > span, .pagination > .active > span:hover, .pagination > .active > span:focus {
-    background-color: #00d1b2 !important;
-    border-color: #00d1b2 !important;
+    background-color: #778899 !important;
+    border-color: #778899 !important;
 }
 .tags-li.active {
-    border: 1px solid #00d1b2;
-    background-color: #00d1b2;
+    border: 1px solid #778899;
+    background-color: #778899;
 }
 .collapse-btn:hover{
-    background: #00d1b2;
+    background: #778899;
 }

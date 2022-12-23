@@ -78,8 +78,8 @@
               <span>共<span class="spanText">{{changeNumPri(1)}}</span>件商品</span>
               <span>总价<span class="spanText">&yen;{{changeNumPri(2)}}</span></span>
               <span>
-                 <router-link to="/submitOrder">
-                    <el-button>提交订单</el-button>
+                 <router-link to="/carts">
+                    <el-button>确认支付</el-button>
                  </router-link>
               </span>
           </span>

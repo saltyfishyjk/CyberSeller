@@ -46,11 +46,6 @@ export default new Router({
           meta: { title: '确认订单' }
         },
         {
-          path: '/submitOrder',
-          component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/submitOrder.vue'),
-          meta: { title: '提交订单' }
-        },
-        {
           path: '/userInfo',
           component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/userInfo.vue'),
           meta: { title: '个人信息' }

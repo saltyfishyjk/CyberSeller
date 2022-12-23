@@ -7,7 +7,7 @@
         <div class="collapse-btn">
           <i class="el-icon-s-home"></i>
         </div>
-        <img style="width: 70px;height: 50px;margin-top: 10px;" src="../../assets/img/logo.png">
+        <!-- <img style="width: 70px;height: 50px;margin-top: 10px;" src="../../assets/img/logo.png"> -->
       </div>
 <!--      <div class="logo"><img src="../../assets/img/logo.png"></div>-->
 
