@@ -628,6 +628,10 @@ def getStarGoods(request):
 		for star in stars:
 			good_id = star.good_id
 			good = Good.objects.get(id=good_id)
+			repos = Repo.objects.filter(id=good_id)
+			repo = 0
+			if repos.count() != 0:
+				repo = Repo.objects.get(id=good_id).repo
 			good_json = {
 				'id': good.id,
 				'name': good.name,
@@ -639,6 +643,7 @@ def getStarGoods(request):
 				'description': good.description,
 				'date': good.date,
 				'shelf_life': good.shelf_life,
+				'repo': repo,
 			}
 			goods_json.append(good_json)
 		return JsonResponse({

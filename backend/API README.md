@@ -518,6 +518,7 @@
 | description | 商品描述  | 字符串，商品详细描述             |
 | date        | 生产日期  | 字符串，形如yyyy-mm-dd           |
 | shelf_life  | 保质期    | 字符串，形如yyyy-mm-dd-hh        |
+| repo        | 库存      | 整数，返回该商品剩余库存         |
 
 ### [14] deleteGood 删除指定商品
 
