@@ -868,3 +868,23 @@
 | `False` | `040001` | `ERROR! Need available good_id!`  |
 | `False` | `040002` | `ERROR! Need available new_num!`  |
 | `False` | `030003` | `ERROR! Need available pic file`  |
+
+### [27] analyseOrder 分析用户订单商品信息
+
+#### 发送
+
+- 使用`POST`方法向服务器提供添加售卖商品申请，数据格式`form-data`
+
+- URL:`http://43.143.179.158:8080/analyseOrder`
+
+- 具体属性如下：
+
+| 属性    | 说明   | 类型                            |
+| ------- | ------ | ------------------------------- |
+| user_id | 用户id | 整数，**非空**，和`Account`对应 |
+
+#### 接收
+
+| 属性   | 说明     | 类型                                                  |
+| ------ | -------- | ----------------------------------------------------- |
+| tuples | 数据元组 | 列表，包含若干个形如`(price, seller_name, num)`的json |

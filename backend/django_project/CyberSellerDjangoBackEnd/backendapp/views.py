@@ -1147,3 +1147,48 @@ def updateShopCartNum(request):
 				'code': '250101',
 				'message': 'SUCCESS! Update ShopCart num successfully!'
 			})
+
+@csrf_exempt
+def analyseOrder(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '270000',
+				'message': 'ERROR! Need available user_id!'
+			})
+		sales = Sale.objects.filter(user_id=user_id)
+		ret_list = []
+		#print("arrive here 1")
+		for sale in sales:
+			#print("arrive here 2")
+			sale_id = sale.id
+			goods = SaleGood.objects.filter(sale_id=sale_id)
+			for good in goods:
+				good_id = good.id
+				num = 1
+				seller_id = Good.objects.get(id=good_id).seller_id
+				price = Good.objects.get(id=good_id).price * num
+				# print("arrive here 3")
+				flag = False
+
+				for ele in ret_list:
+					if ele['seller_id'] == seller_id:
+						flag = True
+						ele['price'] = ele['price'] + price
+						ele['num'] = ele['num'] + num
+						break
+
+				# print("arrive here 4")
+				if not flag:
+					ele = {}
+					ele['seller_id'] = seller_id
+					ele['seller_name'] = Account.objects.get(id=seller_id).name
+					ele['price'] = price
+					ele['num'] = num
+					ret_list.append(ele)
+		#print("arrive here 5")
+		return JsonResponse({
+			'tuples': ret_list
+		})
