@@ -13,7 +13,7 @@
 <!--      <el-cascader-panel :options="options" style="width: 19%;background: #F2F8FE;"></el-cascader-panel>-->
       <div style="float: left;width: 50%;">
         <el-input placeholder="查询商品" v-model="selectd" class="input-with-select" size="1000px">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-button slot="append" icon="el-icon-search" @click="searchInputChange()"></el-button>
         </el-input>
         <p style="color: #BFBFBF;">
           <span>热门搜索：</span>
@@ -31,12 +31,12 @@
           <!--左边栏空白占位  -->
         </div>
         <div style="float: left;width: 80%;">
-              <div class="card"  v-for="(item, index) in goodsList" :key="item.id" v-on:mouseenter="showDialog(index)" v-on:mouseleave="hideDialog(index)">
+              <div class="card"  v-for="(item, index) in currentGoods" :key="item.id" v-on:mouseenter="showDialog(index)" v-on:mouseleave="hideDialog(index)">
                   <div class="ribbon">
                     <!--鼠标移入移出事件-->
                     <div class="handleDialog" v-if="ishow && index==current">
                       <el-button type="success" style="margin-left:25%;margin-top: 70%;" size="medium" @click="goGoodsDesc(item.id)">查看详情</el-button>
-                      <el-button type="warning" icon="el-icon-star-off" circle size="medium"></el-button>
+                      <el-button type="warning" icon="el-icon-star-off" circle size="medium"  @click="addCollection(item.id)"></el-button>
                     </div>
                     <img :src="item.picture" style="height: 100%;width: 100%">
                     
@@ -57,7 +57,9 @@
       <center>
         <el-pagination
           background
+          @current-change="handleCurrentChange"
           layout="prev, pager, next"
+          :page-size="12"
           :total="1000">
         </el-pagination>
       </center>
@@ -77,10 +79,52 @@ export default {
       selectd: '',
       currentDate: new Date(),
       imageList:null,
-      goodsList:null
+      goodsList:null,
+      goodsRst: null,
+      currentindex: 1,
+      currentGoods: null
     };
   },
   methods:{
+    searchInputChange() {
+      console.log(1);
+      this.goodsRst = []
+      if (this.selectd.length == 0) {
+          this.goodsRst = this.goodsList
+          this.currentGoods = this.goodsRst.slice((this.currentindex-1)*12, this.currentindex*12)
+      } else {
+        let regStr =  '';
+        // 初始化正则表达式
+        for(let i=0; i<this.selectd.length; i++){
+          regStr = regStr + '(' + this.selectd[i] + ')([\\s]*)'; //跨字匹配
+        }
+
+        let reg = new RegExp(regStr);
+        console.log(reg);
+        for(let i=0; i<this.goodsList.length; i++) {
+          let name = this.goodsList[i].name; //按照名字匹配
+          let regMatch = name.match(reg);
+          if(null !== regMatch) {// 将匹配的数据放入结果列表中
+             this.goodsRst.push(this.goodsList[i]);
+          }
+        }
+        this.currentGoods = this.goodsRst.slice((this.currentindex-1)*12, this.currentindex*12)
+      }
+    },
+
+    addCollection(goodId) {
+      let fd = new FormData()
+      fd.append('user_id', localStorage.getItem('userId'))
+      fd.append('good_id', goodId)
+      fd.append('like', 1)
+      postForm(`http://43.143.179.158:8080/updateStar`, fd).then(res => {
+      console.log(res)
+      })
+      .catch(function (error) {
+      console.log(error);
+      });
+    },
+
     //前往商品详情页
     goGoodsDesc(goods) {
       this.$router.push({
@@ -99,6 +143,11 @@ export default {
     hideDialog(index, item) {
       this.ishow = false;
       this.current = null;
+    },
+    handleCurrentChange(val) {
+      this.currentindex = val;
+      console.log(this.currentindex);
+      this.currentGoods = this.goodsRst.slice((this.currentindex-1)*12, this.currentindex*12)
     }
   },
   beforeCreate() {
@@ -109,7 +158,9 @@ export default {
     postForm(`http://43.143.179.158:8080/mainRecommendGoods`, fd).then(res => {
       console.log('get goods')
       console.log(res)
-      this.goodsList = res.goods
+      this.goodsList = res.goods;
+      this.goodsRst = this.goodsList;
+      this.currentGoods = this.goodsRst.slice(0, 12)
     })
     .catch(function (error) {
       console.log(error);

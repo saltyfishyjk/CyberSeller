@@ -11,7 +11,7 @@
 <!--        商品图片-->
         <el-table-column label="商品" prop="img" width="110px" align="center">
           <template slot-scope="scope">
-            <el-image style="width: 100px; height: 100px;" :src="scope.row.img"/>
+            <el-image style="width: 100px; height: 100px;" :src="scope.row.picture"/>
           </template>
         </el-table-column>
         <!--        商品名字-->
@@ -25,7 +25,7 @@
         <!--        上下架状态-->
         <el-table-column label="状态"  prop="prize" width="110px" align="center">
           <template slot-scope="scope">
-            <el-tag :type="goodsStatus(scope.row.status)">{{scope.row.status==1?"下架":"在售"}}</el-tag>
+            <el-tag :type="goodsStatus(scope.row.repo)">{{scope.row.repo==0?"下架":"在售"}}</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -37,35 +37,33 @@
 </template>
 
 <script>
+  import { postForm } from '../../api';
   export default {
     name: "collection",
     data()
     {
       return{
-        tableData: [{
-          name: '华为P40 Pro',
-          price:5988.00,
-          status:"1",
-          img:"http://05imgmini.eastday.com/mobile/20200507/20200507135939_9e1683aae3ee6fe14f853d422cdc32be_2.jpeg",
-          nums:1
-        }, {
-          name: 'iPhone 11 Pro Max',
-          price:6338.90,
-          status:"2",
-          img:"https://img12.360buyimg.com/n1/jfs/t1/68636/31/9824/169738/5d780ed7E97e88252/7b62380330636738.jpg",
-          nums:2
-        }],
+        tableData: null,
         search : '',
       }
     },
     created() {
+      let fd = new FormData()
+      fd.append('user_id', localStorage.getItem('userId'))
+      postForm(`http://43.143.179.158:8080/getStarGoods`, fd).then(res => {
+        console.log(res)
+        this.tableData = res.goods
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     },
     methods:{
-      goodsStatus(status)
+      goodsStatus(repo)
       {
-        if(status=="1")
+        if(repo==0)
           return "danger";
-        else if(status=="2")
+        else 
           return "";
       },
       goDesc(row, column, event)

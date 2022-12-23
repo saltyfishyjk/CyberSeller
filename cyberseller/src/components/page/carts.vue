@@ -14,20 +14,27 @@
       <h3>购物车</h3>
       <el-table
         ref="multipleTable"
-        :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+        :data="cartsData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
         @selection-change="handleSelectionChange"
         style="width: 100%;">
 
-        <el-table-column align="center"  type="selection" width="55" :selectable="canSelect"></el-table-column>
+        <el-table-column
+          width="35">
+          <template slot-scope="scope">
+            <el-checkbox v-model="scope.row.checked" :disabled="scope.row.repo==0?true:false"></el-checkbox> 
+          </template>
+        </el-table-column>
+
         <el-table-column label="商品" prop="img" width="110px" align="center">
           <template slot-scope="scope">
-            <el-image style="width: 100px; height: 100px;" :src="scope.row.img"/>
+            
+            <el-image style="width: 100px; height: 100px;" :src="scope.row.picture"/>
           </template>
         </el-table-column>
         <el-table-column label="商品名" prop="name" align="center"></el-table-column>
         <el-table-column label="状态"  prop="prize" width="110px" align="center">
           <template slot-scope="scope">
-            <el-tag :type="goodsStatus(scope.row.status)">{{scope.row.status==1?"下架":"在售"}}</el-tag>
+            <el-tag :type="goodsStatus(scope.row.repo)">{{scope.row.repo==0?"下架":"在售"}}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="单价"  prop="prize" width="110px" align="center">
@@ -37,12 +44,12 @@
         </el-table-column>
         <el-table-column label="数量"  prop="num" width="140px" align="center">
           <template slot-scope="scope">
-            <el-input-number size="mini" v-model="scope.row.nums" :disabled="scope.row.status==1?true:false"></el-input-number>
+            <el-input-number size="mini" v-model="scope.row.num" :disabled="scope.row.repo==0?true:false"></el-input-number>
           </template>
         </el-table-column>
         <el-table-column label="小计"  prop="allPrize" width="110px" align="center">
           <template slot-scope="scope">
-            <span>&yen;</span>{{parseFloat(scope.row.price*scope.row.nums).toFixed(2)}}
+            <span>&yen;</span>{{parseFloat(scope.row.price*scope.row.num).toFixed(2)}}
           </template>
         </el-table-column>
         <el-table-column align="right">
@@ -50,9 +57,9 @@
             <el-input v-model="search" size="mini" placeholder="输入关键字搜索"/>
           </template>
           <template slot-scope="scope">
-            <el-button size="mini" :disabled="scope.row.status==1?true:false" type="warning" @click="handleEdit(scope.$index, scope.row)">移到收藏</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">移出购物车</el-button>
-            <el-button size="mini" :disabled="scope.row.status==1?true:false" type="success" @click="selected">结算</el-button>
+            <!-- <el-button size="mini" :disabled="scope.row.status==1?true:false" type="warning" @click="handleEdit(scope.$index, scope.row)">移到收藏</el-button> -->
+            <!-- <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">移出购物车</el-button>
+            <el-button size="mini" :disabled="scope.row.status==1?true:false" type="success" @click="selected">结算</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -62,18 +69,13 @@
       <!--描述：商品结算开始-->
       <div class="balance">
         <ul class="balance_ul1">
-          <el-button type="danger" size="medium" class="button1" plain>删除选中商品</el-button>
-          <el-button type="danger" size="medium" class="button1" plain>清除下架商品</el-button>
-          <el-button type="warning" size="medium" class="button1" plain>移到我的收藏</el-button>
-          <el-button type="success" size="medium" class="button1" plain>结算选中商品</el-button>
+          <!-- <el-button type="danger" size="medium" class="button1" plain>删除选中商品</el-button> -->
+          <!-- <el-button type="danger" size="medium" class="button1" plain>清除下架商品</el-button> -->
+          <!-- <el-button type="warning" size="medium" class="button1" plain>移到我的收藏</el-button> -->
+          <el-button type="success" size="medium" class="button1" plain @click="transport()">结算选中商品</el-button>
           <span class="balance_ul2">
-              <span>共<span class="spanText">{{changeNumPri(1)}}</span>件商品</span>
-              <span>总价<span class="spanText">&yen;{{changeNumPri(2)}}</span></span>
-              <span>
-                <router-link to="/makeSureOrder">
-                  <el-button>全部结算</el-button>
-                </router-link>
-              </span>
+              <span>共<span class="spanText">{{total}}</span>件商品</span>
+              <span>总价<span class="spanText">&yen;{{totalPrice}}</span></span>
           </span>
         </ul>
       </div>
@@ -83,65 +85,78 @@
 </template>
 
 <script>
+    import { postForm } from '../../api';
     export default {
         name: "carts",
         data()
         {
           return{
-            tableData: [{
-              name: '华为P40 Pro',
-              price:5988.00,
-              status:"1",
-              img:"http://05imgmini.eastday.com/mobile/20200507/20200507135939_9e1683aae3ee6fe14f853d422cdc32be_2.jpeg",
-              nums:1
-            }, {
-              name: 'iPhone 11 Pro Max',
-              price:6338.90,
-              status:"2",
-              img:"https://img12.360buyimg.com/n1/jfs/t1/68636/31/9824/169738/5d780ed7E97e88252/7b62380330636738.jpg",
-              nums:2
-            }],
+            cartsData: null,
             search : '',
             //选中列表
             multipleSelection : [],
             chooseList : [],
+            list:null
           }
         },
         created() {
-
+            this.getData();
         },
+
+        computed: {
+          total() {
+            return this.cartsData.filter(item => item.checked).reduce((t, item) => {return t += item.num}, 0)
+          },
+          totalPrice() {
+            return this.cartsData.filter(item => item.checked).reduce((sum, item) => {return sum += item.num * item.price}, 0)
+          },
+        },  
         methods:{
+          getData() {
+            let fd = new FormData()
+            fd.append('user_id', localStorage.getItem('userId'))
+            postForm(`http://43.143.179.158:8080/searchShopCart`, fd).then(res => {
+            this.cartsData = res.goods
+            console.log(this.cartsData)
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          },
           canSelect(row) {
             if(row.status==1)
               return false;
             else return true;
           },
-          goodsStatus(status)
+          goodsStatus(repo)
           {
-              if(status=="1")
+              if(repo==0)
                 return "danger";
-              else if(status=="2")
+              else 
                 return "";
           },
-          changeNumPri(which)
+          transport()
           {
-            const length = this.tableData.length;
-            //总价
-            //全部数量
-            let allPricess = 0.0;
-            let allNumss = 0;
-            for (let i = 0; i < length; i++) {
-                if(this.tableData[i].status!=1)
-                {
-                  allPricess += this.tableData[i].nums*this.tableData[i].price;
-                  allNumss += this.tableData[i].nums;
+              this.list = [];
+              for (let i = 0; i < this.cartsData.length; i++) {
+                if (this.cartsData[i].checked == true) {
+                    let o = new Object();
+                    o.name = this.cartsData[i].name
+                    o.picture = this.cartsData[i].picture
+                    o.price = this.cartsData[i].price
+                    o.num = this.cartsData[i].num
+                    this.list.push(o);
                 }
-            }
-            if(which=='2'){
-              return parseFloat(allPricess).toFixed(2);
-            }else{
-              return allNumss;
-            }
+              }
+              console.log(this.list);
+              
+              let parObj = JSON.stringify(this.list)
+              this.$router.push({
+                path: '/makeSureOrder',
+                query: {
+                  'obj': parObj
+                }
+              })
           },
           // 多选操作
           handleSelectionChange(val) {
