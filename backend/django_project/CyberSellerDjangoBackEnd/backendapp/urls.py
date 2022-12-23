@@ -34,4 +34,5 @@ urlpatterns = [
 	path(r'updateDefaultAddress', views.updateDefaultAddress, name='updateDefaultAddress'),
 	path(r'analyseLike', views.analyseLike, name='analyseLike'),
 	path(r'updateShopCartNum', views.updateShopCartNum, name='updateShopCartNum'),
+	path(r'analyseOrder', views.analyseOrder, name='analyseOrder'),
 ]
