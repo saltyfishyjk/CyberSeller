@@ -1100,3 +1100,50 @@ def analyseLike(request):
 		return JsonResponse({
 			'tuples': ret_list
 		})
+
+@csrf_exempt
+def updateShopCartNum(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '250000',
+				'message': 'ERROR! Need an available user_id!'
+			})
+		good_id = request.POST.get('good_id')
+		if good_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '250001',
+				'message': 'ERROR! Need an available good_id!'
+			})
+		new_num = request.POST.get('new_num')
+		if new_num is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '250002',
+				'message': 'ERROR! Need an available new_num!'
+			})
+		shop_carts = ShopCart.objects.filter(user_id=user_id, good_id=good_id)
+		if shop_carts.count() == 0:
+			return JsonResponse({
+				'succeed': False,
+				'code': '250003',
+				'message': 'ERROR! No such good in this user\'s shop cart!'
+			})
+		elif shop_carts.count() != 1:
+			return JsonResponse({
+				'succeed': False,
+				'code': '250004',
+				'message': 'ERROR! Unknown error, please contact YJK!'
+			})
+		else:
+			shop_cart = ShopCart.objects.get(user_id=user_id, good_id=good_id)
+			shop_cart.num = new_num
+			shop_cart.save()
+			return JsonResponse({
+				'succeed': True,
+				'code': '250101',
+				'message': 'SUCCESS! Update ShopCart num successfully!'
+			})
