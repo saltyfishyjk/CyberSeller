@@ -80,6 +80,10 @@ excel：商品详情->表格图片
 
 
 
+**2022-12-23-17:02-zry**
+
+1.模仿16号接口，新建与`analyseLike`和`analyseOrder`接口，用于分析收藏列表和历史订单
+
 ## Part 4 Other
 
 
