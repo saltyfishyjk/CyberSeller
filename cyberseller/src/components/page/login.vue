@@ -47,7 +47,8 @@ export default {
     methods: {
         submitForm() {
             userLogin(this.param).then(res => { 
-                let name=localStorage.getItem('username')
+                let name = localStorage.getItem('username')
+                console.log(res)
                 if (name!='admin') {
                     this.$message.success('登录成功!');
                     this.$router.push('/');
