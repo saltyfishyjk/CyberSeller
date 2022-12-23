@@ -1192,3 +1192,11 @@ def analyseOrder(request):
 		return JsonResponse({
 			'tuples': ret_list
 		})
+
+@csrf_exempt
+def checked(request):
+	return JsonResponse({
+		'checked': False
+	})
+
+

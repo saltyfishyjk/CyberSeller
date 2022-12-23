@@ -35,4 +35,5 @@ urlpatterns = [
 	path(r'analyseLike', views.analyseLike, name='analyseLike'),
 	path(r'updateShopCartNum', views.updateShopCartNum, name='updateShopCartNum'),
 	path(r'analyseOrder', views.analyseOrder, name='analyseOrder'),
+	path(r'checked', views.checked, name='checked'),
 ]
