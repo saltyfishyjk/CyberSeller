@@ -1166,7 +1166,7 @@ def analyseOrder(request):
 			sale_id = sale.id
 			goods = SaleGood.objects.filter(sale_id=sale_id)
 			for good in goods:
-				good_id = good.id
+				good_id = good.good_id
 				num = good.num
 				seller_id = Good.objects.get(id=good_id).seller_id
 				price = Good.objects.get(id=good_id).price * num
