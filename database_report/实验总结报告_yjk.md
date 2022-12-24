@@ -171,6 +171,68 @@ XSS 攻击允许用户将客户端脚本注入到其他用户的浏览器中。�
 
 ### Part 5 存储过程、触发器和函数的代码说明
 
+#### 存储过程
+
+我们的项目中对较为复杂的操作在 SQL 层面封装成过程，由于 SQL 中的函数与过程是预先编译并存入 DBMS 中的，调用的时候过程内部不需要解释执行，提高了 SQL 的执行效率，也简化了高级语言的处理逻辑。
+
+根据实际需求，我们使用了如下存储过程：
+##### 搜索相似后缀名商品
+
+```sql
+# 存储过程
+use CyberSeller_db1;
+drop procedure if exists searchGood;
+delimiter $$
+create procedure searchGood(in input varchar(255))
+begin
+    select *
+        from backendapp_good
+            where name like concat('%', input);
+end $$
+delimiter ;
+```
+
+根据用户输入的关键词可以检索和关键词相似的商品，根据数据统计和分析，相似商品往往可能拥有相似后缀，如“星巴克咖啡”和“瑞星咖啡”，用户检索“咖啡”时就会显示这两个商品。
+
+#### 触发器
+
+触发器对于保证数据一致性有很大帮助，而且有时候将数据更新在数据库层面完成，可以简化高级语言的处理逻辑。但是触发器的性能并不好，而且容易出现循环触发等问题，所以我们对于更新数据量为一条数据，与其他数据耦合度小，功能比较独立的操作才使用触发器。
+
+##### 库存数管理
+
+库存数的更新是一个局部细节问题，与其余问题耦合度小，涉及数据仅为一样商品库存信息，所以我们使用了触发器。
+
+```sql
+DELIMITER $$
+CREATE TRIGGER 库存大于等于零 after update on backendapp_repo
+    for each row
+    begin
+        if (new.repo < 0) then
+            signal sqlstate '65666' set message_text = '库存不能小于0';
+        end if;
+    end $$
+DELIMITER ;
+```
+
+#### 函数
+
+用户时常关心商品的价格区间胜过具体价格，对于一般用户而言，其对商品价格的敏感度可以为大于`5000`元时认为昂贵，`2000-5000`元时认为一般，小于`2000`元时认为廉价，因此我们设计了查询函数来快速判断商品价格。
+
+```sql
+use CyberSeller_db1;
+DELIMITER $$
+CREATE FUNCTION getPrice(price integer) RETURNS varchar(3)
+DETERMINISTIC
+BEGIN
+    case
+        when (price >= 5000) then return '昂贵';
+        when (price >= 2000) then return '一般';
+        else return '廉价';
+    end case;
+END $$
+DELIMITER ;
+```
+
 ### Part 6 实现过程中主要技术和主要模块的论述
 
 ### Part 7 若干展示系统功能的运行实例
