@@ -263,6 +263,7 @@
 | description | 商品描述  | 字符串，商品详细描述             |
 | date        | 生产日期  | 字符串，形如yyyy-mm-dd           |
 | shelf_life  | 保质期    | 字符串，形如yyyy-mm-dd-hh        |
+| repo        | 库存      | 整数，是商品库存                 |
 
 ### [07] searchShopCart获取用户购物车内所有商品和数量
 

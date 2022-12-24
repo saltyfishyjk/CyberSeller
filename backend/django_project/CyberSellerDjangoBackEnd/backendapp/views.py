@@ -393,6 +393,10 @@ def getGood(request):
 	if request.method == 'POST':
 		good_id = request.POST.get('good_id')
 		good = Good.objects.get(id=good_id)
+		repo = 0
+		repos = Repo.objects.filter(good_id=good_id)
+		if repos.count() != 0:
+			repo = Repo.objects.get(good_id=good_id).repo
 		return JsonResponse({
 			'id': good.id,
 			'name': good.name,
@@ -402,7 +406,8 @@ def getGood(request):
 			'picture': good.picture,
 			'description': good.description,
 			'date': good.date,
-			'shelf_life': good.shelf_life
+			'shelf_life': good.shelf_life,
+			'repo': repo
 		})
 
 @csrf_exempt
