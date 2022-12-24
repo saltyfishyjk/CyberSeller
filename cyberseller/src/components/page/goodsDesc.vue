@@ -8,22 +8,15 @@
           :preview-src-list="goodImg">
         </el-image>
         <div class="goodsBox-store">
-          <p>{{goodMaker}}</p>
-          <el-rate
-            v-model="value"
-            disabled
-            show-score
-            text-color="#ff9900"
-            score-template="{value}">
-          </el-rate>
+
         </div>
         <div class="goodsBox-btn">
          <br><br>
           <h1>{{goodName}}</h1><br>
           <h2><span style="color: #777777">售价&ensp;</span><span style="color: #e4393c;font-family: simsun">&yen;<span></span>{{goodPrice}}</span></h2>
           <br><br>
-          <h4 style="position: relative;left: -35%;"><span style="color: #777777">库存&ensp;</span><span style="color: #4D6530;font-family: simsun"><span></span>{{sum}}</span></h4>
-          <el-input-number size="large" v-model="num" :min="1" :max="sum" @change="handleChange" label="商品数量"></el-input-number>
+          <h4 style="position: relative;left: -35%;"><span style="color: #777777">库存&ensp;</span><span style="color: #4D6530;font-family: simsun"><span></span>{{ goodRepo }}</span></h4>
+          <el-input-number size="large" v-model="num" :min="1" :max="goodRepo" @change="handleChange" label="商品数量"></el-input-number>
           <el-button size="medium" type="danger" @click="add1">加入购物车</el-button>
           <el-button size="medium" type="warning" @click="add2">收藏</el-button>
           <p style="color: #777777">温馨提示·支持7天无理由退货</p>
@@ -64,7 +57,8 @@
 
 <script>
   import { postForm } from '../../api';
-    export default {
+export default {
+        inject: ['reload'],
         name: "goodsDesc",
         data() {
           return {
@@ -83,17 +77,13 @@
             add2_can_press : true,
             err_can_press : true,
 
-            //商品详情
-            imgUrl: 'https://img13.360buyimg.com/n1/jfs/t1/127138/40/16031/89209/5f918b53E19746496/f0f235be5150056f.jpg',
-            srcList: [
-              'http://img20.360buyimg.com/vc/jfs/t1/105367/36/17413/3696469/5e85c8d5E2e1acf66/0d3545ec70f2646f.jpg',
-            ],
             goodMaker:null,
             goodName:null,
             goodPrice: null,
             goodDescribtion: null,
             goodImg: null,
-            favouriteList: null
+            favouriteList: null,
+            goodRepo: 0,
           };
         },
         created() {
@@ -116,14 +106,15 @@
               this.goodPrice = res.price;
               this.goodDescribtion = res.description;
               this.goodImg = res.picture;
+              this.goodRepo = 2;
             })
             .catch(function (error) {
             console.log(error);
             });
             console.log("get favourite")
             let nfd = new FormData()
-            nfd.append('user_id', localStorage.getItem('userId'))
-            postForm(`http://43.143.179.158:8080/mainRecommendGoods`, nfd).then(res => {
+            nfd.append('good_id', this.goodsId)
+            postForm(`http://43.143.179.158:8080/goodsRecommendGoods`, nfd).then(res => {
             console.log(res)
               this.favouriteList = res.goods;
             })
@@ -139,6 +130,7 @@
                 goods:goods
               }
             });
+            this.reload()
           },
           handleChange(value) {
             console.log(this.num);

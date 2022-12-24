@@ -21,6 +21,7 @@
 <!--            <i class="el-icon-rank"></i>-->
 <!--          </el-tooltip>-->
 <!--        </div>-->
+
         <!-- 我的购物车 -->
         <div class="btn-bell" v-if="login_state()">
           <el-tooltip effect="dark" content="我的购物车" placement="bottom">

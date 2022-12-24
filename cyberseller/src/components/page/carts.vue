@@ -20,7 +20,7 @@
         <el-table-column
           width="35">
           <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.checked" :disabled="scope.row.repo==0?true:false"></el-checkbox> 
+            <el-checkbox v-model="scope.row.checked" :disabled="scope.row.repo==0?true:false"></el-checkbox>
           </template>
         </el-table-column>
 
@@ -33,7 +33,7 @@
         <el-table-column label="商品名" prop="name" align="center"></el-table-column>
         <el-table-column label="状态"  prop="prize" width="110px" align="center">
           <template slot-scope="scope">
-            <el-tag :type="goodsStatus(scope.row.repo)">{{scope.row.repo==0?"下架":"在售"}}</el-tag>
+            <el-tag :type="goodsStatus(scope.row.repo)">{{scope.row.repo==0?"售罄":"在售"}}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="单价"  prop="prize" width="110px" align="center">
@@ -115,8 +115,9 @@
             let fd = new FormData()
             fd.append('user_id', localStorage.getItem('userId'))
             postForm(`http://43.143.179.158:8080/searchShopCart`, fd).then(res => {
-            this.cartsData = res.goods
-            console.log(this.cartsData)
+              console.log(res)
+              this.cartsData = res.goods
+              console.log(this.cartsData)
             })
             .catch(function (error) {
               console.log(error);
@@ -139,12 +140,14 @@
               this.list = [];
               for (let i = 0; i < this.cartsData.length; i++) {
                 if (this.cartsData[i].checked == true) {
-                    let o = new Object();
-                    o.name = this.cartsData[i].name
-                    o.picture = this.cartsData[i].picture
-                    o.price = this.cartsData[i].price
-                    o.num = this.cartsData[i].num
-                    this.list.push(o);
+                  let o = new Object();
+                  o.name = this.cartsData[i].name
+                  o.picture = this.cartsData[i].picture
+                  o.price = this.cartsData[i].price
+                  o.num = this.cartsData[i].num;
+                  o.good_id = this.cartsData[i].id
+                    
+                  this.list.push(o);
                 }
               }
               console.log(this.list);
@@ -178,8 +181,7 @@
   /*商品结算*/
   .balance{
     height: 50px;
-    border: 1px solid gray;
-    margin-top: 40px;
+    margin-top: 20px;
   }
   .balance li{
     float: left;

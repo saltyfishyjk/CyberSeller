@@ -49,7 +49,7 @@
                 <el-table-column label="商品名" prop="name" align="center"></el-table-column>
                 <el-table-column label="状态" prop="prize" width="110px" align="center">
                     <template slot-scope="scope">
-                        <el-tag :type="goodsStatus(scope.row.status)">{{scope.row.repo==0?"售罄":"在售"}}</el-tag>
+                        <el-tag :type="goodsStatus(scope.row.repo)">{{scope.row.repo==0?"售罄":"在售"}}</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="单价" prop="prize" width="110px" align="center">
@@ -233,7 +233,7 @@ export default {
         }
         ,
         goodsStatus(status) {
-            if (status == "1")
+            if (status == "0")
                 return "danger";
             else if (status == "2")
                 return "";

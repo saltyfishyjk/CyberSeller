@@ -78,8 +78,8 @@
               <span>共<span class="spanText">{{changeNumPri(1)}}</span>件商品</span>
               <span>总价<span class="spanText">&yen;{{changeNumPri(2)}}</span></span>
               <span>
-                 <router-link to="/carts">
-                    <el-button>确认支付</el-button>
+                 <router-link to="/helloHome">
+                    <el-button @click="pay()">确认支付</el-button>
                  </router-link>
               </span>
           </span>
@@ -98,7 +98,9 @@
     {
       return{
         tableData: null,
-        userAddress:null,
+        userAddress: null,
+        address_id: '',
+        total_price:0,
         search : '',
         //选中列表
         multipleSelection : [],
@@ -115,7 +117,8 @@
         let fd = new FormData()
         fd.append('user_id', localStorage.getItem('userId'))
         postForm(`http://43.143.179.158:8080/getAddress`, fd).then(res => {
-        this.userAddress = res.addresses
+          this.userAddress = res.addresses
+          this.address_id = res.address_id
         console.log(this.userAddress)
         })
         .catch(function (error) {
@@ -144,12 +147,66 @@
             allNumss += this.tableData[i].num;
           
         }
+        this.total_price = allPricess
         if(which=='2'){
           return parseFloat(allPricess).toFixed(2);
         }else{
           return allNumss;
         }
       },
+      pay() {
+        //http://43.143.179.158:8080/addSale
+        //http://43.143.179.158:8080/addSaleGood
+        this.$notify({
+          title: '支付订单',
+          message: '支付成功',
+          type: 'success'
+        });
+        console.log(this.tableData)
+        let fd = new FormData()
+        var addr_id=''
+        for (var i = 0; i < this.userAddress.length; i++){
+          let row = this.userAddress[i]
+          if (row.default == 1) {
+            addr_id = row.address_id
+          }
+        }
+        fd.append('user_id', localStorage.getItem('userId'))
+        fd.append('address_id', addr_id)
+        fd.append('price', this.total_price)
+        console.log(this.total_price)
+        console.log(addr_id)
+        console.log(localStorage.getItem('userId'))
+        var sale_id=''
+        postForm(`http://43.143.179.158:8080/addSale`, fd).then(res => {
+          console.log('addSale')
+          console.log(res)
+          console.log('table data')
+          console.log(this.tableData)
+          sale_id=res.sale_id
+          for (var i = 0; i < this.tableData.length; i++) {
+            let row = this.tableData[i]
+            let good_sale = new FormData()
+            good_sale.append('sale_id', sale_id)
+            good_sale.append('good_id', row.good_id)
+            good_sale.append('num', row.num)
+            console.log('good sale')
+            console.log(sale_id)
+            console.log(row.good_id)
+            console.log(row.num)
+            postForm(`http://43.143.179.158:8080/addSaleGood`, good_sale).then(res => {
+              console.log('add sale')
+            })
+              .catch(function (error) {
+                console.log(error);
+              });
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+      }
     }
   }
 </script>
@@ -167,7 +224,6 @@
   /*商品结算*/
   .balance{
     height: 50px;
-    border: 1px solid gray;
     margin-top: 40px;
   }
   .balance li{

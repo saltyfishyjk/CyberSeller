@@ -104,7 +104,8 @@ export default {
               { min: 11, max: 11, message: '', trigger: 'blur' }
             ],
             address: [
-              { required: true, message: '请选择地址', trigger: 'change' }
+              { required: true, message: '请输入地址', trigger: 'blur' },
+              { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
             ],
             address2: [
               { required: true, message: '请输入详细地址', trigger: 'blur' },

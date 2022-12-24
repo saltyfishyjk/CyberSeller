@@ -70,7 +70,7 @@ export const userSignUp = async (para) => {
         console.log(res)
         if (res.succeed) {
             localStorage.setItem('username', para.username);
-            localStorage.setItem('userId', para.id);
+            localStorage.setItem('userId', res.id);
         } else {
             localStorage.setItem('username', 'admin');
         }

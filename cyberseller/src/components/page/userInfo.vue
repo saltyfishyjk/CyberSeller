@@ -1,8 +1,8 @@
 <template>
     <div class="dashboard">
-      <div class="flex-container column">
+      <div class="flex-container column" background-color='black'>
         <div style="display: flex">
-            <div class="item one" @click="clickChart('1')">
+            <div class="item one" @click="clickChart('1')"  >
               <div class="chart" id="mychart" ></div>
             </div>
             <div class="item two" @click="clickChart('2')">
@@ -17,7 +17,14 @@
             <v-chart class="chart" :option="times_tmp" :update-options="true" />
           </div>
         </div>
+<div>
+  <div ref="wordcloud" class="wordcloud">
+  </div>
+  <button v-print="printObj">导出pdf</button>
+</div>
       </div>
+
+
     </div>
 
   
@@ -35,10 +42,9 @@ import {
 import VChart, { THEME_KEY } from 'vue-echarts';
 import { postForm } from "@/api";
 import * as echarts from "echarts";
-import JSZipUtils from 'jszip-utils';
-import docxtemplater from 'docxtemplater';
-import { saveAs } from 'file-saver';
-import PizZip from 'pizzip';
+import JsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
 use([
   CanvasRenderer,
   PieChart,
@@ -53,7 +59,7 @@ export default ({
     VChart,
   },
   provide: {
-    [THEME_KEY]: 'dark',
+    [THEME_KEY]: 'light',
   },
   data() {
     let sellers = this.getSellerData()
@@ -61,6 +67,9 @@ export default ({
     let times=this.getTimesData()
 
     return {
+      chartStyle: {
+        background: "rgb(255,255,255,0)"
+      },
       in_seller_data: true,
       goodsList: null,
       sellers_tmp: sellers,
@@ -226,7 +235,7 @@ export default ({
       return para_seller
     },
     getOrderData() {
-      console.log('init')
+      console.log('order')
       let fd = new FormData()
       var seller_name_list = []
       var seller_name2value = []
@@ -248,7 +257,7 @@ export default ({
         });
       var para_seller = {
         title: {
-          text: '历史订单去向',
+          text: '资金流向',
           top: '5%',
           left: 'center',
         },
@@ -281,7 +290,7 @@ export default ({
       return para_seller
     },
     getTimesData() {
-      console.log('init')
+      console.log('times')
       let fd = new FormData()
       var seller_name_list = []
       var seller_name2value = []
@@ -303,7 +312,7 @@ export default ({
         });
       var para_seller = {
         title: {
-          text: '历史订单成交数',
+          text: '历史订单',
           top: '5%',
           left: 'center',
         },
@@ -318,7 +327,7 @@ export default ({
         },
         series: [
           {
-            name: '成交额',
+            name: '交易次数',
             type: 'pie',
             radius: '55%',
             center: ['50%', '60%'],
@@ -335,73 +344,34 @@ export default ({
       }
       return para_seller
     },
-    base64DataURLToArrayBuffer(dataURL) {
-      const base64Regex = /^data:image\/(png|jpg|svg|svg\+xml);base64,/;
-      if (!base64Regex.test(dataURL)) {
-        return false;
-      }
-      const stringBase64 = dataURL.replace(base64Regex, "");
-      let binaryString;
-      if (typeof window !== "undefined") {
-        binaryString = window.atob(stringBase64);
-      } else {
-        binaryString = new Buffer(stringBase64, "base64").toString("binary");
-      }
-      const len = binaryString.length;
-      const bytes = new Uint8Array(len);
-      for (let i = 0; i < len; i++) {
-        const ascii = binaryString.charCodeAt(i);
-        bytes[i] = ascii;
-      }
-      return bytes.buffer;
+    download() {
+      let mycanvas = document.getElementsByTagName('canvas')[0]
+      let image = mycanvas.toDataURL("image/png");
+      let $a = document.createElement('a');
+      $a.setAttribute("href", image);
+      $a.setAttribute("download", "chart.png");
+      $a.click();
     },
-    // 导出word
-    exportWord() {
-      //这里要引入处理图片的插件，下载docxtemplater后，引入的就在其中了
-      var ImageModule = require('docxtemplater-image-module-free');
-      var that = this;
-      //这里是我的Word路径，在static文件下
-      JSZipUtils.getBinaryContent("../../static/word.docx", function (error, content) {
-        if (error) {
-          throw error
-        };
-        let opts = {}
-        opts.centered = true;
-        opts.fileType = "docx";
-        opts.getImage = (tag) => {
-          return that.base64DataURLToArrayBuffer(tag);
-        }
-        opts.getSize = () => {
-          return [600, 400]//这里可更改输出的图片宽和高
-        }
-        let zip = new PizZip(content);
-        let doc = new docxtemplater();
-        doc.attachModule(new ImageModule(opts));
-        doc.loadZip(zip);
-        doc.setData({
-          ...that.wordData//我的最外层包裹一切要导出的数据名称
-        });
-        try {
-          doc.render()
-        } catch (error) {
-          var e = {
-            message: error.message,
-            name: error.name,
-            stack: error.stack,
-            properties: error.properties,
-          }
-          console.log(JSON.stringify({
-            error: e
-          }));
-          throw error;
-        }
-        var out = doc.getZip().generate({
-          type: "blob",
-          mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        })
-        saveAs(out, "成绩报表.docx")
-      })
-    },
+    handleWindowPrint(ele, fileName) {
+      var oIframe = document.createElement('iframe')
+      var oScript = document.createElement('script')
+      document.body.appendChild(oIframe)
+      var titleText = document.head.getElementsByTagName('title')[0].innerText
+      document.head.getElementsByTagName('title')[0].innerText = `${fileName}`
+      oIframe.contentDocument.head.innerHTML = `<meta charset="utf-8">
+                                              <title>${fileName}</title>
+                                              <meta name="format-detection" content="telephone=no">
+                                              <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+                                              <meta name="viewport" content="width=device-width,initial-scale=1.0">`
+      oIframe.contentDocument.body.innerHTML = document.querySelector(
+        ele
+      ).outerHTML
+      oScript.innerHTML = 'window.print();'
+      oIframe.contentDocument.body.appendChild(oScript)
+      document.body.removeChild(oIframe)
+      document.head.getElementsByTagName('title')[0].innerText = titleText
+    }
+
   },
 });
 </script>
@@ -410,6 +380,7 @@ export default ({
 .chart {
   height: 45vh;
   width: 100vh;
-  margin: 10px;
+  margin: 2px;
+  background-color:azure
 }
 </style>
