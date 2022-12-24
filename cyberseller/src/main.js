@@ -8,6 +8,8 @@ import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 import './assets/css/theme-green/index.css'; // 浅绿色主题
 import './assets/css/icon.css';
 import ECharts from 'vue-echarts'
+
+
 //使用
 
 Vue.component('v-chart', ECharts)

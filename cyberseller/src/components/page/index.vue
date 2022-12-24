@@ -17,7 +17,7 @@
         </el-input>
         <p style="color: #BFBFBF;">
           <span>热门搜索：</span>
-          <a href="">月饼</a>
+          <a href="">水果</a>
           <a href="">狐狸</a>
         </p>
 
@@ -106,6 +106,16 @@ export default {
           let regMatch = name.match(reg);
           if(null !== regMatch) {// 将匹配的数据放入结果列表中
              this.goodsRst.push(this.goodsList[i]);
+          }
+          let price = this.goodsList[i].price; //按照名字匹配
+          regMatch = price.match(reg);
+          if (null !== regMatch) {// 将匹配的数据放入结果列表中
+            this.goodsRst.push(this.goodsList[i]);
+          }
+          let seller = this.goodsList[i].seller_name; //按照名字匹配
+          regMatch = seller.match(reg);
+          if (null !== regMatch) {// 将匹配的数据放入结果列表中
+            this.goodsRst.push(this.goodsList[i]);
           }
         }
         this.currentGoods = this.goodsRst.slice((this.currentindex-1)*12, this.currentindex*12)
