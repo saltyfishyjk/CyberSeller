@@ -70,72 +70,6 @@ export default {
     }
   },
   methods: {
-    submitForm(formName) {
-      let fd = new FormData()
-      fd.append('name', this.ruleForm.name)
-      fd.append('price', this.ruleForm.price)
-      fd.append('picture', this.ruleForm.image)
-      fd.append('seller_id', localStorage.getItem('userId'))
-      if (this.ruleForm.maker != '') {
-        fd.append('maker', this.ruleForm.maker)
-      }
-      if (this.ruleForm.description != '') {
-        fd.append('description', this.ruleForm.description)
-      }
-      if (this.ruleForm.date != '') {
-        fd.append('date', this.ruleForm.date)
-      }
-      if (this.ruleForm.shelf_life != '') {
-        fd.append('shelf_life', this.ruleForm.shelf_life)
-      }
-      console.log(typeof this.ruleForm.name)
-      console.log(typeof this.ruleForm.price)
-      console.log(this.ruleForm.price)
-      console.log(localStorage.getItem('userId'))
-      postForm(`http://43.143.179.158:8080/addGoods`, fd).then(res => {
-        console.log(res)
-        this.getSellData()
-        this.reload()
-        this.good_id = res.good_id
-      })
-        .catch(function (error) {
-          console.log(error);
-        });
-      if (this.ruleForm.others != null) {
-        console.log(this.ruleForm.others)
-        let excel_file = new FormData()
-        excel_file.append('excel', this.ruleForm.others)
-        excel_file.append('good_id', this.good_id)
-        postForm(`http://43.143.179.158:8080/analyseExcel`, excel_file).then(res => {
-          console.log(res)
-        })
-          .catch(function (error) {
-            console.log(error);
-          });
-      }
-    },
-    getImageFile: function (e) {
-      console.log(this.$refs["img"].files);
-      console.log(this.$refs["img"].files[0]);
-      if (this.$refs["img"].files[0]) {
-        this.ruleForm.image = this.$refs["img"].files[0];
-      } else {
-        this.ruleForm.image = null;
-      }
-      console.log('上传类型')
-      console.log(typeof this.ruleForm.image)
-    },
-    getExcelFile: function (e) {
-      console.log(this.$refs["file"].files);
-      console.log(this.$refs["file"].files[0]);
-      if (this.$refs["file"].files[0]) {
-        this.ruleForm.others = this.$refs["file"].files[0];
-      } else {
-        this.ruleForm.others = null;
-      }
-      console.log('上传类型')
-      console.log(typeof this.ruleForm.others)
-    },
     resetForm(formName) {
       this.$refs.ruleForm.resetFields()
       this.ruleForm.image = null;
@@ -144,39 +78,6 @@ export default {
       if (row.status == 1)
         return false;
       else return true;
-    },
-    handleEdit(row) {
-      let repo_goods_id = row.id
-      console.log(row.repo)
-      let fd = new FormData()
-      fd.append('repo', row.repo)
-      fd.append('good_id', repo_goods_id)
-      postForm(`http://43.143.179.158:8080/updateRepo`, fd).then(res => {
-        if (res.succeed) {
-          this.init_sell_data = true
-        }
-      })
-        .catch(function (error) {
-        });
-      if (this.tableData == null) {
-        return false
-      }
-    },
-    handleDelete(row) {
-      let repo_goods_id = row.id
-      console.log('delete ' + row.id)
-      let fd = new FormData()
-      fd.append('good_id', repo_goods_id)
-      postForm(`http://43.143.179.158:8080/deleteGood`, fd).then(res => {
-        if (res.succeed) {
-          this.init_sell_data = true
-        }
-      })
-        .catch(function (error) {
-        });
-      if (this.tableData == null) {
-        return false
-      }
     }
     ,
     goodsStatus(status) {
@@ -193,8 +94,20 @@ export default {
       let fd = new FormData()
       fd.append('user_id', localStorage.getItem('userId'))
       console.log('Call Database for SellData')
-      postForm(`http://43.143.179.158:8080/mainRecommendGoods`, fd).then(res => {
-        this.tableData = res.goods
+      postForm(`http://43.143.179.158:8080/getSale`, fd).then(res => {
+        console.log(res)
+        var ans = []
+        for (var i = 0; i < res.sales.length; i++) {
+          var json_e = res.sales[i]
+          console.log(json_e)
+          for (var row = 0; row < json_e.length; row++) {
+            var ele = json_e[row]
+            console.log(ele)
+            ans.push(ele)
+          }
+        }
+        this.tableData = ans
+        console.log(this.tableData)
       })
         .catch(function (error) {
           console.log(error)
