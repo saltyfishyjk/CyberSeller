@@ -34,7 +34,7 @@
 | id          | 编号     | INT      | 主码        |
 | name        | 商品名   | VARCHAR  |             |
 | price       | 价格     | DECIMAL  |             |
-| seller_id   | 卖家编号 | VARCHAR  | 外键        |
+| seller_id   | 卖家编号 | INT      | 外键        |
 | maker       | 制造商   | VARCHAR  |             |
 | picture     | 图片地址 | VARCHAR  | 存储图片URL |
 | description | 详细描述 | VARCHAR  |             |
@@ -234,6 +234,131 @@ DELIMITER ;
 ```
 
 ### Part 6 实现过程中主要技术和主要模块的论述
+
+#### Django 框架
+
+Django是由Python编写的开源Web应用框架，Python+Django+Vue是网站开发与部署的常见组合。
+
+- 齐全的功能。自带大量常用工具和框架，可轻松、迅速开发出一一个功能齐全的Web应用。
+
+- 完善的文档。Django已发展十余年，具有广泛的实践案例，同时Django提 供完善的在线文档，Django用户能够更容易地找到问题的解决方案。
+
+- 强大的数据库访问组件。Django自带一个面向对象的、反映数据模型(以Python类的形式定义)与关系型数据库间的映射关系的映射器(ORM)，开发者无须学习SQL语言即可操作数据库。
+
+- 灵活的URL映射。Django提供一个基于正则表达式的URL分发器，开发者可灵活地编写URL。
+
+- 丰富的模板语言。Django模板语言功能丰富，支持自定义模板标签。Django也支持使用第三方模板系统，如jinja2等 。
+
+- 健全的后台管理系统。Django内置了-一个后台数据管理系统，经简单配置后，再编写少量代码即可使用完整的后台管理功能。
+
+- 完整的错误信息提示。Django提供 了非常完整的错误信息提示和定位功能，可在开发调试过程中快速定位错误或异常。
+
+- 强大的缓存支持。Django内置了一个缓存框架，并提供了多种可选的缓存方式。
+
+- 国际化。Django包含一个国际化系统，Django组件支持多种语言。
+
+#### Django 模型映射数据库实体（OR Mapping）
+
+Django 提供了 Model 映射数据库实体，在本项目中，`CyberSllerDjangoBackEnd/backendapp/models.py`中以Python类的形式记录了表单的结构，方便使用Django提供的OR Mapping API直接操作数据库。如下图中，左侧为`models.py`中的类结构，右侧为数据库中的对应表单。
+
+<table>
+<tr>
+	<td><img src="系统实现报告/image-20221224111438670.png" width="400"></td>
+    <td><img src="系统实现报告/image-20221224111507297.png" width="400"></td>
+<tr>
+</table>
+
+##### 增删改查
+
+在Django框架中，对数据库操作提供了良好的封装（相较于pymysql而言），增删改查变得更加面向对象。
+
+###### 增
+
+```python
+good = Good(name=name, price=price, seller_id=seller_id,
+					maker=maker, picture=pic_url, description=description,
+					date=date, shelf_life=shelf_life)
+good.save()
+```
+
+###### 删
+
+```python
+good_obj = Good.objects.get(id = 1)
+good_obj.delete()
+```
+
+###### 改
+
+```python
+# 方法一
+good = Good.get(did = 1) # 相当于SQL查询，good为Good对象
+good.name = "new_name" # 修改内容
+good.save() # 保存上传
+```
+
+###### 查
+
+**获取全部数据**
+
+```python
+# objects是模型管理器，all()返回了所有数据行，某种程度上相当于SQL中的SELECT * FROM
+# 其中，ls是一个列表，其中每一个元素是Good对象，这是比pymysql更优雅的地方
+good = Goods.objects.all()
+```
+
+**按条件获取数据**
+
+```python
+goods = Good.objects.filter(seller_id=user_id)
+```
+
+#### MySQL 数据库
+
+尽管Django自带了Sqlite3数据库，但这一数据库过于轻量级，不很符合本课程设计的要求。
+
+相较而言，MySQL作为最流行的数据库之一，其功能完整，性能优良，表现稳定，适合本项目使用。
+
+#### 路由 - 控制器 - 渲染
+
+前端发送请求后，路由接收到前端的请求，随后根据`CyberSellerDjangoBackEnd/backendapp/urls.py`中定义的路由信息，找到`CyberSellerDjangoBackEnd/backendapp/views.py`对应的控制器（Controller）与动作（Action）。本项目的路由信息可由如下命令给出：
+
+| 名称                   | URL                                               | 行为                           | 方式           |
+| ---------------------- | ------------------------------------------------- | ------------------------------ | -------------- |
+| `signup`               | `http://43.143.179.158:8080/signup`               | 注册                           | POST/JSON      |
+| `login`                | `http://43.143.179.158:8080/login`                | 登录                           | POST/JSON      |
+| `addGoods`             | `http://43.143.179.158:8080/addGoods`             | 添加售卖商品                   | POST/FORM-DATA |
+| `updateShopCart`       | `http://43.143.179.158:8080/updateShopCart`       | 添加商品到购物车               | POST/FORM-DATA |
+| `mainRecommendGoods`   | `http://43.143.179.158:8080/mainRecommendGoods`   | 为用户推荐商品                 | POST/FORM-DATA |
+| `getGood`              | `http://43.143.179.158:8080/getGood`              | 获取指定商品所有信息           | POST/FORM-DATA |
+| `searchShopCart`       | `http://43.143.179.158:8080/searchShopCart`       | 获取用户购物车内所有商品和数量 | POST/FORM-DATA |
+| `updateStar`           | `http://43.143.179.158:8080/updateStar`           | 更新收藏关系                   | POST/FORM-DATA |
+| `getSixPictures`       | `http://43.143.179.158:8080/getSixPictures`       | 获取首页六张滚播图             | POST/FORM-DATA |
+| `updateRepo `          | `http://43.143.179.158:8080/updateRepo`           | 更新库存容量                   | POST/FORM-DATA |
+| `getSellGoods `        | `http://43.143.179.158:8080/getSellGoods`         | 获取正在售卖的商品             | POST/FORM-DATA |
+| `goodsRecommendGoods`  | `http://43.143.179.158:8080/goodsRecommendGoods ` | 为商品推荐商品                 | POST/FORM-DATA |
+| `getStarGoods`         | `http://43.143.179.158:8080/getStarGoods `        | 获取收藏商品                   | POST/FORM-DATA |
+| `deleteGood`           | `http://43.143.179.158:8080/deleteGood`           | 删除指定商品                   | POST/FORM-DATA |
+| `analyseExcel`         | `http://43.143.179.158:8080/analyseExcel`         | 解析Excel文件                  | POST/FORM-DATA |
+| `analyseShopCart`      | `http://43.143.179.158:8080/analyseShopCart`      | 分析用户购物车内商品信息       | POST/FORM-DATA |
+| `addAddress`           | `http://43.143.179.158:8080/addAddress`           | 添加地址                       | POST/FORM-DATA |
+| `addSale`              | `http://43.143.179.158:8080/addSale`              | 添加订单                       | POST/FORM-DATA |
+| `addSaleGood`          | `http://43.143.179.158:8080/addSaleGood`          | 添加订单商品关系               | POST/FORM-DATA |
+| `analyseSale`          | `http://43.143.179.158:8080/analyseSale`          | 分析订单商品信息               | POST/FORM-DATA |
+| `getGoodDetail`        | `http://43.143.179.158:8080/getGoodDetail`        | 获取商品详情                   | POST/FORM-DATA |
+| `getAddress`           | `http://43.143.179.158:8080/getAddress`           | 获取地址                       | POST/FORM-DATA |
+| `deleteAddress`        | `http://43.143.179.158:8080/deleteAddress`        | 删除地址                       | POST/FORM-DATA |
+| `updateDefaultAddress` | `http://43.143.179.158:8080/updateDefaultAddress` | 设置默认地址                   | POST/FORM-DATA |
+| `analyseLike`          | `http://43.143.179.158:8080/analyseLike`          | 分析用户收藏商品信息           | POST/FORM-DATA |
+| `updateShopCartNum`    | `http://43.143.179.158:8080/updateShopCartNum`    | 更新购物车商品数量             | POST/FORM-DATA |
+
+随后落入当前请求对应的控制器动作中，由控制器来进行 ORM 操作，并发回前端。
+
+#### 服务器
+
+服务器端使用`conda`进行虚拟环境管理，使用`Django=3.2`
+
+
 
 ### Part 7 若干展示系统功能的运行实例
 

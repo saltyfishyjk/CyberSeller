@@ -417,9 +417,9 @@ def searchShopCart(request):
 			good_id = good_index.good_id
 			good = Good.objects.get(id=good_id)
 			repo = 0
-			repos = Repo.objects.filter(id=good_id)
+			repos = Repo.objects.filter(good_id=good_id)
 			if repos.count() != 0:
-				repo = Repo.objects.get(id=good_id).repo
+				repo = Repo.objects.get(good_id=good_id).repo
 			goods_list.append({
 				'id': good.id,
 				'name': good.name,
