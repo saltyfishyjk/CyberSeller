@@ -1236,8 +1236,8 @@ def getSale(request):
 					'shelf_life': good.shelf_life,
 					'num': num
 				})
-			ret_ele.reverse()
 			ret_list.append(ret_ele)
+		ret_list.reverse()
 		return JsonResponse({
 			'sales': ret_list
 		})
