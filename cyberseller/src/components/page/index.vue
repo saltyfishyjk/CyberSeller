@@ -15,11 +15,7 @@
         <el-input placeholder="查询商品" v-model="selectd" class="input-with-select" size="1000px">
           <el-button slot="append" icon="el-icon-search" @click="searchInputChange()"></el-button>
         </el-input>
-        <p style="color: #BFBFBF;">
-          <span>热门搜索：</span>
-          <a href="">水果</a>
-          <a href="">狐狸</a>
-        </p>
+
 
       </div>
     </el-container>

@@ -106,7 +106,7 @@ export default {
               this.goodPrice = res.price;
               this.goodDescribtion = res.description;
               this.goodImg = res.picture;
-              this.goodRepo = 2;
+              this.goodRepo = res.repo;
             })
             .catch(function (error) {
             console.log(error);
