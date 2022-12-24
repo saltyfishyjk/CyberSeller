@@ -1204,4 +1204,42 @@ def checked(request):
 		'checked': False
 	})
 
+@csrf_exempt
+def getSale(request):
+	if request.method == 'POST':
+		user_id = request.POST.get('user_id')
+		if user_id is None:
+			return JsonResponse({
+				'succeed': False,
+				'code': '290000',
+				'message': 'ERROR! Need an available user_id!'
+			})
+		sales = Sale.objects.filter(user_id=user_id)
+		ret_list = []
+		for sale in sales:
+			ret_ele = []
+			sale_id = sale.id
+			sale_goods = SaleGood.objects.filter(sale_id=sale_id)
+			for sale_good in sale_goods:
+				good_id = sale_good.good_id
+				num = sale_good.num
+				good = Good.objects.get(id=good_id)
+				ret_ele.append({
+					'id': good_id,
+					'name': good.name,
+					'price': good.price,
+					'seller_id': good.seller_id,
+					'maker': good.maker,
+					'picture': good.picture,
+					'description': good.description,
+					'date': good.date,
+					'shelf_life': good.shelf_life,
+					'num': num
+				})
+			ret_ele.reverse()
+			ret_list.append(ret_ele)
+		return JsonResponse({
+			'sales': ret_list
+		})
+
 

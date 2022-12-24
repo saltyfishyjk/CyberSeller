@@ -36,4 +36,5 @@ urlpatterns = [
 	path(r'updateShopCartNum', views.updateShopCartNum, name='updateShopCartNum'),
 	path(r'analyseOrder', views.analyseOrder, name='analyseOrder'),
 	path(r'checked', views.checked, name='checked'),
+	path(r'getSale', views.getSale, name='getSale'),
 ]
