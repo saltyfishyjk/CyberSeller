@@ -8,6 +8,11 @@ import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 import './assets/css/theme-green/index.css'; // 浅绿色主题
 import './assets/css/icon.css';
 import ECharts from 'vue-echarts'
+import htmlToPdf from '@/htmlToPdf';
+import JsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+// 使用 Vue.use() 方法就会调用工具方法中的install方法
+Vue.use(htmlToPdf);
 
 
 //使用

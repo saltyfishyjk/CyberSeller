@@ -10,7 +10,7 @@
           </template>
         </el-table-column>
         <el-table-column label="商品名" prop="name" align="center"></el-table-column>
-        <el-table-column label="卖家" prop="seller_name" align="center"></el-table-column>
+        <el-table-column label="数量" prop="num" align="center"></el-table-column>
         <el-table-column label="单价" prop="prize" width="110px" align="center">
           <template slot-scope="scope">
             <span>&yen;</span>{{ scope.row.price }}

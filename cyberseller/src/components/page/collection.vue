@@ -25,7 +25,7 @@
         <!--        上下架状态-->
         <el-table-column label="状态"  prop="prize" width="110px" align="center">
           <template slot-scope="scope">
-            <el-tag :type="goodsStatus(scope.row.repo)">{{scope.row.repo==0?"下架":"在售"}}</el-tag>
+            <el-tag :type="goodsStatus(scope.row.repo)">{{"在售"}}</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -61,7 +61,7 @@
     methods:{
       goodsStatus(repo)
       {
-        if(repo==0)
+        if(repo==-1)
           return "danger";
         else 
           return "";

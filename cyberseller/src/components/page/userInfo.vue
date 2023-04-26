@@ -1,4 +1,5 @@
 <template>
+  <div ref="pdfDom" class="pdfDom" id="pdfDom">
     <div class="dashboard">
       <div class="flex-container column" background-color='black'>
         <div style="display: flex">
@@ -17,14 +18,12 @@
             <v-chart class="chart" :option="times_tmp" :update-options="true" />
           </div>
         </div>
-<div>
-  <div ref="wordcloud" class="wordcloud">
-  </div>
-  <button v-print="printObj">导出pdf</button>
-</div>
       </div>
 
-
+      
+      
+      <button @click="download">导出pdf</button>
+      </div>
     </div>
 
   
@@ -42,8 +41,7 @@ import {
 import VChart, { THEME_KEY } from 'vue-echarts';
 import { postForm } from "@/api";
 import * as echarts from "echarts";
-import JsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+
 
 use([
   CanvasRenderer,
@@ -67,6 +65,7 @@ export default ({
     let times=this.getTimesData()
 
     return {
+      exportPDFtitle: "页面导出PDF文件名",
       chartStyle: {
         background: "rgb(255,255,255,0)"
       },
@@ -345,32 +344,8 @@ export default ({
       return para_seller
     },
     download() {
-      let mycanvas = document.getElementsByTagName('canvas')[0]
-      let image = mycanvas.toDataURL("image/png");
-      let $a = document.createElement('a');
-      $a.setAttribute("href", image);
-      $a.setAttribute("download", "chart.png");
-      $a.click();
+      this.$nextTick(() => { this.getPdf(); })
     },
-    handleWindowPrint(ele, fileName) {
-      var oIframe = document.createElement('iframe')
-      var oScript = document.createElement('script')
-      document.body.appendChild(oIframe)
-      var titleText = document.head.getElementsByTagName('title')[0].innerText
-      document.head.getElementsByTagName('title')[0].innerText = `${fileName}`
-      oIframe.contentDocument.head.innerHTML = `<meta charset="utf-8">
-                                              <title>${fileName}</title>
-                                              <meta name="format-detection" content="telephone=no">
-                                              <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-                                              <meta name="viewport" content="width=device-width,initial-scale=1.0">`
-      oIframe.contentDocument.body.innerHTML = document.querySelector(
-        ele
-      ).outerHTML
-      oScript.innerHTML = 'window.print();'
-      oIframe.contentDocument.body.appendChild(oScript)
-      document.body.removeChild(oIframe)
-      document.head.getElementsByTagName('title')[0].innerText = titleText
-    }
 
   },
 });
